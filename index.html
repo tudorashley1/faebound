@@ -3011,39 +3011,20 @@ window.vw = (() => {
           ${(()=>{
             try {
               const r = JSON.parse(localStorage.getItem('faeboundLastVeilWithinResult')||'null');
-              const depth = parseInt(localStorage.getItem('faeboundVeilDepth')||'0')||0;
               const crossings = parseInt(localStorage.getItem('faeboundVWCrossings')||'0')||0;
               if (!r || !r.name) return '';
-              // Increment crossing count for next time
               try { localStorage.setItem('faeboundVWCrossings', crossings + 1); } catch(e) {}
-              // Build evolutionary intro based on how many times they've been here
+              const nm = r.name;
+              const ps = 'margin:0 0 14px;font-size:.88rem;font-style:italic;';
+              const sm = 'font-size:.82rem;opacity:.8';
               if (crossings === 0) {
-                // Second visit — simple acknowledgment
-                return \`<p style="margin:0 0 14px;font-size:.88rem;color:rgba(188,197,239,.65);font-style:italic">
-                  You have been here before. Last time, the Veil saw <em style="color:rgba(238,216,122,.75)">\${r.name}</em>.
-                  <br><span style="font-size:.82rem;opacity:.75">The questions will be different this time.</span>
-                </p>\`;
+                return '<p style="' + ps + 'color:rgba(188,197,239,.65)">You have been here before. Last time, the Veil saw <em style="color:rgba(238,216,122,.75)">' + nm + '</em>.<br><span style="' + sm + '">The questions will be different this time.</span></p>';
               } else if (crossings < 4) {
-                // Third through fifth visit — more specific
-                return \`<p style="margin:0 0 14px;font-size:.88rem;color:rgba(188,197,239,.7);font-style:italic">
-                  The Veil knows you now. <em style="color:rgba(238,216,122,.8)">\${r.name}</em> has been present in every crossing.
-                  <br><span style="font-size:.82rem;opacity:.8">Choose as honestly as you did the first time. The Veil is still listening.</span>
-                </p>\`;
+                return '<p style="' + ps + 'color:rgba(188,197,239,.7)">The Veil knows you now. <em style="color:rgba(238,216,122,.8)">' + nm + '</em> has been present in every crossing.<br><span style="' + sm + '">Choose with the same honesty you brought last time.</span></p>';
               } else if (crossings < 8) {
-                // Six through eighth visit — deeper acknowledgment
-                return \`<p style="margin:0 0 14px;font-size:.88rem;color:rgba(188,197,239,.78);font-style:italic">
-                  You have returned \${crossings + 1} times. The Veil does not take this lightly.
-                  <br><em style="color:rgba(238,216,122,.85)">\${r.name}</em> has been your most consistent reflection.
-                  <br><span style="font-size:.82rem;opacity:.8">The questions have never stopped changing. Neither have you.</span>
-                </p>\`;
+                return '<p style="' + ps + 'color:rgba(188,197,239,.78)">You have returned ' + (crossings+1) + ' times. The Veil does not take this lightly.<br><em style="color:rgba(238,216,122,.85)">' + nm + '</em> has been your most consistent reflection.<br><span style="' + sm + '">The questions have never stopped changing. Neither have you.</span></p>';
               } else {
-                // Deep returner
-                return \`<p style="margin:0 0 14px;font-size:.88rem;color:rgba(188,197,239,.85);font-style:italic">
-                  This is your \${crossings + 1}th crossing. Few come back this many times.
-                  <br>The Veil has been keeping what you have shown it.
-                  <br><em style="color:rgba(238,216,122,.9)">\${r.name}</em> has been here in every reading. 
-                  The Veil is beginning to understand something about the permanence of that.
-                </p>\`;
+                return '<p style="' + ps + 'color:rgba(188,197,239,.85)">This is your ' + (crossings+1) + 'th crossing. Few come back this many times.<br>The Veil has been keeping what you have shown it.<br><em style="color:rgba(238,216,122,.9)">' + nm + '</em> has been here in every reading. The Veil is beginning to understand something about the permanence of that.</p>';
               }
             } catch(e) { return ''; }
           })()}
