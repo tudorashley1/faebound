@@ -191,6 +191,10 @@ button{appearance:none;font:inherit;cursor:pointer;touch-action:manipulation}
 .portal[data-launch="veil-within"]:hover{
   border-color:rgba(238,216,122,.25);
   box-shadow:0 22px 52px rgba(0,0,0,.4),0 0 52px rgba(238,216,122,.08)}
+.portal[data-launch="archive"]{border-color:rgba(238,216,122,.1)}
+.portal[data-launch="archive"]:hover{
+  border-color:rgba(238,216,122,.28);
+  box-shadow:0 22px 52px rgba(0,0,0,.4),0 0 44px rgba(238,216,122,.1)}
 .portal:active{transform:translateY(-2px) scale(.99)}
 
 .portal-glow{position:absolute;top:-30px;right:-30px;
@@ -415,6 +419,124 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
   text-align:center;padding:13px;border-radius:10px;
   border:1px solid rgba(255,255,255,.038);margin-bottom:20px}
 .vw-disclaimer a{color:rgba(154,164,204,.45);text-decoration:underline}
+
+
+/* ── THE ARCHIVE ─────────────────────────────────────────────── */
+#archiveScreen{padding:0;align-items:stretch;position:relative;
+  background:radial-gradient(circle at 50% 25%,rgba(238,216,122,.07),transparent 52%),
+  linear-gradient(180deg,#06080f,#0a0c1c)}
+.archive-wrap{width:min(680px,100%);margin:0 auto;
+  padding:48px 24px 80px;min-height:100vh;
+  display:flex;flex-direction:column;justify-content:flex-start}
+.archive-back{position:fixed;top:16px;right:16px;z-index:40;
+  opacity:.55;transition:opacity .2s}
+.archive-back:hover{opacity:1}
+
+/* Header */
+.arc-header{text-align:center;margin-bottom:40px}
+.arc-sigil{font-size:2.8rem;display:block;margin-bottom:16px;
+  animation:breathe 4s ease-in-out infinite}
+.arc-eyebrow{font-size:.65rem;text-transform:uppercase;letter-spacing:.24em;
+  color:rgba(238,216,122,.5);margin-bottom:10px}
+.arc-title{font-family:'Cinzel',serif;font-size:clamp(1.8rem,5vw,2.6rem);
+  font-weight:700;color:var(--gold);margin-bottom:10px;letter-spacing:.06em}
+.arc-sub{font-size:.9rem;color:var(--muted);line-height:1.7;
+  max-width:480px;margin:0 auto}
+
+/* Prompt */
+.arc-prompt-wrap{margin-bottom:24px;padding:20px 22px;border-radius:18px;
+  background:rgba(238,216,122,.04);border:1px solid rgba(238,216,122,.12);
+  position:relative}
+.arc-prompt-label{font-size:.63rem;text-transform:uppercase;
+  letter-spacing:.18em;color:rgba(238,216,122,.45);margin-bottom:10px}
+.arc-prompt-text{font-size:.97rem;color:var(--text);line-height:1.72;
+  font-style:italic}
+.arc-prompt-refresh{position:absolute;top:14px;right:14px;
+  background:none;border:none;cursor:pointer;
+  color:rgba(238,216,122,.3);font-size:.75rem;
+  transition:color .2s;padding:4px 8px;border-radius:6px}
+.arc-prompt-refresh:hover{color:rgba(238,216,122,.7)}
+
+/* Writing area */
+.arc-entry-wrap{margin-bottom:20px;position:relative}
+.arc-textarea{width:100%;min-height:180px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;padding:18px 20px;
+  color:var(--text);font-family:Inter,system-ui,sans-serif;
+  font-size:.95rem;line-height:1.72;resize:vertical;
+  outline:none;transition:border-color .2s ease}
+.arc-textarea:focus{border-color:rgba(238,216,122,.28)}
+.arc-textarea::placeholder{color:rgba(154,164,204,.28)}
+.arc-char-count{position:absolute;bottom:10px;right:14px;
+  font-size:.68rem;color:rgba(154,164,204,.28);pointer-events:none}
+
+/* Submit */
+.arc-submit-row{display:flex;gap:10px;align-items:center;margin-bottom:32px}
+.arc-submit{padding:13px 28px;border-radius:14px;cursor:pointer;
+  background:rgba(238,216,122,.09);border:1px solid rgba(238,216,122,.28);
+  color:var(--gold);font-family:Inter,sans-serif;font-weight:700;
+  font-size:.9rem;transition:all .18s ease}
+.arc-submit:hover{background:rgba(238,216,122,.16);
+  box-shadow:0 0 24px rgba(238,216,122,.12)}
+.arc-submit:disabled{opacity:.35;cursor:default}
+.arc-submit-note{font-size:.75rem;color:rgba(154,164,204,.3);
+  line-height:1.5;flex:1}
+
+/* Archivist response */
+.arc-response{margin-bottom:32px;padding:22px 24px;border-radius:18px;
+  background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);
+  animation:rise .5s ease forwards;display:none}
+.arc-response.visible{display:block}
+.arc-response-label{font-size:.62rem;text-transform:uppercase;
+  letter-spacing:.18em;color:rgba(238,216,122,.4);margin-bottom:12px}
+.arc-response-text{font-size:.95rem;color:var(--muted);
+  line-height:1.82;font-style:italic}
+.arc-response-thinking{display:flex;gap:6px;align-items:center;
+  color:rgba(154,164,204,.35);font-size:.82rem}
+.arc-dot{width:5px;height:5px;border-radius:50%;
+  background:rgba(238,216,122,.4);
+  animation:breathe .9s ease-in-out infinite}
+.arc-dot:nth-child(2){animation-delay:.2s}
+.arc-dot:nth-child(3){animation-delay:.4s}
+
+/* Resources (shown when distress signals detected) */
+.arc-resources{margin-bottom:28px;padding:18px 20px;border-radius:14px;
+  background:rgba(94,221,168,.04);border:1px solid rgba(94,221,168,.12);
+  display:none}
+.arc-resources.visible{display:block}
+.arc-resources-label{font-size:.63rem;text-transform:uppercase;
+  letter-spacing:.16em;color:rgba(94,221,168,.5);margin-bottom:10px}
+.arc-resources-text{font-size:.86rem;color:var(--muted);
+  line-height:1.7;margin-bottom:12px}
+.arc-resource-links{display:flex;flex-direction:column;gap:7px}
+.arc-resource-link{font-size:.84rem;color:rgba(94,221,168,.7);
+  text-decoration:none;padding:7px 12px;border-radius:9px;
+  background:rgba(94,221,168,.05);border:1px solid rgba(94,221,168,.1);
+  transition:all .15s}
+.arc-resource-link:hover{background:rgba(94,221,168,.1);color:rgba(94,221,168,.9)}
+
+/* Past entries */
+.arc-entries-section{margin-top:8px}
+.arc-entries-label{font-size:.63rem;text-transform:uppercase;
+  letter-spacing:.18em;color:rgba(154,164,204,.3);margin-bottom:14px}
+.arc-entry-item{padding:16px 18px;border-radius:13px;
+  background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);
+  margin-bottom:10px;cursor:pointer;transition:all .15s}
+.arc-entry-item:hover{background:rgba(255,255,255,.04);
+  border-color:rgba(238,216,122,.1)}
+.arc-entry-date{font-size:.65rem;color:rgba(154,164,204,.3);
+  margin-bottom:5px;letter-spacing:.08em}
+.arc-entry-preview{font-size:.85rem;color:rgba(154,164,204,.55);
+  line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.arc-empty-state{text-align:center;padding:32px 0;
+  color:rgba(154,164,204,.25);font-size:.88rem;
+  font-style:italic;line-height:1.7}
+
+/* Disclaimer */
+.arc-disclaimer{font-size:.72rem;color:rgba(154,164,204,.22);
+  line-height:1.7;text-align:center;padding:16px;
+  border-top:1px solid rgba(255,255,255,.04);margin-top:8px}
 
 /* MODALS */
 .modal-wrap{position:fixed;inset:0;background:rgba(3,5,14,.74);
@@ -651,13 +773,14 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
         <button class="btn btn-primary btn-sm portal-enter" data-launch-btn="echo-drift">Enter Trial</button>
       </article>
 
-      <article class="portal portal-archive coming-soon" style="opacity:.55;cursor:default;border-style:dashed">
+      <article class="portal portal-archive" data-launch="archive" style="border-color:rgba(238,216,122,.18)">
         <div class="portal-glow" style="background:var(--gold)"></div>
         <div class="portal-icon" style="color:var(--gold);filter:drop-shadow(0 0 10px rgba(238,216,122,.4))">📖</div>
         <span class="portal-kicker">Reflection Space</span>
         <h3 class="portal-name" style="color:var(--gold)">The Archive</h3>
-        <p class="portal-desc">A private space to write, reflect, and be witnessed. The Archivist holds what you bring here.</p>
-        <p class="portal-promise" style="color:rgba(238,216,122,.45)"><em>Opening soon — the realm is preparing this space.</em></p>
+        <p class="portal-desc">A private space to write, reflect, and be witnessed. The Archivist holds what you bring here. Nothing leaves this space.</p>
+        <p class="portal-promise"><strong>What this crossing offers:</strong> a quiet place to put words to what you carry.</p>
+        <button class="btn btn-gold btn-sm portal-enter" data-launch-btn="archive">Enter the Archive</button>
       </article>
 
       <article class="portal portal-within glass-gold" data-launch="veil-within">
@@ -734,8 +857,8 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
       <p style="margin-top:8px">Draws on the Four-Branch Model of Emotional Intelligence (Mayer & Salovey, 1997) and RULER (Brackett/Yale, 2019).</p>
     </div>
     <div class="modal-sec">
-      <h3>📖 The Archive — Coming Soon</h3>
-      <p>A private space for reflection. Write what you're carrying. The Archivist witnesses without judgment and holds what you bring here. Nothing leaves this space.</p>
+      <h3>📖 The Archive — Reflection Space</h3>
+      <p>A private space for reflection. Write what you're carrying. The Archivist — an AI — witnesses without judgment and responds once. Nothing written here is sent anywhere or stored outside your device.</p>
     </div>
     <div class="modal-sec">
       <h3>More crossings are coming</h3>
@@ -855,6 +978,81 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
     <!-- Injected by JS -->
   </div>
 </section>
+
+
+<!-- ARCHIVE SCREEN -->
+<section class="game-screen-wrap hidden" id="archiveScreen" style="padding:0;align-items:stretch;background:radial-gradient(circle at 50% 25%,rgba(238,216,122,.07),transparent 52%),linear-gradient(180deg,#06080f,#0a0c1c)">
+  <button class="btn btn-ghost btn-sm archive-back" id="backFromArchiveBtn" style="position:fixed;top:16px;right:16px;z-index:40;opacity:.55;transition:opacity .2s">Return to Realm</button>
+
+  <div class="archive-wrap" id="archiveWrap">
+
+    <!-- Header -->
+    <div class="arc-header">
+      <span class="arc-sigil">📖</span>
+      <p class="arc-eyebrow">The Archive</p>
+      <h1 class="arc-title">A private space to reflect</h1>
+      <p class="arc-sub">Write what you are carrying. The Archivist witnesses without judgment.<br>Nothing written here leaves this space.</p>
+    </div>
+
+    <!-- Prompt -->
+    <div class="arc-prompt-wrap">
+      <div class="arc-prompt-label">Today's prompt</div>
+      <p class="arc-prompt-text" id="arcPromptText">Loading a prompt for you…</p>
+      <button class="arc-prompt-refresh" id="arcPromptRefresh" title="Different prompt">↻ different prompt</button>
+    </div>
+
+    <!-- Writing area -->
+    <div class="arc-entry-wrap">
+      <textarea class="arc-textarea" id="arcTextarea"
+        placeholder="Write as much or as little as you want. You can also ignore the prompt entirely and write whatever is present for you right now."
+        maxlength="2000"></textarea>
+      <span class="arc-char-count" id="arcCharCount">0 / 2000</span>
+    </div>
+
+    <!-- Submit row -->
+    <div class="arc-submit-row">
+      <button class="arc-submit" id="arcSubmitBtn" disabled>Offer to the Archive</button>
+      <p class="arc-submit-note">The Archivist will respond once, then hold what you brought in silence.</p>
+    </div>
+
+    <!-- Archivist response -->
+    <div class="arc-response" id="arcResponse">
+      <div class="arc-response-label">The Archivist</div>
+      <div class="arc-response-text" id="arcResponseText">
+        <div class="arc-response-thinking">
+          <div class="arc-dot"></div>
+          <div class="arc-dot"></div>
+          <div class="arc-dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resources (shown conditionally) -->
+    <div class="arc-resources" id="arcResources">
+      <div class="arc-resources-label">If you need someone to talk to</div>
+      <p class="arc-resources-text">If what you're carrying feels like too much to hold alone, there are people who are specifically here for that moment. You don't have to explain yourself to them.</p>
+      <div class="arc-resource-links">
+        <a class="arc-resource-link" href="https://www.crisistextline.org" target="_blank" rel="noopener">Crisis Text Line — Text HOME to 741741</a>
+        <a class="arc-resource-link" href="https://988lifeline.org" target="_blank" rel="noopener">988 Suicide & Crisis Lifeline — Call or text 988</a>
+        <a class="arc-resource-link" href="https://www.thetrevorproject.org" target="_blank" rel="noopener">The Trevor Project — LGBTQ+ youth support</a>
+        <a class="arc-resource-link" href="https://www.nami.org/help" target="_blank" rel="noopener">NAMI — Mental health support & resources</a>
+      </div>
+    </div>
+
+    <!-- Past entries -->
+    <div class="arc-entries-section" id="arcEntriesSection">
+      <div class="arc-entries-label">Previous entries</div>
+      <div id="arcEntriesList"></div>
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="arc-disclaimer">
+      The Archive is a private space for reflection. Nothing written here is sent anywhere or seen by anyone except the Archivist AI, which responds once and does not retain your words after responding. The Archivist is not a therapist or crisis service. If you are in danger, please contact emergency services.
+    </div>
+
+  </div>
+</section>
+
 
 <script>
 'use strict';
@@ -1329,6 +1527,7 @@ const screens = {
   hub: document.getElementById('hubScreen'),
   echo: document.getElementById('echoDriftScreen'),
   veilWithin: document.getElementById('veilWithinScreen'),
+  archive: document.getElementById('archiveScreen'),
 };
 const veilTrans = document.getElementById('veilTrans');
 
@@ -1394,8 +1593,8 @@ function launchGame(game){
   audio.ensure(); window.ambient.ensure();
   try{localStorage.setItem('faeboundLastGame',game);}catch(e){}
   _sessionGames.add(game);
-  if(_sessionGames.size===2&&!_sessionGames.has('_allTwoCelebrated')){
-    _sessionGames.add('_allTwoCelebrated');
+  if(_sessionGames.size===3&&!_sessionGames.has('_allThreeCelebrated')){
+    _sessionGames.add('_allThreeCelebrated');
     setTimeout(()=>{
       showMilestone('All Four Crossings','You have walked every path the Veil offers. Something shifts in the realm.');
       obsLines.push('You have walked both paths the realm currently offers. The Veil is paying attention.');
@@ -1413,6 +1612,11 @@ function launchGame(game){
     window.vw?.begin();
     showOnly('veilWithin');
   }
+  if(game==='archive'){
+    window.ambient.setIntensity('echo');
+    window.arc?.enter();
+    showOnly('archive');
+  }
   updateRecentCrossing();
 }
 
@@ -1426,6 +1630,7 @@ document.querySelectorAll('[data-launch],[data-launch-btn]').forEach(el=>{
 // Court theme buttons removed
 
 document.getElementById('backFromEchoBtn')?.addEventListener('click',()=>backToHub(()=>window.ed?.resetAll()));
+document.getElementById('backFromArchiveBtn')?.addEventListener('click',()=>backToHub(()=>{}));
 document.getElementById('backFromVeilWithinBtn')?.addEventListener('click',()=>backToHub(()=>{}));
 
 // ── INTRO DISMISS ────────────────────────────────────────────────────────
@@ -1496,8 +1701,8 @@ function updateRecentCrossing(){
   try{
     const last=localStorage.getItem('faeboundLastGame')||'';
     const result=JSON.parse(localStorage.getItem('faeboundLastVeilWithinResult')||'null');
-    const labels={'echo-drift':'Echo Drift','veil-within':'The Veil Within'};
-    const glyphs={'echo-drift':'◇','veil-within':'✶'};
+    const labels={'echo-drift':'Echo Drift','veil-within':'The Veil Within','archive':'The Archive'};
+    const glyphs={'echo-drift':'◇','veil-within':'✶','archive':'📖'};
     if(last&&labels[last]){
       let txt=labels[last];
       if(last==='veil-within'&&result){
@@ -2532,6 +2737,331 @@ window.vw = (() => {
 
 
 
+<!-- ═══ THE ARCHIVE ═══ -->
+<script>
+
+window.arc = (() => {
+
+  // ── PROMPTS ──────────────────────────────────────────────────────
+  // Rotating pool of prompts, calibrated by archetype when available.
+  // These are always available even without AI — the prompt generation
+  // can be enhanced by AI later, but the base pool works standalone.
+  const PROMPTS_BASE = [
+    "Write about something you are carrying right now that you haven't told anyone.",
+    "Describe a moment from this week that stayed with you, even quietly.",
+    "What are you waiting for? You don't have to know what it is for it to be real.",
+    "Write about something that felt heavier than it looked.",
+    "What would you say to yourself six months ago?",
+    "Describe something you noticed today that most people walked past without seeing.",
+    "What is something you keep returning to, even when you try to leave it?",
+    "Write about a feeling you don't quite have a word for yet.",
+    "What does rest mean to you right now? Not what it should mean — what it actually means.",
+    "Write about something you are proud of that you haven't let yourself say out loud.",
+    "What are you holding gently right now?",
+    "Describe the version of today that you needed instead of the one you got.",
+    "What is something small that has been surprisingly difficult?",
+    "Write about something that is true about you that most people don't know.",
+    "What does the inside of this week feel like? Not the events — the feeling.",
+    "Write about something you are learning, even if you didn't choose to learn it.",
+    "What are you trying not to think about? You don't have to think about it — just name that it's there.",
+    "Describe something you are grateful for in a way you have never said before.",
+    "What would you write if you knew no one would ever read it?",
+    "Write about something that has shifted in you recently, even slightly.",
+  ];
+
+  const PROMPTS_BY_ARCHETYPE = {
+    'The Seer': [
+      "Write about something you noticed in someone else recently that they didn't say out loud.",
+      "Describe a moment when you saw something coming before anyone else did. What did that feel like?",
+      "Write about the gap between what you perceive and what you say.",
+    ],
+    'The Ember': [
+      "Write about a time a feeling moved you forward instead of stopping you.",
+      "Describe what intensity feels like from the inside — not how others see it, but how it feels to carry it.",
+      "Write about something you care about so much it sometimes surprises you.",
+    ],
+    'The Weaver': [
+      "Write about a pattern you've noticed in yourself that you haven't fully named yet.",
+      "Describe a situation where you understood what was happening before the people in it did. What did you do with that?",
+      "Write about the difference between understanding something and feeling it.",
+    ],
+    'The Root': [
+      "Write about something you have stayed with longer than most people would have.",
+      "Describe what it feels like to be the person others lean on. Not the role — the feeling.",
+      "Write about something you are holding that was never really yours to hold.",
+    ],
+  };
+
+  // ── STATE ─────────────────────────────────────────────────────────
+  let currentPrompt = '';
+  let isWaiting = false;
+  let entries = [];
+
+  // ── LOAD ENTRIES FROM LOCAL STORAGE ──────────────────────────────
+  function loadEntries() {
+    try {
+      entries = JSON.parse(localStorage.getItem('faeboundArchiveEntries') || '[]');
+    } catch(e) { entries = []; }
+  }
+
+  function saveEntries() {
+    try {
+      localStorage.setItem('faeboundArchiveEntries', JSON.stringify(entries));
+    } catch(e) {}
+  }
+
+  // ── GET ARCHETYPE ─────────────────────────────────────────────────
+  function getArchetype() {
+    try {
+      const r = JSON.parse(localStorage.getItem('faeboundLastVeilWithinResult') || 'null');
+      return r?.name || null;
+    } catch(e) { return null; }
+  }
+
+  // ── PICK A PROMPT ─────────────────────────────────────────────────
+  function pickPrompt(exclude = '') {
+    const archetype = getArchetype();
+    const arcPool = archetype ? (PROMPTS_BY_ARCHETYPE[archetype] || []) : [];
+    const combined = [...PROMPTS_BASE, ...arcPool];
+    const available = combined.filter(p => p !== exclude);
+    return available[Math.floor(Math.random() * available.length)] || PROMPTS_BASE[0];
+  }
+
+  // ── RENDER ENTRIES ────────────────────────────────────────────────
+  function renderEntries() {
+    const list = document.getElementById('arcEntriesList');
+    if (!list) return;
+    if (!entries.length) {
+      list.innerHTML = '<div class="arc-empty-state">No entries yet.<br>This space is waiting for what you bring.</div>';
+      return;
+    }
+    list.innerHTML = entries.slice().reverse().slice(0, 8).map(e => `
+      <div class="arc-entry-item">
+        <div class="arc-entry-date">${new Date(e.date).toLocaleDateString('en-US', {month:'long',day:'numeric',year:'numeric'})}</div>
+        <div class="arc-entry-preview">${e.text.substring(0, 120).replace(/</g,'&lt;')}${e.text.length > 120 ? '…' : ''}</div>
+      </div>
+    `).join('');
+  }
+
+  // ── DETECT DISTRESS SIGNALS ───────────────────────────────────────
+  // Scans for language that may indicate the player needs support.
+  // This is conservative and errs toward showing resources.
+  // Does NOT analyze or diagnose — only detects keyword patterns.
+  function detectDistress(text) {
+    const lower = text.toLowerCase();
+    const signals = [
+      'suicide', 'suicidal', 'kill myself', 'end my life', 'want to die',
+      'don\'t want to be here', 'don\'t want to live', 'no reason to live',
+      'self harm', 'self-harm', 'cutting', 'hurting myself', 'hurt myself',
+      'worthless', 'hopeless', 'no one cares', 'nobody cares',
+      'can\'t go on', 'can\'t do this anymore', 'too much to handle',
+      'abuse', 'being hurt', 'someone hurts me', 'afraid to go home',
+    ];
+    return signals.some(s => lower.includes(s));
+  }
+
+  // ── BUILD ARCHIVIST SYSTEM PROMPT ─────────────────────────────────
+  function buildSystemPrompt(entryText) {
+    const archetype = getArchetype();
+    const depth = (() => {
+      try { return parseInt(localStorage.getItem('faeboundVeilDepth') || '0') || 0; }
+      catch(e) { return 0; }
+    })();
+    const entryCount = entries.length;
+
+    // Build context about returning players
+    let returningContext = '';
+    if (entryCount > 0) {
+      returningContext = `This player has made ${entryCount} previous entr${entryCount===1?'y':'ies'} in the Archive. `;
+    }
+    if (entryCount >= 3) {
+      returningContext += 'They have returned here multiple times. ';
+    }
+
+    const archetypeContext = archetype
+      ? `Their Veil Within archetype is ${archetype}. `
+      : '';
+
+    const depthContext = depth >= 7
+      ? `They have been in this realm at Veil Depth ${depth} — they are not a newcomer here. `
+      : '';
+
+    return `You are the Archivist of the Veil. You have received a reflection from a player.
+
+${returningContext}${archetypeContext}${depthContext}
+
+Your role is to witness what was written and respond once. You are a presence, not a conversationalist. After this response, silence returns.
+
+CRITICAL CONSTRAINTS — follow these absolutely:
+- Do NOT give advice. Do NOT suggest what they should do.
+- Do NOT make any claim about whether what they described is real, true, or valid.
+- Do NOT validate or invalidate their perception of events or people.
+- Do NOT diagnose, label, or categorize what they are feeling.
+- Do NOT say "it sounds like" or "it seems like" — you are witnessing, not analyzing.
+- Do NOT be saccharine, generic, or use phrases like "thank you for sharing."
+- Do NOT ask follow-up questions.
+- Do NOT engage with the content as a therapist or counselor would.
+
+WHAT YOU DO:
+- Witness the act of writing — acknowledge that they put something into words.
+- Notice what is present in the writing without naming it as a problem or a pattern.
+- You may notice how they write (their language, their rhythm) — not what they wrote about.
+- If there is movement or lightness in the writing, you may notice that gently.
+- Be specific to what they actually wrote — do not be generic.
+- Your tone is quiet, warm, and unhurried. You are not impressed or concerned. You are simply present.
+- Length: 2-4 sentences maximum. Never more.
+- Write in second person ("You wrote about..." / "Something in what you brought here...")
+
+The player's entry follows. Respond as the Archivist.`;
+  }
+
+  // ── CALL THE ARCHIVIST ────────────────────────────────────────────
+  async function callArchivist(entryText) {
+    const responseEl = document.getElementById('arcResponseText');
+    const resourcesEl = document.getElementById('arcResources');
+
+    // Show thinking state
+    responseEl.innerHTML = `<div class="arc-response-thinking">
+      <div class="arc-dot"></div>
+      <div class="arc-dot"></div>
+      <div class="arc-dot"></div>
+    </div>`;
+    document.getElementById('arcResponse').classList.add('visible');
+
+    // Check for distress signals — show resources regardless of AI response
+    if (detectDistress(entryText)) {
+      resourcesEl.classList.add('visible');
+    }
+
+    try {
+      const response = await fetch('/.netlify/functions/claude', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          system: buildSystemPrompt(entryText),
+          messages: [{ role: 'user', content: entryText }],
+        }),
+      });
+
+      const data = await response.json();
+      const text = data.response || '';
+
+      if (text) {
+        // Fade in the response text
+        responseEl.style.opacity = '0';
+        responseEl.textContent = text;
+        responseEl.style.transition = 'opacity .6s ease';
+        setTimeout(() => { responseEl.style.opacity = '1'; }, 50);
+      } else {
+        responseEl.textContent = 'The Archive received what you brought. The Archivist holds it.';
+      }
+
+    } catch(err) {
+      // Graceful fallback — the Archive still works without AI
+      const fallbacks = [
+        'The Archive received what you brought. The Archivist holds it in the silence that follows.',
+        'You put something into words. That is not a small thing. The Archive holds it.',
+        'What you brought here has been received. The Archivist witnesses it.',
+        'The words are here now. The Archive keeps them.',
+      ];
+      responseEl.textContent = fallbacks[Math.floor(Math.random() * fallbacks.length)];
+    }
+  }
+
+  // ── ENTER THE ARCHIVE ─────────────────────────────────────────────
+  function enter() {
+    loadEntries();
+
+    // Reset UI state
+    const textarea = document.getElementById('arcTextarea');
+    const submitBtn = document.getElementById('arcSubmitBtn');
+    const responseEl = document.getElementById('arcResponse');
+    const resourcesEl = document.getElementById('arcResources');
+    const charCount = document.getElementById('arcCharCount');
+
+    if (textarea) { textarea.value = ''; textarea.disabled = false; }
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Offer to the Archive'; }
+    if (responseEl) responseEl.classList.remove('visible');
+    if (resourcesEl) resourcesEl.classList.remove('visible');
+    if (charCount) charCount.textContent = '0 / 2000';
+
+    isWaiting = false;
+
+    // Load a prompt
+    currentPrompt = pickPrompt();
+    const promptEl = document.getElementById('arcPromptText');
+    if (promptEl) promptEl.textContent = currentPrompt;
+
+    // Render past entries
+    renderEntries();
+  }
+
+  // ── WIRE UP UI ────────────────────────────────────────────────────
+  // These listeners fire once, but the elements exist in the DOM from page load.
+  const textarea = document.getElementById('arcTextarea');
+  const submitBtn = document.getElementById('arcSubmitBtn');
+  const refreshBtn = document.getElementById('arcPromptRefresh');
+  const charCount = document.getElementById('arcCharCount');
+
+  if (textarea) {
+    textarea.addEventListener('input', () => {
+      const len = textarea.value.length;
+      if (charCount) charCount.textContent = `${len} / 2000`;
+      if (submitBtn) submitBtn.disabled = len < 10 || isWaiting;
+    });
+  }
+
+  if (refreshBtn) {
+    refreshBtn.addEventListener('click', () => {
+      currentPrompt = pickPrompt(currentPrompt);
+      const promptEl = document.getElementById('arcPromptText');
+      if (promptEl) {
+        promptEl.style.opacity = '0';
+        setTimeout(() => {
+          promptEl.textContent = currentPrompt;
+          promptEl.style.transition = 'opacity .3s ease';
+          promptEl.style.opacity = '1';
+        }, 150);
+      }
+    });
+  }
+
+  if (submitBtn) {
+    submitBtn.addEventListener('click', async () => {
+      if (isWaiting || !textarea?.value.trim()) return;
+      const entryText = textarea.value.trim();
+      isWaiting = true;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'The Archive is listening…';
+      textarea.disabled = true;
+
+      // Save entry locally
+      const entry = {
+        date: new Date().toISOString(),
+        text: entryText,
+        prompt: currentPrompt,
+        archetype: getArchetype(),
+      };
+      entries.push(entry);
+      saveEntries();
+      renderEntries();
+
+      // Call Archivist
+      await callArchivist(entryText);
+
+      submitBtn.textContent = 'Entry received';
+
+      // Track in progression
+      try {
+        window.archive?.inc?.('trialsCompleted');
+        window.progression?.increment?.();
+      } catch(e) {}
+    });
+  }
+
+  return { enter };
+})();
+
+</script>
 </body>
 </html>
-
