@@ -1027,6 +1027,14 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
       </div>
     </div>
 
+    <!-- New entry button — appears after Archivist responds -->
+    <div style="text-align:center;margin-top:4px">
+      <button id="arcNewEntryBtn" class="btn btn-ghost btn-sm"
+        style="opacity:0;pointer-events:none;transition:opacity .4s ease;font-size:.8rem">
+        ↩ Write another entry
+      </button>
+    </div>
+
     <!-- Resources (shown conditionally) -->
     <div class="arc-resources" id="arcResources">
       <div class="arc-resources-label">If you need someone to talk to</div>
@@ -3056,6 +3064,78 @@ The player's entry follows. Respond as the Archivist.`;
         window.archive?.inc?.('trialsCompleted');
         window.progression?.increment?.();
       } catch(e) {}
+
+      // Post-submit: fade out writing area, leave only Archivist response
+      setTimeout(() => {
+        const promptWrap = document.querySelector('.arc-prompt-wrap');
+        const entryWrap = document.querySelector('.arc-entry-wrap');
+        const submitRow = document.querySelector('.arc-submit-row');
+        const newEntryBtn = document.getElementById('arcNewEntryBtn');
+
+        [promptWrap, entryWrap, submitRow].forEach(el => {
+          if (!el) return;
+          el.style.transition = 'opacity .6s ease, max-height .6s ease';
+          el.style.opacity = '0';
+          el.style.maxHeight = el.scrollHeight + 'px';
+          setTimeout(() => {
+            el.style.maxHeight = '0';
+            el.style.overflow = 'hidden';
+            el.style.marginBottom = '0';
+            el.style.paddingTop = '0';
+            el.style.paddingBottom = '0';
+          }, 600);
+        });
+
+        if (newEntryBtn) {
+          setTimeout(() => {
+            newEntryBtn.style.opacity = '1';
+            newEntryBtn.style.pointerEvents = 'auto';
+          }, 900);
+        }
+      }, 400);
+    });
+  }
+
+  // New entry button — resets the writing space without full reload
+  const newEntryBtn = document.getElementById('arcNewEntryBtn');
+  if (newEntryBtn) {
+    newEntryBtn.addEventListener('click', () => {
+      // Restore writing area
+      const promptWrap = document.querySelector('.arc-prompt-wrap');
+      const entryWrap = document.querySelector('.arc-entry-wrap');
+      const submitRow = document.querySelector('.arc-submit-row');
+
+      [promptWrap, entryWrap, submitRow].forEach(el => {
+        if (!el) return;
+        el.style.maxHeight = '';
+        el.style.overflow = '';
+        el.style.marginBottom = '';
+        el.style.paddingTop = '';
+        el.style.paddingBottom = '';
+        el.style.transition = 'opacity .4s ease';
+        el.style.opacity = '1';
+      });
+
+      // Reset state
+      if (textarea) { textarea.value = ''; textarea.disabled = false; }
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Offer to the Archive'; }
+      if (charCount) charCount.textContent = '0 / 2000';
+
+      // New prompt
+      currentPrompt = pickPrompt(currentPrompt);
+      const promptEl = document.getElementById('arcPromptText');
+      if (promptEl) promptEl.textContent = currentPrompt;
+
+      // Hide response and new entry button
+      document.getElementById('arcResponse')?.classList.remove('visible');
+      document.getElementById('arcResources')?.classList.remove('visible');
+      newEntryBtn.style.opacity = '0';
+      newEntryBtn.style.pointerEvents = 'none';
+
+      isWaiting = false;
+
+      // Scroll back to top of archive wrap
+      document.querySelector('.archive-wrap')?.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
 
