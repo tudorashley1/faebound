@@ -1,0 +1,3650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
+<title>Faebound Realm</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&display=swap');
+:root{
+  --bg:#060812;--bg2:#0d1128;
+  --panel:rgba(12,16,40,.82);--pb:rgba(255,255,255,.08);
+  --text:#f0f2ff;--muted:#9aa4cc;--accent:#bba8ff;
+  --gold:#eed87a;--blue:#7ec8ff;--pink:#ff9ec8;--mint:#5edda8;
+  --ruby:#ff5577;--ember:#ffaa33;
+  /* --court-a/g/m removed with court system */
+  --r:20px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+html,body{min-height:100%;font-family:Inter,system-ui,sans-serif;color:var(--text);
+  background:var(--bg);overflow-x:hidden}
+
+/* KEYFRAMES */
+@keyframes breathe{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.07);opacity:1}}
+@keyframes spin-cw{to{transform:rotate(360deg)}}
+@keyframes spin-ccw{to{transform:rotate(-360deg)}}
+@keyframes flicker{0%,100%{opacity:1}48%{opacity:.82}50%{opacity:.6}52%{opacity:.88}}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{transform:scale(.12) rotate(-14deg);opacity:0}
+  62%{transform:scale(1.1) rotate(2deg);opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes glow-pulse{0%,100%{box-shadow:0 0 18px rgba(187,168,255,.15)}
+  50%{box-shadow:0 0 38px rgba(187,168,255,.35),0 0 60px rgba(187,168,255,.1)}}
+@keyframes mist{0%{transform:translateY(0) scale(1);opacity:0}
+  10%{opacity:1}90%{opacity:.55}100%{transform:translateY(-110px) translateX(50px) scale(1.18);opacity:0}}
+@keyframes twinkle{0%,100%{opacity:.12;transform:scale(.75)}50%{opacity:1;transform:scale(1.5)}}
+@keyframes echo-place{0%{opacity:0;transform:scale(.5)}65%{opacity:1;transform:scale(1.06)}100%{opacity:1;transform:scale(1)}}
+@keyframes rune-in{0%{opacity:0;transform:scale(.5) rotate(-10deg)}
+  65%{opacity:1;transform:scale(1.08) rotate(2deg)}
+  100%{opacity:1;transform:scale(1) rotate(0)}}
+@keyframes win-flash{0%,100%{filter:brightness(1)}40%{filter:brightness(.6) saturate(1.4)}
+  50%{filter:brightness(1.2) saturate(.8)}}
+@keyframes comet-trail{0%{opacity:.7;transform:scaleX(0)}100%{opacity:0;transform:scaleX(1)}}
+@keyframes score-pop{0%{transform:scale(1)}35%{transform:scale(1.5)}100%{transform:scale(1)}}
+@keyframes fog-shift{0%,100%{opacity:.05;transform:scale(1) translate(0,0)}
+  50%{opacity:.10;transform:scale(1.07) translate(3%,-2%)}}
+@keyframes veil-open{0%{clip-path:circle(0% at 50% 50%)}
+  100%{clip-path:circle(85% at 50% 50%)}}
+@keyframes portal-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+/* CANVAS LAYERS */
+#realmCanvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.stars-layer{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.star{position:absolute;border-radius:50%;background:#fff;animation:twinkle linear infinite}
+.fx-layer{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:4}
+.fx-particle{position:absolute;border-radius:50%;pointer-events:none}
+
+/* INTRO */
+#introScreen{position:fixed;inset:0;z-index:200;display:grid;place-items:center;
+  background:radial-gradient(circle at 50% 44%,rgba(90,50,200,.24),transparent 56%),
+  linear-gradient(180deg,#020306,#06080f)}
+#introScreen.hidden{display:none}
+.intro-wrap{text-align:center;padding:28px 20px}
+.intro-sigil{width:128px;height:128px;margin:0 auto 28px;position:relative}
+.i-ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(187,168,255,.18)}
+.i-ring:nth-child(1){animation:spin-cw 22s linear infinite}
+.i-ring:nth-child(2){inset:13px;border-color:rgba(187,168,255,.12);animation:spin-ccw 15s linear infinite}
+.i-ring:nth-child(3){inset:24px;border-color:rgba(238,216,122,.1);animation:spin-cw 9s linear infinite}
+.i-core{position:absolute;inset:36px;display:grid;place-items:center;
+  font-size:2.4rem;color:var(--gold);
+  text-shadow:0 0 28px rgba(238,216,122,.55),0 0 55px rgba(238,216,122,.2);
+  animation:breathe 3.8s ease-in-out infinite}
+.intro-title{font-family:'Cinzel',serif;font-size:clamp(2.4rem,8vw,4.8rem);font-weight:700;letter-spacing:.06em;
+  color:var(--gold);line-height:1;margin-bottom:8px}
+.intro-sub{color:rgba(154,164,204,.6);font-size:.87rem;letter-spacing:.22em;
+  text-transform:uppercase;margin-bottom:40px}
+.intro-enter{display:inline-flex;align-items:center;gap:10px;
+  padding:16px 44px;border-radius:999px;cursor:pointer;
+  border:1px solid rgba(187,168,255,.28);
+  background:rgba(187,168,255,.06);color:var(--accent);
+  font-size:.9rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  transition:all .2s ease;backdrop-filter:blur(6px)}
+.intro-enter:hover{background:rgba(187,168,255,.14);border-color:rgba(187,168,255,.5);
+  box-shadow:0 0 36px rgba(187,168,255,.2)}
+.intro-note{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);
+  font-size:.66rem;color:rgba(154,164,204,.22);letter-spacing:.14em;text-transform:uppercase}
+
+/* HIDDEN */
+.hidden{display:none!important}
+.screen{position:relative;z-index:2;min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;padding:28px 20px 56px}
+.game-screen-wrap{position:relative;z-index:2;min-height:100vh;
+  display:grid;place-items:center;padding:20px}
+
+/* GLASS PANELS */
+.glass{background:rgba(10,13,34,.78);border:1px solid rgba(255,255,255,.08);
+  border-radius:var(--r);backdrop-filter:blur(18px);
+  box-shadow:0 24px 60px rgba(0,0,0,.5),0 0 36px rgba(187,168,255,.07),
+  inset 0 1px 0 rgba(255,255,255,.05)}
+.glass-gold{border-color:rgba(238,216,122,.18);
+  box-shadow:0 24px 60px rgba(0,0,0,.5),0 0 32px rgba(238,216,122,.07),
+  inset 0 1px 0 rgba(255,255,255,.05)}
+
+/* TYPE */
+.eyebrow{font-size:.67rem;text-transform:uppercase;letter-spacing:.24em;
+  color:var(--court-a);opacity:.65;margin-bottom:8px}
+.realm-title{font-family:'Cinzel',serif;font-size:clamp(2.2rem,6vw,4.4rem);font-weight:700;
+  letter-spacing:.06em;line-height:1;
+  background:linear-gradient(140deg,var(--gold) 0%,var(--court-a) 55%,var(--mint) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sub-text{color:var(--muted);font-size:.97rem;line-height:1.66;max-width:620px;text-align:center}
+
+/* BUTTONS */
+button{appearance:none;font:inherit;cursor:pointer;touch-action:manipulation}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  padding:12px 20px;border-radius:13px;font-weight:700;font-size:.87rem;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.09);
+  color:var(--text);transition:all .17s ease;
+  box-shadow:0 7px 18px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.06)}
+.btn:hover{transform:translateY(-2px);background:rgba(255,255,255,.11);
+  box-shadow:0 12px 28px rgba(0,0,0,.3),0 0 18px rgba(187,168,255,.1)}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:rgba(187,168,255,.1);border-color:rgba(187,168,255,.28);color:var(--accent)}
+.btn-primary:hover{box-shadow:0 12px 28px rgba(0,0,0,.3),0 0 24px rgba(187,168,255,.18)}
+.btn-gold{background:rgba(238,216,122,.09);border-color:rgba(238,216,122,.28);color:var(--gold)}
+.btn-ghost{background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.06);color:var(--muted)}
+.btn-sm{padding:8px 14px;font-size:.8rem;border-radius:10px}
+.btn-danger{color:var(--pink);border-color:rgba(255,158,200,.18)}
+.btns{display:flex;gap:9px;flex-wrap:wrap}
+
+/* HUB WORLD */
+#hubScreen{padding:0;overflow:hidden;position:relative;min-height:100vh}
+#hubCanvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.hub-inner{position:relative;z-index:3;width:100%;min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+  padding:clamp(16px,3vh,40px) 24px clamp(24px,4vh,60px)}
+
+/* Hub header */
+.hub-sigil-wrap{margin-bottom:20px;position:relative}
+.hub-sigil{width:clamp(72px,9vw,108px);height:clamp(72px,9vw,108px);position:relative}
+.h-ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(238,216,122,.2)}
+.h-ring:nth-child(1){animation:spin-cw 24s linear infinite}
+.h-ring:nth-child(2){inset:14px;border-color:rgba(187,168,255,.15);animation:spin-ccw 16s linear infinite}
+.h-core{position:absolute;inset:30px;display:grid;place-items:center;
+  font-size:2rem;color:var(--gold);
+  text-shadow:0 0 22px rgba(238,216,122,.45);animation:breathe 4.2s ease-in-out infinite}
+
+/* Depth badge */
+.depth-badge{display:inline-flex;align-items:center;gap:9px;
+  padding:7px 16px;border-radius:999px;margin-bottom:20px;
+  background:rgba(238,216,122,.05);border:1px solid rgba(238,216,122,.16);
+  color:var(--gold);font-size:.79rem;font-weight:700;letter-spacing:.1em;
+  animation:glow-pulse 5s ease-in-out infinite}
+.depth-num{font-size:1.08rem;font-weight:900}
+
+/* Stats bar */
+.hub-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
+  width:min(660px,100%);margin-bottom:20px}
+.hub-stat{padding:11px 8px;border-radius:14px;text-align:center;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.055)}
+.hs-label{font-size:.64rem;text-transform:uppercase;letter-spacing:.13em;
+  color:var(--muted);opacity:.6;margin-bottom:3px}
+.hs-val{font-size:1.15rem;font-weight:900;color:var(--gold)}
+
+/* Court selector removed — single realm identity */
+
+/* PORTALS — 2x2 + full-width 4th */
+.portal-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;
+  width:min(880px,100%);margin-bottom:22px}
+.portal{padding:22px;border-radius:22px;cursor:pointer;
+  background:rgba(8,11,28,.72);border:1px solid rgba(255,255,255,.07);
+  transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;gap:10px}
+.portal::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 50% -10%,rgba(255,255,255,.055),transparent 52%);
+  pointer-events:none}
+.portal:hover{transform:translateY(-5px);box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.portal[data-launch="sigil-grid"]:hover{
+  border-color:rgba(126,200,255,.2);
+  box-shadow:0 22px 52px rgba(0,0,0,.4),0 0 44px rgba(126,200,255,.1)}
+.portal[data-launch="veil-paddle"]:hover{
+  border-color:rgba(255,158,200,.2);
+  box-shadow:0 22px 52px rgba(0,0,0,.4),0 0 44px rgba(255,158,200,.1)}
+.portal[data-launch="echo-drift"]:hover{
+  border-color:rgba(94,221,168,.2);
+  box-shadow:0 22px 52px rgba(0,0,0,.4),0 0 44px rgba(94,221,168,.1)}
+.portal[data-launch="veil-within"]{
+  grid-column:1/-1;
+  background:linear-gradient(135deg,rgba(12,16,38,.85),rgba(7,9,20,.9));
+  border-color:rgba(238,216,122,.13)}
+.portal[data-launch="veil-within"]:hover{
+  border-color:rgba(238,216,122,.25);
+  box-shadow:0 22px 52px rgba(0,0,0,.4),0 0 52px rgba(238,216,122,.08)}
+.portal:active{transform:translateY(-2px) scale(.99)}
+
+.portal-glow{position:absolute;top:-30px;right:-30px;
+  width:160px;height:160px;border-radius:50%;filter:blur(60px);opacity:.07;pointer-events:none}
+.portal-sigil-grid .portal-glow{background:var(--blue)}
+.portal-paddle .portal-glow{background:var(--pink)}
+.portal-echo .portal-glow{background:var(--mint)}
+.portal-within .portal-glow{background:var(--gold)}
+
+.portal-icon{font-size:1.9rem;line-height:1;margin-bottom:2px}
+.portal-sigil-grid .portal-icon{color:var(--blue);filter:drop-shadow(0 0 10px rgba(126,200,255,.4))}
+.portal-paddle .portal-icon{color:var(--pink);filter:drop-shadow(0 0 10px rgba(255,158,200,.4))}
+.portal-echo .portal-icon{color:var(--mint);filter:drop-shadow(0 0 10px rgba(94,221,168,.35))}
+.portal-within .portal-icon{color:var(--gold);filter:drop-shadow(0 0 10px rgba(238,216,122,.45))}
+
+.portal-kicker{font-size:.62rem;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);opacity:.55}
+.portal-name{font-size:1.28rem;font-weight:800;line-height:1.08;margin-top:-2px}
+.portal-desc{font-size:.85rem;color:var(--muted);line-height:1.55}
+.portal-promise{font-size:.8rem;color:var(--muted);opacity:.56;line-height:1.45;
+  padding-top:9px;border-top:1px solid rgba(255,255,255,.055)}
+.portal-promise strong{color:var(--gold);font-weight:600;opacity:.88}
+.portal-animation{position:absolute;bottom:14px;right:16px;
+  font-size:.7rem;color:rgba(255,255,255,.15);letter-spacing:.05em}
+
+/* Animation: portal icon floats */
+.portal:hover .portal-icon{animation:portal-float 2s ease-in-out infinite}
+
+/* Recent crossing */
+.recent-cross{width:min(660px,100%);margin-bottom:16px;
+  padding:12px 16px;border-radius:14px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.055);
+  display:flex;align-items:center;gap:12px}
+.rc-glyph{font-size:1.3rem;opacity:.65}
+.rc-info{flex:1;min-width:0}
+.rc-label{font-size:.64rem;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);opacity:.55}
+.rc-val{font-size:.9rem;color:var(--text);font-weight:600;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Hub footer */
+.hub-footer{display:flex;gap:9px;justify-content:center}
+
+/* GAME SHELL */
+.game-shell{width:min(1180px,100%);display:grid;grid-template-columns:290px 1fr;
+  gap:18px;align-items:stretch}
+.sidebar{padding:18px;display:flex;flex-direction:column;gap:11px;
+  background:rgba(8,11,30,.82);border:1px solid rgba(255,255,255,.07);
+  border-radius:var(--r);backdrop-filter:blur(18px)}
+.sidebar-sec{padding:13px;border-radius:13px;
+  background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.055)}
+.sec-label{font-size:.67rem;text-transform:uppercase;letter-spacing:.14em;
+  color:var(--muted);opacity:.6;margin-bottom:7px}
+.sec-status{font-size:.98rem;font-weight:700;min-height:1.7em}
+.turn-strip{display:flex;align-items:center;gap:8px;margin-top:7px;
+  padding:6px 10px;border-radius:9px;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05)}
+.t-orb{width:9px;height:9px;border-radius:50%;background:var(--accent);
+  box-shadow:0 0 10px var(--accent);flex-shrink:0;transition:all .3s ease}
+.t-txt{font-size:.8rem;color:var(--muted)}
+.score-row{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:7px}
+.sc-cell{padding:9px 5px;border-radius:11px;text-align:center;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.055)}
+.sc-lbl{font-size:.64rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);opacity:.55}
+.sc-val{font-size:1.05rem;font-weight:800;margin-top:2px;transition:transform .2s ease}
+.sc-val.pop{animation:score-pop .3s ease}
+.sc-you .sc-val{color:var(--blue)}
+.sc-warden .sc-val{color:var(--pink)}
+.sc-draw .sc-val,.sc-rally .sc-val{color:var(--mint)}
+.diff-row{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:7px}
+.diff-btn{padding:8px 3px;border-radius:9px;font-size:.73rem;font-weight:700;
+  letter-spacing:.04em;text-transform:uppercase;
+  border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.04);
+  color:var(--muted);cursor:pointer;transition:all .14s ease}
+.diff-btn.active{background:rgba(238,216,122,.09);border-color:rgba(238,216,122,.26);color:var(--gold)}
+.diff-btn:hover:not(.active){background:rgba(255,255,255,.07);color:var(--text)}
+.h-pills{display:flex;gap:5px;flex-wrap:wrap;min-height:30px;margin-top:7px}
+.h-pill{padding:3px 9px;border-radius:999px;font-size:.74rem;
+  border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.03);color:var(--muted)}
+.h-pill.x,.h-pill.player{color:var(--blue);border-color:rgba(126,200,255,.18)}
+.h-pill.o,.h-pill.warden{color:var(--pink);border-color:rgba(255,158,200,.18)}
+.h-pill.draw{color:var(--mint);border-color:rgba(94,221,168,.18)}
+.mode-row{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:7px}
+.mode-cell{padding:8px 7px;border-radius:10px;text-align:center;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.05)}
+.mc-lbl{font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);opacity:.52}
+.mc-val{font-size:.84rem;font-weight:700;margin-top:2px}
+.obs-box{padding:11px 13px;border-radius:11px;
+  background:rgba(255,255,255,.024);border:1px solid rgba(255,255,255,.048)}
+.obs-txt{font-size:.82rem;color:var(--muted);line-height:1.62;font-style:italic;
+  transition:opacity .3s ease}
+.obs-txt.fading{opacity:.12}
+.lore-panel{padding:13px;border-radius:13px;
+  background:linear-gradient(135deg,rgba(187,168,255,.06),rgba(94,221,168,.03));
+  border:1px solid rgba(187,168,255,.11)}
+.lore-panel.hidden{display:none}
+.lore-txt{font-size:.83rem;color:var(--muted);line-height:1.68;font-style:italic}
+.lore-new{display:inline-block;font-size:.6rem;background:var(--accent);color:#060812;
+  border-radius:999px;padding:2px 6px;font-weight:800;letter-spacing:.07em;
+  text-transform:uppercase;margin-left:5px;vertical-align:middle}
+
+/* GAME PANELS */
+.game-panel,.arena-panel{border-radius:var(--r);position:relative;overflow:hidden;
+  background:rgba(5,7,16,.9);border:1px solid rgba(255,255,255,.065);
+  display:flex;align-items:center;justify-content:center}
+
+/* SIGIL GRID */
+.sg-board-wrap{padding:24px;position:relative;z-index:2}
+.sg-board{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
+  width:min(420px,100%);min-width:320px}
+.sg-cell{aspect-ratio:1;min-height:96px;border-radius:18px;cursor:pointer;position:relative;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  display:grid;place-items:center;overflow:hidden;
+  transition:all .15s ease}
+.sg-cell::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(circle,rgba(255,255,255,.07),transparent 66%);
+  opacity:0;transition:opacity .18s ease}
+.sg-cell:hover:not(.locked):not(.filled)::before{opacity:1}
+.sg-cell:hover:not(.locked):not(.filled){border-color:rgba(255,255,255,.18);
+  background:rgba(255,255,255,.07);transform:scale(1.04)}
+.sg-cell.locked,.sg-cell.filled{cursor:default}
+.sg-cell.filled{background:rgba(255,255,255,.04)!important}
+.sg-cell.preview-star{border-color:rgba(126,200,255,.2);background:rgba(126,200,255,.04)}
+.sg-cell.preview-moon{border-color:rgba(255,158,200,.2);background:rgba(255,158,200,.04)}
+.sg-cell.win-cell{animation:win-flash .8s ease 2}
+.sg-mark{position:absolute;inset:0;display:grid;place-items:center;
+  z-index:2;pointer-events:none}
+/* Star: CSS clip-path 8-point star — no SVG, no background issues */
+.sg-mark.star::after{
+  content:'';display:block;
+  width:44%;aspect-ratio:1;
+  background:var(--blue);
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+  filter:drop-shadow(0 0 8px var(--blue)) drop-shadow(0 0 18px rgba(126,200,255,.5));
+  animation:rune-in .38s cubic-bezier(.2,.8,.2,1) forwards}
+/* Moon: CSS crescent — circle minus offset ellipse approximated via path */
+.sg-mark.moon::after{
+  content:'';display:block;
+  width:42%;aspect-ratio:1;
+  border-radius:50%;
+  background:var(--pink);
+  clip-path:polygon(50% 2%,66% 7%,79% 18%,87% 33%,89% 50%,86% 66%,77% 79%,63% 88%,50% 92%,46% 84%,44% 72%,44% 56%,46% 40%,51% 26%,50% 2%);
+  filter:drop-shadow(0 0 8px var(--pink)) drop-shadow(0 0 18px rgba(255,158,200,.5));
+  animation:rune-in .38s cubic-bezier(.2,.8,.2,1) forwards}
+.sg-win-line{position:absolute;height:2.5px;border-radius:999px;
+  background:linear-gradient(90deg,transparent,var(--mint),transparent);
+  box-shadow:0 0 14px var(--mint),0 0 30px rgba(94,221,168,.3);
+  transform-origin:left center;pointer-events:none;z-index:3}
+canvas.sg-bg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.45;z-index:1}
+
+/* PADDLE */
+#vpCanvas{display:block;width:100%;height:auto;border-radius:14px}
+.arena-panel{flex-direction:column;padding:18px;gap:10px}
+.vp-top-bar{width:100%;display:flex;align-items:center;justify-content:space-between;
+  padding:7px 14px;border-radius:10px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.05);z-index:2}
+.vp-top-txt{font-size:.8rem;color:var(--muted)}
+.touch-hint{display:none;text-align:center;font-size:.78rem;color:var(--muted);
+  margin-top:8px;letter-spacing:.07em}
+
+/* ECHO DRIFT */
+.echo-stage{width:min(680px,100%);padding:22px;display:flex;
+  flex-direction:column;gap:16px;align-items:center;position:relative;z-index:2}
+canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
+  pointer-events:none;border-radius:var(--r);z-index:0}
+.echo-banner{min-height:36px;display:flex;align-items:center;justify-content:center;z-index:1}
+.echo-event{display:none;padding:7px 16px;border-radius:999px;
+  background:rgba(238,216,122,.07);border:1px solid rgba(238,216,122,.2);
+  color:var(--gold);font-weight:700;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase}
+.echo-event.active{display:inline-flex}
+.echo-layout{display:grid;grid-template-columns:1fr 130px;gap:14px;
+  align-items:start;width:100%;z-index:1}
+.echo-board{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;min-width:240px}
+.echo-tile{aspect-ratio:1;min-height:70px;border-radius:16px;cursor:pointer;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  display:grid;place-items:center;font-size:1.75rem;position:relative;
+  transition:all .16s ease;touch-action:manipulation;overflow:hidden}
+.echo-tile::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(circle,rgba(255,255,255,.07),transparent 66%);
+  opacity:0;transition:opacity .18s ease}
+.echo-tile:hover:not(.locked)::before{opacity:1}
+.echo-tile:hover:not(.locked){transform:scale(1.04)}
+.echo-tile.selected{border-color:rgba(255,255,255,.28);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.echo-tile.placed{animation:echo-place .4s cubic-bezier(.2,.8,.2,1) forwards}
+.echo-tile.ghost::after{content:'';position:absolute;inset:22%;border-radius:9px;
+  border:1px dashed rgba(255,255,255,.07)}
+.echo-tile.decoy{border-color:rgba(255,85,119,.1)}
+.echo-tile.rune-aethra{color:var(--gold);text-shadow:0 0 12px rgba(238,216,122,.32)}
+.echo-tile.rune-nyxil{color:var(--accent);text-shadow:0 0 12px rgba(187,168,255,.32)}
+.echo-tile.rune-virel{color:var(--blue);text-shadow:0 0 12px rgba(126,200,255,.32)}
+.echo-tile.rune-thalen{color:var(--mint);text-shadow:0 0 12px rgba(94,221,168,.26)}
+.echo-tile.rune-kairo{color:var(--pink);text-shadow:0 0 12px rgba(255,158,200,.26)}
+.echo-tray{display:flex;flex-direction:column;gap:7px}
+.e-rune-btn{padding:13px 7px;border-radius:11px;cursor:pointer;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  font-size:1.5rem;display:grid;place-items:center;
+  transition:all .15s ease;touch-action:manipulation}
+.e-rune-btn:hover{transform:translateY(-2px);background:rgba(255,255,255,.08)}
+.e-rune-btn.active{background:rgba(255,255,255,.09);box-shadow:0 0 14px rgba(255,255,255,.06)}
+.e-rune-btn.rune-aethra{color:var(--gold)}.e-rune-btn.rune-nyxil{color:var(--accent)}
+.e-rune-btn.rune-virel{color:var(--blue)}.e-rune-btn.rune-thalen{color:var(--mint)}
+.e-rune-btn.rune-kairo{color:var(--pink)}
+.echo-msg{text-align:center;font-size:.88rem;color:var(--muted);
+  line-height:1.6;max-width:460px;min-height:50px;z-index:1}
+.echo-msg strong{display:block;color:var(--text);margin-bottom:3px;font-size:.92rem}
+
+/* Rune list sidebar */
+.rune-list{display:flex;flex-direction:column;gap:6px;margin-top:7px}
+.rune-row{display:flex;align-items:center;gap:8px;padding:6px 9px;border-radius:8px;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);transition:all .14s ease}
+.rune-row:hover{background:rgba(255,255,255,.05)}
+.rune-sym{font-size:.95rem;width:18px;text-align:center}
+.rune-nm{font-size:.8rem;color:var(--text)}
+.rune-row.rune-aethra .rune-sym{color:var(--gold)}
+.rune-row.rune-nyxil .rune-sym{color:var(--accent)}
+.rune-row.rune-virel .rune-sym{color:var(--blue)}
+.rune-row.rune-thalen .rune-sym{color:var(--mint)}
+.rune-row.rune-kairo .rune-sym{color:var(--pink)}
+
+/* VEIL WITHIN */
+#veilWithinScreen{padding:0;align-items:stretch;position:relative;
+  background:radial-gradient(circle at 50% 30%,rgba(238,216,122,.09),transparent 54%),
+  linear-gradient(180deg,#050710,#090b1e)}
+.vw-back{position:fixed;top:14px;right:14px;z-index:40;opacity:.55;transition:opacity .2s}
+.vw-back:hover{opacity:1}
+.vw-wrap{width:min(720px,100%);margin:0 auto;padding:36px 22px 72px;
+  min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+.vw-pips{display:flex;gap:9px;justify-content:center;margin-bottom:28px}
+.vw-pip{width:8px;height:8px;border-radius:50%;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.08);transition:all .38s ease}
+.vw-pip.active{background:var(--gold);border-color:rgba(238,216,122,.5);
+  box-shadow:0 0 9px rgba(238,216,122,.4)}
+.vw-pip.done{background:rgba(238,216,122,.26);border-color:rgba(238,216,122,.18)}
+.vw-eyebrow{font-size:.65rem;text-transform:uppercase;letter-spacing:.24em;
+  color:rgba(238,216,122,.52);margin-bottom:12px}
+.vw-title{font-size:clamp(1.65rem,4.5vw,2.5rem);font-weight:900;margin:0 0 9px;line-height:1.04}
+.vw-prose{color:var(--muted);line-height:1.88;font-size:.97rem;margin:0 0 24px}
+.vw-prose em{color:rgba(238,216,122,.7);font-style:normal}
+.vw-question{font-size:1.03rem;color:var(--text);line-height:1.65;
+  margin:0 0 22px;font-weight:500}
+.vw-choices{display:flex;flex-direction:column;gap:9px;margin-bottom:26px}
+.vw-choice{padding:16px 19px;border-radius:15px;cursor:pointer;
+  border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);
+  color:var(--muted);line-height:1.58;font-size:.92rem;
+  text-align:left;transition:all .19s ease;position:relative;overflow:hidden}
+.vw-choice::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(238,216,122,.055),transparent);
+  opacity:0;transition:opacity .19s ease}
+.vw-choice:hover{border-color:rgba(238,216,122,.24);color:var(--text);transform:translateY(-2px)}
+.vw-choice:hover::before{opacity:1}
+.vw-choice.selected{border-color:rgba(238,216,122,.42);
+  background:rgba(238,216,122,.065);color:var(--text)}
+.vw-choice.selected::before{opacity:1}
+.vw-choice-num{font-size:.62rem;text-transform:uppercase;letter-spacing:.16em;
+  color:rgba(238,216,122,.42);margin-bottom:4px;display:block}
+.vw-nav{display:flex;gap:9px;flex-wrap:wrap}
+
+/* VW Result */
+.vw-result{text-align:center;padding:6px 0;animation:rise .6s ease forwards}
+.vw-arch-sigil{font-size:4.2rem;display:block;margin-bottom:12px;animation:breathe 4s ease-in-out infinite}
+.vw-arch-name{font-family:'Cinzel',serif;font-size:clamp(1.7rem,5vw,2.7rem);font-weight:700;letter-spacing:.04em;margin:0 0 3px}
+.vw-arch-court{font-size:.75rem;text-transform:uppercase;letter-spacing:.2em;color:var(--muted);margin:0 0 22px}
+.vw-arch-desc{color:var(--muted);line-height:1.9;font-size:.97rem;text-align:left;
+  margin:0 0 18px;padding:20px;border-radius:15px;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.055)}
+.vw-arch-desc p{margin:0 0 11px}.vw-arch-desc p:last-child{margin:0}
+.vw-traits{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:20px;text-align:left}
+.vw-trait{padding:12px;border-radius:12px;
+  background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.05)}
+.vt-label{font-size:.63rem;text-transform:uppercase;letter-spacing:.13em;
+  color:var(--muted);opacity:.6;margin-bottom:4px}
+.vt-val{font-size:.88rem;color:var(--text);line-height:1.44}
+.vw-bars{margin-bottom:20px}
+.vw-bar-row{display:flex;align-items:center;gap:9px;margin-bottom:6px}
+.vwb-lbl{font-size:.72rem;color:var(--muted);opacity:.46;min-width:76px}
+.vwb-track{flex:1;height:3px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden}
+.vwb-fill{height:100%;border-radius:999px;transition:width 1.3s cubic-bezier(.2,.8,.2,1)}
+.vw-disclaimer{font-size:.74rem;color:rgba(154,164,204,.3);line-height:1.72;
+  text-align:center;padding:13px;border-radius:10px;
+  border:1px solid rgba(255,255,255,.038);margin-bottom:20px}
+.vw-disclaimer a{color:rgba(154,164,204,.45);text-decoration:underline}
+
+/* MODALS */
+.modal-wrap{position:fixed;inset:0;background:rgba(3,5,14,.74);
+  display:grid;place-items:center;z-index:60;padding:20px;backdrop-filter:blur(9px)}
+.modal-wrap.hidden{display:none}
+.modal{width:min(640px,100%);padding:26px;border-radius:22px;
+  background:rgba(8,11,32,.95);border:1px solid rgba(255,255,255,.08);
+  max-height:90vh;overflow-y:auto;
+  box-shadow:0 36px 90px rgba(0,0,0,.65)}
+.modal h2{font-size:1.35rem;font-weight:800;margin-bottom:14px}
+.modal-sec{margin-bottom:14px;padding:13px;border-radius:12px;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.055)}
+.modal-sec h3{font-size:.92rem;color:var(--gold);margin-bottom:7px}
+.modal-sec p,.modal-sec li{font-size:.88rem;color:var(--muted);line-height:1.64;margin:0 0 5px}
+.modal-sec ul{margin:0;padding-left:17px}
+.vol-row{display:flex;align-items:center;gap:11px;margin-top:9px}
+.vol-lbl{font-size:.78rem;color:var(--muted);min-width:68px;
+  text-transform:uppercase;letter-spacing:.07em}
+.vol-slider{flex:1;-webkit-appearance:none;height:4px;border-radius:999px;
+  background:rgba(255,255,255,.09);outline:none;cursor:pointer}
+.vol-slider::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;
+  border-radius:50%;background:var(--gold);box-shadow:0 0 7px rgba(238,216,122,.38);cursor:pointer}
+.vol-readout{font-size:.77rem;color:var(--gold);min-width:32px;text-align:right;font-weight:700}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;margin-top:9px}
+.toggle-lbl{font-size:.83rem;color:var(--muted)}
+.tog{position:relative;width:42px;height:23px;cursor:pointer}
+.tog input{opacity:0;width:0;height:0;position:absolute}
+.tog-track{position:absolute;inset:0;border-radius:999px;background:rgba(255,255,255,.09);transition:background .2s}
+.tog input:checked + .tog-track{background:var(--gold)}
+.tog-thumb{position:absolute;left:2px;top:2px;width:19px;height:19px;
+  border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 5px rgba(0,0,0,.3)}
+.tog input:checked ~ .tog-thumb{transform:translateX(19px)}
+
+/* END OVERLAYS */
+.end-overlay{position:fixed;inset:0;z-index:50;display:grid;place-items:center;
+  padding:22px;background:rgba(3,5,14,.8);backdrop-filter:blur(14px);animation:rise .38s ease}
+.end-overlay.hidden{display:none}
+.end-card{width:min(480px,100%);padding:32px;border-radius:24px;text-align:center;
+  border:1px solid rgba(255,255,255,.09);
+  background:linear-gradient(180deg,rgba(12,16,44,.95),rgba(6,8,20,.98));
+  box-shadow:0 36px 90px rgba(0,0,0,.58)}
+.end-card.win{border-color:rgba(94,221,168,.18);
+  box-shadow:0 36px 90px rgba(0,0,0,.58),0 0 52px rgba(94,221,168,.09)}
+.end-card.lose{border-color:rgba(187,168,255,.14)}
+.end-sigil{font-size:3rem;display:block;margin-bottom:9px}
+.end-title{font-family:'Cinzel',serif;font-size:1.6rem;font-weight:700;letter-spacing:.04em;margin:0 0 7px}
+.end-title.win{color:var(--mint)}.end-title.lose{color:var(--muted)}
+.end-sub{color:var(--muted);font-size:.92rem;line-height:1.6;margin:0 0 20px}
+.end-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:20px}
+.end-stat{padding:10px 6px;border-radius:11px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.05);
+  text-align:center;font-size:.71rem;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.07em}
+.end-stat strong{display:block;font-size:1.1rem;color:var(--gold);margin-top:3px;font-weight:800}
+.end-btns{display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+
+/* MILESTONE TOAST */
+.milestone-toast{position:fixed;bottom:26px;left:50%;z-index:100;
+  transform:translateX(-50%) translateY(90px);opacity:0;
+  padding:12px 20px;border-radius:16px;
+  background:linear-gradient(135deg,rgba(12,16,46,.98),rgba(7,9,20,.99));
+  border:1px solid rgba(238,216,122,.2);
+  box-shadow:0 12px 36px rgba(0,0,0,.52),0 0 26px rgba(238,216,122,.07);
+  color:var(--gold);font-size:.88rem;text-align:center;
+  transition:transform .4s cubic-bezier(.2,.8,.2,1),opacity .4s ease;
+  pointer-events:none;max-width:300px}
+.milestone-toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.milestone-toast strong{display:block;font-size:.97rem;margin-bottom:2px}
+
+/* MOBILE */
+@media(max-width:768px){
+  .game-shell{display:block}
+  .sidebar{position:fixed;bottom:0;left:0;right:0;z-index:30;
+    border-radius:20px 20px 0 0;max-height:76vh;overflow-y:auto;
+    transform:translateY(100%);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+  .sidebar.open{transform:translateY(0)}
+  .game-panel,.arena-panel{border-radius:0;min-height:100svh}
+  .mobile-hud{display:flex!important}
+  .sheet-bar{display:block!important}
+  .portal-grid{grid-template-columns:1fr}
+  .hub-stats{grid-template-columns:repeat(2,1fr)}
+  .vw-traits{grid-template-columns:1fr}
+  .sg-board{gap:9px}
+  .echo-layout{grid-template-columns:1fr;gap:10px}
+  .echo-tray{flex-direction:row;flex-wrap:wrap;justify-content:center;gap:8px}
+  .e-rune-btn{padding:14px 18px;font-size:1.6rem}
+  canvas{width:100%!important;max-width:100%!important}
+  .touch-hint{display:block!important}
+}
+@media(min-width:769px){
+  .mobile-hud{display:none!important}
+  .sheet-bar{display:none!important}
+}
+
+/* VEILED TRANSITION */
+.veil-trans{position:fixed;inset:0;pointer-events:none;opacity:0;
+  background:radial-gradient(circle at 50% 50%,rgba(187,168,255,.14),rgba(6,8,20,.88) 52%,rgba(4,5,14,.98) 100%);
+  z-index:999;transition:opacity .4s ease}
+.veil-trans.active{opacity:1}
+
+/* MOBILE HUD + SHEET */
+.mobile-hud{position:fixed;top:0;left:0;right:0;z-index:25;
+  padding:9px 13px 7px;background:rgba(5,7,17,.9);
+  backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.055);
+  align-items:center;justify-content:space-between;gap:9px}
+.mob-scores{display:flex;gap:11px;align-items:center}
+.mob-score{font-size:.78rem;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:1px}
+.mob-score strong{font-size:.95rem;font-weight:800}
+.mob-score.you strong{color:var(--blue)}
+.mob-score.warden strong{color:var(--pink)}
+.mob-status{font-size:.74rem;color:var(--muted);flex:1;text-align:center;
+  overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.mob-btns{display:flex;gap:6px}
+.mob-btns button{padding:6px 10px;font-size:.73rem;border-radius:8px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);
+  color:var(--text);cursor:pointer;font:inherit;font-weight:600}
+.sheet-bar{position:fixed;bottom:0;left:0;right:0;z-index:24;padding:0 13px 13px}
+.sheet-pull{background:rgba(8,10,28,.94);backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,.07);border-radius:16px 16px 0 0;
+  padding:9px 16px 7px;display:flex;align-items:center;
+  justify-content:space-between;cursor:pointer;position:relative}
+.sheet-line{width:32px;height:3px;border-radius:999px;
+  background:rgba(255,255,255,.14);position:absolute;left:50%;
+  transform:translateX(-50%);top:6px}
+.sheet-lbl{font-size:.69rem;text-transform:uppercase;letter-spacing:.13em;color:var(--muted)}
+.sheet-btns{display:flex;gap:6px}
+.sheet-btns button{padding:6px 10px;font-size:.72rem;border-radius:8px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.07);
+  color:var(--text);cursor:pointer;font:inherit;font-weight:600}
+
+/* ── VEIL WITHIN expanded styles ── */
+.vw-intro-sigil{width:88px;height:88px;position:relative;
+  border-radius:50%;border:1px solid rgba(238,216,122,.22);
+  display:grid;place-items:center;
+  box-shadow:0 0 32px rgba(238,216,122,.08);
+  animation:breathe 4s ease-in-out infinite}
+.vw-intro-sigil-core{font-size:2.2rem;color:var(--gold);
+  text-shadow:0 0 24px rgba(238,216,122,.5)}
+.vw-choice-num{font-size:.6rem;text-transform:uppercase;letter-spacing:.16em;
+  color:rgba(238,216,122,.38);margin-bottom:4px;display:block}
+.vw-arch-sigil{font-size:4rem;display:block;text-align:center;margin-bottom:12px;
+  animation:breathe 4s ease-in-out infinite}
+.vw-arch-name{font-size:clamp(1.85rem,5vw,2.9rem);font-weight:900;
+  text-align:center;margin:0 0 3px}
+.vw-arch-court{font-size:.74rem;text-transform:uppercase;letter-spacing:.2em;
+  color:var(--muted);margin:0 0 18px;text-align:center;display:block}
+.vw-arch-desc{color:var(--muted);line-height:1.9;font-size:.96rem;text-align:left;
+  margin:0 0 20px;padding:20px;border-radius:15px;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.055)}
+.vw-arch-desc p{margin:0 0 12px}.vw-arch-desc p:last-child{margin:0}
+</style>
+
+</head>
+<body>
+
+<!-- INTRO SCREEN -->
+<div id="introScreen">
+  <div class="intro-wrap">
+    <div class="intro-sigil">
+      <div class="i-ring"></div><div class="i-ring"></div><div class="i-ring"></div>
+      <div class="i-core">✶</div>
+    </div>
+    <h1 class="intro-title">Faebound Realm</h1>
+    <p class="intro-sub">Four crossings wait beyond the Veil</p>
+    <p style="max-width:440px;margin:0 auto 26px;color:rgba(200,210,240,.48);font-size:.88rem;line-height:1.65">
+      A living realm of trials, echoes, and thresholds.<br>Each crossing changes something — even if only slightly.
+    </p>
+    <div class="intro-enter" id="introEnterBtn">Enter the Veil</div>
+    <p style="margin-top:20px;font-size:.76rem;color:rgba(154,164,204,.38);letter-spacing:.18em;text-transform:uppercase;animation:flicker 2.8s ease-in-out infinite">
+      Touch or press any key
+    </p>
+  </div>
+  <div class="intro-note">Faebound Realm · A threshold into the Veil Between</div>
+</div>
+
+<!-- BACKGROUND LAYERS -->
+<canvas id="realmCanvas"></canvas>
+<div class="stars-layer" id="starsLayer"></div>
+<div class="fx-layer" id="fxLayer"></div>
+<div class="veil-trans" id="veilTrans"></div>
+<div class="milestone-toast" id="milestoneToast"><strong id="mTitle"></strong><span id="mSub"></span></div>
+
+<!-- HUB SCREEN -->
+<section class="screen hidden" id="hubScreen">
+  <canvas id="hubCanvas"></canvas>
+  <div class="hub-inner">
+    <!-- Sigil -->
+    <div class="hub-sigil-wrap">
+      <div class="hub-sigil">
+        <div class="h-ring"></div><div class="h-ring"></div>
+        <div class="h-core">✶</div>
+      </div>
+    </div>
+    <p class="eyebrow" style="text-align:center;margin-bottom:6px">A threshold into the Veil</p>
+    <h1 class="realm-title" style="text-align:center;margin-bottom:10px">Faebound Realm</h1>
+    <p class="sub-text" style="margin-bottom:24px">
+      Four paths through the Veil. Each one offers a different kind of gain:<br>precision, rhythm, recall, or reflection.
+    </p>
+
+    <!-- Depth badge -->
+    <div class="depth-badge">
+      <span>Veil Depth</span>
+      <span class="depth-num" id="veilDepthNum">0</span>
+    </div>
+
+    <!-- Stats -->
+    <div class="hub-stats">
+      <div class="hub-stat"><div class="hs-label">Crossings</div><div class="hs-val" id="arcPlayed">0</div></div>
+      <div class="hub-stat"><div class="hs-label">Completed</div><div class="hs-val" id="arcCompleted">0</div></div>
+      <div class="hub-stat"><div class="hs-label">Veil Depth</div><div class="hs-val" id="arcVeilDepth">0</div></div>
+      <div class="hub-stat"><div class="hs-label">Best Streak</div><div class="hs-val" id="arcBestStreak">0</div></div>
+    </div>
+
+    <!-- Recent Crossing -->
+    <div class="recent-cross">
+      <span class="rc-glyph" id="rcGlyph">◈</span>
+      <div class="rc-info">
+        <div class="rc-label">Last Echo</div>
+        <div class="rc-val" id="rcVal">None yet — enter a trial to begin</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" id="resumeBtn" disabled>Return to Trial</button>
+    </div>
+
+    <!-- Trial Portals -->
+    <div class="portal-grid">
+      <article class="portal portal-sigil-grid" data-launch="sigil-grid">
+        <div class="portal-glow"></div>
+        <div class="portal-icon">✦</div>
+        <span class="portal-kicker">Pattern Trial</span>
+        <h3 class="portal-name">Sigil Grid</h3>
+        <p class="portal-desc">A shifting constellation of symbols responds to your perception. Challenge the Warden or a second player — three paths, three thresholds of difficulty.</p>
+        <p class="portal-promise"><strong>What this crossing offers:</strong> sharper pattern recognition and cleaner decisions.</p>
+        <button class="btn btn-primary btn-sm portal-enter" data-launch-btn="sigil-grid">Enter Trial</button>
+      </article>
+
+      <article class="portal portal-paddle" data-launch="veil-paddle">
+        <div class="portal-glow"></div>
+        <div class="portal-icon">☾</div>
+        <span class="portal-kicker">Motion Trial</span>
+        <h3 class="portal-name">Veil Paddle</h3>
+        <p class="portal-desc">A living current of motion that adapts to your rhythm. The orb accelerates. The Warden adapts. Touch-ready for mobile.</p>
+        <p class="portal-promise"><strong>What this crossing offers:</strong> better rhythm, focus, and responsiveness under pressure.</p>
+        <button class="btn btn-primary btn-sm portal-enter" data-launch-btn="veil-paddle">Enter Trial</button>
+      </article>
+
+      <article class="portal portal-echo" data-launch="echo-drift">
+        <div class="portal-glow"></div>
+        <div class="portal-icon">◇</div>
+        <span class="portal-kicker">Memory Trial</span>
+        <h3 class="portal-name">Echo Drift</h3>
+        <p class="portal-desc">A memory surfaces, then dissolves. The Veil closes. Reconstruct what you held — rune and position both matter. Decoys cloud the path.</p>
+        <p class="portal-promise"><strong>What this crossing offers:</strong> stronger recall and calm under vanishing information.</p>
+        <button class="btn btn-primary btn-sm portal-enter" data-launch-btn="echo-drift">Enter Trial</button>
+      </article>
+
+      <article class="portal portal-within glass-gold" data-launch="veil-within">
+        <div class="portal-glow"></div>
+        <div class="portal-icon">✶</div>
+        <span class="portal-kicker" style="color:rgba(238,216,122,.6)">Reflection Trial</span>
+        <h3 class="portal-name" style="color:var(--gold)">The Veil Within</h3>
+        <p class="portal-desc">Five chambers. Five ways of meeting what is human. Not a test — an encounter. There are no right answers, only honest ones.</p>
+        <p class="portal-promise"><strong>What this crossing offers:</strong> reflection, language, and a clearer sense of how you move through feeling.</p>
+        <button class="btn btn-gold btn-sm portal-enter" data-launch-btn="veil-within">Enter the Veil</button>
+      </article>
+    </div>
+
+    <!-- Footer -->
+    <div class="hub-footer">
+      <button class="btn btn-ghost btn-sm" id="hubHelpBtn">How the Trials Work</button>
+      <button class="btn btn-ghost btn-sm" id="settingsBtn">⚙ Settings</button>
+    </div>
+  </div>
+</section>
+
+<!-- SETTINGS MODAL -->
+<div class="modal-wrap hidden" id="settingsModal">
+  <div class="modal">
+    <div class="eyebrow">Faebound Realm</div>
+    <h2>Settings</h2>
+    <div class="modal-sec">
+      <div class="sec-label">Music</div>
+      <div class="vol-row">
+        <span class="vol-lbl">Volume</span>
+        <input type="range" class="vol-slider" id="musicVol" min="0" max="100" value="75">
+        <span class="vol-readout" id="musicVolReadout">75%</span>
+      </div>
+      <div class="toggle-row">
+        <span class="toggle-lbl">Music enabled</span>
+        <label class="tog"><input type="checkbox" id="musicToggle" checked>
+          <div class="tog-track"></div><div class="tog-thumb"></div></label>
+      </div>
+    </div>
+    <div class="modal-sec">
+      <div class="sec-label">Sound Effects</div>
+      <div class="vol-row">
+        <span class="vol-lbl">Volume</span>
+        <input type="range" class="vol-slider" id="sfxVol" min="0" max="100" value="80">
+        <span class="vol-readout" id="sfxVolReadout">80%</span>
+      </div>
+      <div class="toggle-row">
+        <span class="toggle-lbl">Effects enabled</span>
+        <label class="tog"><input type="checkbox" id="sfxToggle" checked>
+          <div class="tog-track"></div><div class="tog-thumb"></div></label>
+      </div>
+    </div>
+    <div class="modal-sec">
+      <div class="sec-label">Archive</div>
+      <p style="font-size:.86rem;color:var(--muted);margin-bottom:10px">Trial history and scores saved to this device.</p>
+      <button class="btn btn-danger btn-sm" id="clearArchiveBtn">Clear Archive Data</button>
+    </div>
+    <div class="btns" style="margin-top:4px"><button class="btn btn-primary" id="closeSettingsBtn">Done</button></div>
+  </div>
+</div>
+
+<!-- HUB HELP MODAL -->
+<div class="modal-wrap hidden" id="hubHelpModal">
+  <div class="modal">
+    <div class="eyebrow">The Trials</div>
+    <h2>Four paths through the Veil</h2>
+    <div class="modal-sec">
+      <h3>✦ Sigil Grid — Pattern Trial</h3>
+      <p>A turn-based duel on a 3×3 field. You are Star (✦), the Warden is Moon (☾). Three in a row claims the constellation. Three difficulty paths: Drifted, Veiled, Warden-Touched.</p>
+    </div>
+    <div class="modal-sec">
+      <h3>☾ Veil Paddle — Motion Trial</h3>
+      <p>Keep the orb in play. Desktop: W/S keys. Mobile: drag the left half of the arena. The ball accelerates with every rally. Three difficulty paths.</p>
+    </div>
+    <div class="modal-sec">
+      <h3>◇ Echo Drift — Memory Trial</h3>
+      <p>A pattern of runes appears briefly, then the Veil closes. Reconstruct what you saw — rune and position both matter. Higher difficulty adds decoy runes and reduces reveal time.</p>
+    </div>
+    <div class="modal-sec">
+      <h3>✶ The Veil Within — Reflection Trial</h3>
+      <p>Five chambers. Five questions drawn from emotional intelligence research. The Veil shows you which of four archetypes you carry most strongly. Not a diagnosis — a reflection. Choose honestly, not strategically.</p>
+      <p style="margin-top:8px">Draws on the Four-Branch Model of Emotional Intelligence (Mayer & Salovey, 1997) and RULER (Brackett/Yale, 2019).</p>
+    </div>
+    <div class="modal-sec">
+      <h3>Court Themes</h3>
+      <p>Moon, Ember, and Veil courts shift color, music frequencies, and ambient tones. Choose the one that feels right.</p>
+    </div>
+    <div class="btns"><button class="btn btn-primary" id="closeHubHelpBtn">Back to the Hub</button></div>
+  </div>
+</div>
+
+<!-- END OVERLAYS -->
+<div class="end-overlay hidden" id="sgEndOverlay">
+  <div class="end-card" id="sgEndCard">
+    <span class="end-sigil" id="sgEndSigil">✦</span>
+    <h2 class="end-title" id="sgEndTitle">The Stars Prevail</h2>
+    <p class="end-sub" id="sgEndSub">The constellation is complete.</p>
+    <div class="end-stats">
+      <div class="end-stat">Rounds<strong id="sgEndRounds">0</strong></div>
+      <div class="end-stat">Wins<strong id="sgEndWins">0</strong></div>
+      <div class="end-stat">Draws<strong id="sgEndDraws">0</strong></div>
+    </div>
+    <div class="end-btns">
+      <button class="btn btn-primary" id="sgEndPlayAgain">Cross Again</button>
+      <button class="btn btn-ghost" id="sgEndHub">Return to Realm</button>
+    </div>
+  </div>
+</div>
+
+<div class="end-overlay hidden" id="vpEndOverlay">
+  <div class="end-card" id="vpEndCard">
+    <span class="end-sigil" id="vpEndSigil">☾</span>
+    <h2 class="end-title" id="vpEndTitle">The Arena Stills</h2>
+    <p class="end-sub" id="vpEndSub">The rally is over.</p>
+    <div class="end-stats">
+      <div class="end-stat">Your Score<strong id="vpEndYours">0</strong></div>
+      <div class="end-stat">Best Rally<strong id="vpEndRally">0</strong></div>
+      <div class="end-stat">Matches<strong id="vpEndMatches">0</strong></div>
+    </div>
+    <div class="end-btns">
+      <button class="btn btn-primary" id="vpEndPlayAgain">Cross Again</button>
+      <button class="btn btn-ghost" id="vpEndHub">Return to Realm</button>
+    </div>
+  </div>
+</div>
+
+<div class="end-overlay hidden" id="edEndOverlay">
+  <div class="end-card" id="edEndCard">
+    <span class="end-sigil" id="edEndSigil">◇</span>
+    <h2 class="end-title" id="edEndTitle">The Pattern Holds</h2>
+    <p class="end-sub" id="edEndSub">What was seen has been remembered.</p>
+    <div class="end-stats">
+      <div class="end-stat">Streak<strong id="edEndStreak">0</strong></div>
+      <div class="end-stat">Best<strong id="edEndBest">0</strong></div>
+      <div class="end-stat">Difficulty<strong id="edEndDiff">Drifted</strong></div>
+    </div>
+    <div class="end-btns">
+      <button class="btn btn-primary" id="edEndPlayAgain">Drift Again</button>
+      <button class="btn btn-ghost" id="edEndHub">Return to Realm</button>
+    </div>
+  </div>
+</div>
+
+<!-- SIGIL GRID SCREEN -->
+<section class="game-screen-wrap hidden" id="sigilScreen">
+  <!-- Mobile HUD -->
+  <div class="mobile-hud" id="sgMobHud">
+    <div class="mob-scores">
+      <div class="mob-score you"><span>You</span><strong id="sgMobX">0</strong></div>
+      <div class="mob-score" style="font-size:.65rem;color:var(--muted)">vs</div>
+      <div class="mob-score warden"><span>Warden</span><strong id="sgMobO">0</strong></div>
+    </div>
+    <div class="mob-status" id="sgMobStatus">Ready</div>
+    <div class="mob-btns">
+      <button onclick="window.sg?.resetRound()">↺</button>
+    </div>
+  </div>
+  <!-- Sheet bar -->
+  <div class="sheet-bar" id="sgSheetBar">
+    <div class="sheet-pull" onclick="toggleSidebar('sg')">
+      <div class="sheet-line"></div>
+      <span class="sheet-lbl">◈ Details</span>
+      <div class="sheet-btns">
+        <button onclick="event.stopPropagation();window.sg?.resetRound()">Reset</button>
+        <button onclick="event.stopPropagation();backToHub(()=>window.sg?.resetRound())">Hub</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="game-shell">
+    <aside class="sidebar" id="sgSidebar">
+      <div class="obs-box">
+        <div class="sec-label">Observatory</div>
+        <div class="obs-txt" id="obsText">The Veil is quiet… for now.</div>
+      </div>
+      <div>
+        <div class="eyebrow">Pattern Trial</div>
+        <h2 style="font-size:1.5rem;margin-bottom:3px">Sigil Grid</h2>
+        <p style="font-size:.9rem;color:var(--muted)">Three in a row claims the constellation.</p>
+      </div>
+      <div class="sidebar-sec">
+        <div class="sec-label">Status</div>
+        <div class="sec-status" id="sgStatusText">Ready — Star's turn</div>
+        <div class="turn-strip">
+          <div class="t-orb" id="sgTurnOrb"></div>
+          <span class="t-txt" id="sgTurnLabel">Star is active</span>
+        </div>
+      </div>
+      <div class="sidebar-sec">
+        <div class="sec-label">Score</div>
+        <div class="score-row">
+          <div class="sc-cell sc-you"><div class="sc-lbl" id="sgLabelX">You ✦</div><div class="sc-val" id="sgScoreX">0</div></div>
+          <div class="sc-cell sc-warden"><div class="sc-lbl" id="sgLabelO">Warden ☾</div><div class="sc-val" id="sgScoreO">0</div></div>
+          <div class="sc-cell sc-draw"><div class="sc-lbl">Draws</div><div class="sc-val" id="sgScoreDraw">0</div></div>
+        </div>
+      </div>
+      <div class="sidebar-sec">
+        <div class="sec-label">Difficulty</div>
+        <div class="diff-row">
+          <button class="diff-btn active" data-sg-diff="initiate">Drifted</button>
+          <button class="diff-btn" data-sg-diff="adept">Veiled</button>
+          <button class="diff-btn" data-sg-diff="warden">Warden-Touched</button>
+        </div>
+      </div>
+      <div class="sidebar-sec">
+        <div class="sec-label">Mode</div>
+        <div class="mode-row">
+          <div class="mode-cell"><div class="mc-lbl">Active</div><div class="mc-val" id="sgModeLabel">Two Players</div></div>
+          <div class="mode-cell"><div class="mc-lbl">Opponent</div><div class="mc-val" id="sgOpponentLabel">Human</div></div>
+        </div>
+      </div>
+      <div class="sidebar-sec">
+        <div class="sec-label">Round History</div>
+        <div class="h-pills" id="sgHistory"></div>
+      </div>
+      <div class="lore-panel hidden" id="sgLorePanel"></div>
+      <div class="btns" style="flex-wrap:wrap;gap:7px">
+        <button class="btn btn-sm" id="sgResetRoundBtn">Reset Round</button>
+        <button class="btn btn-ghost btn-sm" id="sgResetScoresBtn">Reset Scores</button>
+        <button class="btn btn-sm" id="sgSwapModeBtn">Swap Mode</button>
+        <button class="btn btn-ghost btn-sm" id="backFromSigilBtn">Return to Realm</button>
+      </div>
+    </aside>
+
+    <section class="game-panel" id="sgGamePanel">
+      <canvas class="sg-bg" id="sgBgCanvas"></canvas>
+      <div style="text-align:center;color:var(--muted);font-size:.82rem;margin-bottom:14px;opacity:.78">Shape the constellation by claiming three in a row.</div><div class="sg-board-wrap">
+        <div class="sg-board" id="sgBoard"></div>
+        <div class="sg-win-line" id="sgWinLine" style="opacity:0;width:0"></div>
+      </div>
+    </section>
+  </section>
+</section>
+
+<!-- VEIL PADDLE SCREEN -->
+<section class="game-screen-wrap hidden" id="paddleScreen">
+  <div class="mobile-hud" id="vpMobHud">
+    <div class="mob-scores">
+      <div class="mob-score you"><span>You</span><strong id="vpMobL">0</strong></div>
+      <div class="mob-score" style="font-size:.65rem;color:var(--muted)">vs</div>
+      <div class="mob-score warden"><span>Warden</span><strong id="vpMobR">0</strong></div>
+    </div>
+    <div class="mob-status" id="vpMobStatus">Ready</div>
+    <div class="mob-btns">
+      <button id="vpMobStart">▶</button>
+      <button id="vpMobPause">⏸</button>
+    </div>
+  </div>
+  <div class="sheet-bar" id="vpSheetBar">
+    <div class="sheet-pull" onclick="toggleSidebar('vp')">
+      <div class="sheet-line"></div>
+      <span class="sheet-lbl">◈ Details</span>
+      <div class="sheet-btns">
+        <button onclick="event.stopPropagation();window.vp?.resetMatch()">Reset</button>
+        <button onclick="event.stopPropagation();backToHub(()=>window.vp?.resetMatch())">Hub</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="game-shell">
+    <aside class="sidebar" id="vpSidebar">
+      <div>
+        <div class="eyebrow">Motion Trial</div>
+        <h2 style="font-size:1.5rem;margin-bottom:3px">Veil Paddle</h2>
+        <p style="font-size:.9rem;color:var(--muted)">Keep the orb alive. Score when the Warden fails.</p>
+      </div>
+      <div class="sidebar-sec">
+        <div class="sec-label">Status</div>
+        <div class="sec-status" id="vpStatusText">Ready — press Start</div>
+        <div class="turn-strip">
+          <div class="t-orb" id="vpTurnOrb"></div>
+          <span class="t-txt" id="vpTurnLabel">Arena is stable</span>
+        </div>
+      </div>
+      <div class="sidebar-sec">
+        <div class="sec-label">Score</div>
+        <div class="score-row">
+          <div class="sc-cell sc-you"><div class="sc-lbl" id="vpLabelLeft">You</div><div class="sc-val" id="vpScoreLeft">0</div></div>
+          <div class="sc-cell sc-warden"><div class="sc-lbl" id="vpLabelRight">Warden</div><div class="sc-val" id="vpScoreRight">0</div></div>
+          <div class="sc-cell sc-rally"><div class="sc-lbl">Best Rally</div><div class="sc-val" id="vpBestRally">0</div></div>
+        </div>
+      </div>
+      <div class="sidebar-sec">
+        <div class="sec-label">Difficulty</div>
+        <div class="diff-row">
+          <button class="diff-btn active" data-vp-diff="initiate">Drifted</button>
+          <button class="diff-btn" data-vp-diff="adept">Veiled</button>
+          <button class="diff-btn" data-vp-diff="warden">Warden-Touched</button>
+        </div>
+      </div>
+      <div class="sidebar-sec">
+        <div class="sec-label">Mode</div>
+        <div class="mode-row">
+          <div class="mode-cell"><div class="mc-lbl">Active</div><div class="mc-val" id="vpModeLabel">Solo vs Warden</div></div>
+          <div class="mode-cell"><div class="mc-lbl">Controls</div><div class="mc-val" id="vpControlLabel">W/S or Touch</div></div>
+        </div>
+      </div>
+      <div class="sidebar-sec">
+        <div class="sec-label">Match Ledger</div>
+        <div class="h-pills" id="vpHistory"></div>
+      </div>
+      <div class="sidebar-sec">
+        <div class="sec-label">Controls</div>
+        <p style="font-size:.82rem;color:var(--muted)">Desktop: W/S keys. Mobile: drag left side of arena. Two Players: Arrow keys for right paddle.</p>
+      </div>
+      <div class="lore-panel hidden" id="vpLorePanel"></div>
+      <div class="btns" style="flex-wrap:wrap;gap:7px">
+        <button class="btn btn-sm" id="vpStartRoundBtn">Start / Serve</button>
+        <button class="btn btn-ghost btn-sm" id="vpPauseBtn">Pause</button>
+        <button class="btn btn-ghost btn-sm" id="vpResetMatchBtn">Reset</button>
+        <button class="btn btn-sm" id="vpSwapModeBtn">Swap Mode</button>
+        <button class="btn btn-ghost btn-sm" id="backFromPaddleBtn">Return to Realm</button>
+      </div>
+    </aside>
+
+    <section class="arena-panel" id="vpArenaPanel">
+      <div class="vp-top-bar">
+        <span class="vp-top-txt" id="vpHudLeft">You: 0</span>
+        <span class="vp-top-txt" id="vpHudBanner">Ready — press Start</span>
+        <span class="vp-top-txt" id="vpHudRight">Warden: 0</span>
+      </div>
+      <canvas id="vpCanvas" width="960" height="540"></canvas>
+      <p class="touch-hint" id="vpTouchHint">Drag anywhere on the <strong style="color:var(--blue)">left half</strong> to move your paddle</p>
+    </section>
+  </section>
+</section>
+
+<!-- ECHO DRIFT SCREEN -->
+<section class="game-screen-wrap hidden" id="echoDriftScreen">
+  <div class="mobile-hud" id="edMobHud">
+    <div class="mob-scores">
+      <div class="mob-score"><span>Streak</span><strong id="edMobStreak">0</strong></div>
+      <div class="mob-score" style="margin-left:8px"><span>Best</span><strong id="edMobBest" style="color:var(--gold)">0</strong></div>
+    </div>
+    <div class="mob-status" id="edMobStatus">Ready</div>
+    <div class="mob-btns">
+      <button id="edMobStart">Begin</button>
+      <button id="edMobCheck" disabled>Seal</button>
+    </div>
+  </div>
+  <div class="sheet-bar" id="edSheetBar">
+    <div class="sheet-pull" onclick="toggleSidebar('ed')">
+      <div class="sheet-line"></div>
+      <span class="sheet-lbl">◈ Details</span>
+      <div class="sheet-btns">
+        <button onclick="event.stopPropagation();window.ed?.resetAll()">Reset</button>
+        <button onclick="event.stopPropagation();backToHub(()=>window.ed?.resetAll())">Hub</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="game-shell">
+    <aside class="sidebar" id="edSidebar">
+      <div>
+        <div class="eyebrow">Memory Trial</div>
+        <h2 style="font-size:1.5rem;margin-bottom:3px">Echo Drift</h2>
+        <p style="font-size:.9rem;color:var(--muted)">Hold what you saw. Rebuild what remains.</p>
+      </div>
+      <div class="sidebar-sec">
+        <div class="sec-label">Status</div>
+        <div class="sec-status" id="edStatusText">Ready — press Begin Drift</div>
+        <div class="turn-strip">
+          <div class="t-orb" id="edTurnOrb"></div>
+          <span class="t-txt" id="edTurnLabel">Awaiting first reveal</span>
+        </div>
+      </div>
+      <div class="sidebar-sec">
+        <div class="sec-label">Difficulty</div>
+        <div class="diff-row">
+          <button class="diff-btn active" data-ed-diff="initiate">Drifted</button>
+          <button class="diff-btn" data-ed-diff="adept">Veiled</button>
+          <button class="diff-btn" data-ed-diff="warden">Warden-Touched</button>
+        </div>
+      </div>
+      <div class="sidebar-sec">
+        <div class="sec-label">Runes of the Drift</div>
+        <div class="rune-list">
+          <div class="rune-row rune-aethra"><span class="rune-sym">✦</span><span class="rune-nm">Aethra</span></div>
+          <div class="rune-row rune-nyxil"><span class="rune-sym">☾</span><span class="rune-nm">Nyxil</span></div>
+          <div class="rune-row rune-virel"><span class="rune-sym">◇</span><span class="rune-nm">Virel</span></div>
+          <div class="rune-row rune-thalen"><span class="rune-sym">∴</span><span class="rune-nm">Thalen</span></div>
+          <div class="rune-row rune-kairo"><span class="rune-sym">⌁</span><span class="rune-nm">Kairo</span></div>
+        </div>
+      </div>
+      <div class="lore-panel" id="edLorePanel">
+        <div class="sec-label">Archive Note</div>
+        <p class="lore-txt">This trial does not ask you to move quickly. It asks whether you can hold a thing after it has begun to disappear.</p>
+      </div>
+      <div class="btns" style="flex-wrap:wrap;gap:7px">
+        <button class="btn btn-sm" id="edStartBtn">Begin Drift</button>
+        <button class="btn btn-ghost btn-sm" id="edCheckBtn" disabled>Seal Pattern</button>
+        <button class="btn btn-ghost btn-sm" id="edResetBtn">Reset</button>
+        <button class="btn btn-ghost btn-sm" id="backFromEchoBtn">Return to Realm</button>
+      </div>
+    </aside>
+
+    <section class="game-panel" id="edGamePanel">
+      <canvas class="echo-bg" id="edBgCanvas"></canvas>
+      <div class="echo-stage" id="echoStage">
+        <div class="echo-banner">
+          <div class="echo-event" id="edEventBanner">The Veil closes</div>
+        </div>
+        <div class="echo-layout">
+          <div class="echo-board" id="edBoard"></div>
+          <div class="echo-tray" id="edTray"></div>
+        </div>
+        <div class="echo-msg" id="edMsg"><strong>Awaiting first pattern</strong>The board is still. Nothing has crossed the Veil yet.</div>
+      </div>
+    </section>
+  </section>
+</section>
+
+<!-- VEIL WITHIN SCREEN -->
+<section class="game-screen-wrap hidden" id="veilWithinScreen" style="padding:0;align-items:stretch">
+  <button class="btn btn-ghost btn-sm vw-back" id="backFromVeilWithinBtn">Return to Realm</button>
+  <div class="vw-wrap" id="vwWrap">
+    <!-- Injected by JS -->
+  </div>
+</section>
+
+<script>
+'use strict';
+// ══════════════════════════════════════════════════════════════════════════
+//  FAEBOUND TRIALS  ·  REALM BUILD  ·  CORE SYSTEMS
+// ══════════════════════════════════════════════════════════════════════════
+
+// ── ARCHIVE ───────────────────────────────────────────────────────────────
+const archive = (() => {
+  let d = {trialsPlayed:0,trialsCompleted:0,fractures:0,surges:0,bestStreak:0};
+  try{const s=localStorage.getItem('faeboundArchive');if(s)d={...d,...JSON.parse(s)};}catch(e){}
+  function save(){try{localStorage.setItem('faeboundArchive',JSON.stringify(d));}catch(e){}}
+  function render(){
+    const map = {arcPlayed:'trialsPlayed',arcCompleted:'trialsCompleted',arcBestStreak:'bestStreak'};
+    Object.entries(map).forEach(([id,k])=>{const el=document.getElementById(id);if(el)el.textContent=d[k]||0;});
+    ['arcVeilDepth','veilDepthNum'].forEach(id=>{
+      const el=document.getElementById(id); if(!el)return;
+      try{el.textContent=parseInt(localStorage.getItem('faeboundVeilDepth')||'0')||0;}catch(e){el.textContent=0;}
+    });
+  }
+  function inc(key,n=1){d[key]=(d[key]||0)+n;save();render();}
+  function get(k){return d[k]||0;}
+  render();
+  return {inc,render,get};
+})();
+
+// ── THEMES ────────────────────────────────────────────────────────────────
+// Single realm identity — Moon Court aesthetic
+// Scale data lives in the music engine; no court switching
+const REALM_SCALE = { root:73.42, steps:[0,2,3,5,7,9,10,12,14,15,17,19] };
+
+// Court system removed — single realm identity
+
+// ── STARS ─────────────────────────────────────────────────────────────────
+function initStars() {
+  const el = document.getElementById('starsLayer'); if(!el) return;
+  el.innerHTML = '';
+  for(let i=0;i<72;i++){
+    const s=document.createElement('div'); s.className='star';
+    const sz = Math.random()*2+.5;
+    s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;width:${sz}px;height:${sz}px;animation-duration:${2+Math.random()*5}s;animation-delay:${Math.random()*5}s;opacity:${Math.random()*.6+.15}`;
+    el.appendChild(s);
+  }
+}
+
+// ── PARTICLES ─────────────────────────────────────────────────────────────
+function burst(x, y, color='var(--accent)', count=12) {
+  const el = document.getElementById('fxLayer'); if(!el) return;
+  for(let i=0;i<count;i++){
+    const p=document.createElement('div'); p.className='fx-particle';
+    const angle=Math.random()*Math.PI*2, dist=28+Math.random()*52, dur=380+Math.random()*280;
+    const sz=3+Math.random()*5;
+    p.style.cssText=`left:${x}px;top:${y}px;width:${sz}px;height:${sz}px;background:${color};box-shadow:0 0 8px ${color}`;
+    el.appendChild(p);
+    p.animate([
+      {transform:'translate(-50%,-50%) scale(.8)',opacity:.95},
+      {transform:`translate(calc(-50% + ${Math.cos(angle)*dist}px),calc(-50% + ${Math.sin(angle)*dist}px)) scale(${.4+Math.random()*.7})`,opacity:0}
+    ],{duration:dur,easing:'cubic-bezier(.22,.61,.36,1)'});
+    setTimeout(()=>p.remove(),dur+50);
+  }
+}
+// ── burstParticles compatibility shim ────────────────────────────
+function burstParticles(point, theme, count=12) {
+  if (!point) return;
+  const colorMap = {
+    pink:'var(--pink)', blue:'var(--blue)', mint:'var(--mint)',
+    neutral:'var(--accent)', gold:'var(--gold)'
+  };
+  burst(point.x, point.y, colorMap[theme]||colorMap.neutral, count);
+}
+
+
+// ── AUDIO CORE ────────────────────────────────────────────────────────────
+const audio = (() => {
+  let ctx=null;
+  function ensure(){
+    if(!ctx){const AC=window.AudioContext||window.webkitAudioContext;if(AC)ctx=new AC();}
+    if(ctx&&ctx.state==='suspended')ctx.resume();
+  }
+  function tone(freq=440,dur=.08,type='sine',vol=.022,slide=null){
+    ensure(); if(!ctx) return;
+    const now=ctx.currentTime, osc=ctx.createOscillator(), g=ctx.createGain();
+    osc.type=type; osc.frequency.setValueAtTime(freq,now);
+    if(slide) osc.frequency.exponentialRampToValueAtTime(slide,now+dur);
+    g.gain.setValueAtTime(.0001,now); g.gain.exponentialRampToValueAtTime(vol,now+.01);
+    g.gain.exponentialRampToValueAtTime(.0001,now+dur);
+    osc.connect(g); g.connect(ctx.destination); osc.start(now); osc.stop(now+dur+.02);
+  }
+  function ctx_() { ensure(); return ctx; }
+  return {ensure,tone,ctx:ctx_};
+})();
+
+// ── MUSIC ENGINE v4 ───────────────────────────────────────────────────────
+window.ambient = (() => {
+  let actx=null,master=null,compressor=null;
+  let droneOscs=[],droneGains=[];
+  let melGain=null,bassGain=null,bellGain=null;
+  let seqTimer=null,running=false,bellTimer=null;
+  let curScreen='hub';
+  let musicVol=.75,musicEnabled=true;
+  let melStep=0,melPat=0,paddleTension=0;
+  let skipChance=.1,octShift=0;
+
+  // Single scale: D Dorian — the realm's voice
+  function noteHz(deg,oct=0){
+    const s=REALM_SCALE;
+    const semi=s.steps[((deg%s.steps.length)+s.steps.length)%s.steps.length];
+    return s.root*Math.pow(2,(semi+oct*12)/12);
+  }
+
+  // ── PHRASES ── designed for each space's feel
+  // hub:   floating, unhurried — long rests, wide leaps, no rush
+  // sigil: measured, deliberate — calls and silences between moves
+  // paddle: rhythmic tension — shorter rests, driving but still spacious
+  // echo:  minimal, meditative — a note, then long silence, then another
+  const PHRASES={
+    hub:[
+      // Call phrase — descends from high, long rests, then a leap back up
+      [7,null,null,null,null,null,5,null,null,null,null,null,3,null,null,null,null,null,null,null,9,null,null,null,null,null,7,null,null,null,null,null],
+      // Response phrase — lower, slower, more intimate
+      [4,null,null,null,null,null,2,null,null,null,null,null,0,null,null,null,null,null,null,null,null,null,5,null,null,null,null,null,null,null,null,null],
+      // Ascending phrase — wonder, reaching upward
+      [0,null,null,null,null,null,null,null,5,null,null,null,null,null,7,null,null,null,null,null,null,null,null,null,10,null,null,null,null,null,null,null],
+      // Rest phrase — mostly silence, a single note in the distance
+      [null,null,null,null,null,null,null,null,7,null,null,null,null,null,null,null,null,null,null,null,null,null,3,null,null,null,null,null,null,null,null,null],
+    ],
+    sigil:[
+      // Deliberate opening — note, silence, echo lower
+      [5,null,null,null,null,null,3,null,null,null,null,null,null,null,7,null,null,null,null,null,5,null,null,null,null,null,2,null,null,null,null,null],
+      // Tense middle — smaller intervals, slightly shorter rests
+      [4,null,null,null,2,null,null,null,null,null,5,null,null,null,4,null,null,null,null,null,3,null,null,null,null,null,null,null,null,null,null,null],
+      // Warden phrase — lower, heavier, descending
+      [7,null,null,null,null,null,null,null,5,null,null,null,null,null,3,null,null,null,null,null,null,null,2,null,null,null,null,null,null,null,null,null],
+      // Resolution phrase — comes home, ends on rest
+      [3,null,null,null,5,null,null,null,null,null,7,null,null,null,null,null,5,null,null,null,null,null,null,null,3,null,null,null,null,null,null,null],
+    ],
+    paddle:[
+      // Driving but still breathing — notes come in pairs with gaps between
+      [5,null,null,7,null,null,null,null,4,null,null,5,null,null,null,null,3,null,null,4,null,null,null,null,2,null,null,3,null,null,null,null],
+      // Ascending tension — wider leaps as energy builds
+      [0,null,null,null,5,null,null,null,null,null,7,null,null,null,null,null,5,null,null,7,null,null,null,null,9,null,null,null,null,null,null,null],
+      // Fast call-response pairs
+      [7,null,5,null,null,null,null,null,4,null,2,null,null,null,null,null,5,null,3,null,null,null,null,null,4,null,5,null,null,null,null,null],
+      // Descending with momentum
+      [9,null,null,null,7,null,null,5,null,null,null,4,null,null,3,null,null,null,2,null,null,null,null,null,0,null,null,null,null,null,null,null],
+    ],
+    echo:[
+      // Ultra-sparse — each note is an event, long silence between
+      [5,null,null,null,null,null,null,null,null,null,null,null,3,null,null,null,null,null,null,null,null,null,null,null,7,null,null,null,null,null,null,null],
+      [null,null,null,null,null,null,7,null,null,null,null,null,null,null,null,null,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,null],
+      [2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,5,null,null,null,null,null,null,null,null,null,null,null,3,null,null,null],
+      [null,null,null,null,null,null,null,null,9,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,7,null,null,null,null,null],
+    ],
+  };
+  const BASS={
+    // Bass: very sparse — 1-2 notes per phrase, long sustain
+    hub:[0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,5,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+    sigil:[0,null,null,null,null,null,null,null,4,null,null,null,null,null,null,null,0,null,null,null,null,null,null,null,5,null,null,null,null,null,null,null],
+    paddle:[0,null,null,null,5,null,null,null,0,null,null,null,4,null,null,null,0,null,null,null,3,null,null,null,0,null,null,null,5,null,null,null],
+    echo:[0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,7,null,null,null,null,null,null,null],
+  };
+  // Tempos — slower overall to increase space between notes
+  const TEMPO={hub:.72,sigil:.48,paddle:.28,echo:1.20};
+
+  function getCtx(){
+    if(!actx){const AC=window.AudioContext||window.webkitAudioContext;if(AC)actx=new AC();}
+    if(actx&&actx.state==='suspended')actx.resume();
+    return actx;
+  }
+  function makeReverb(c,secs=3.8,decay=2.6){
+    const conv=c.createConvolver(),len=c.sampleRate*secs,buf=c.createBuffer(2,len,c.sampleRate);
+    for(let ch=0;ch<2;ch++){const d=buf.getChannelData(ch);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,decay);}
+    conv.buffer=buf; return conv;
+  }
+  function startDrones(c,dry,rev){
+    stopDrones();
+    const root=REALM_SCALE.root;
+    // Pure sine drones — silver, resonant, ethereal
+    [[.5,'sine',.20,0],[1,'sine',.13,-4],[1,'sine',.08,+4],[1.5,'sine',.06,-2],[2,'sine',.038,+3],[3,'sine',.022,-1]].forEach(([m,t,v,det])=>{
+      const osc=c.createOscillator(),g=c.createGain();
+      osc.type=t; osc.frequency.value=root*m; osc.detune.value=det;
+      g.gain.setValueAtTime(.0001,c.currentTime); g.gain.exponentialRampToValueAtTime(v,c.currentTime+4.2);
+      osc.connect(g); g.connect(dry); g.connect(rev); osc.start();
+      droneOscs.push(osc); droneGains.push(g);
+    });
+    const lfo=c.createOscillator(),lg=c.createGain();
+    lfo.frequency.value=.055; lg.gain.value=.012;
+    lfo.connect(lg); droneGains.forEach(g=>lg.connect(g.gain)); lfo.start();
+    droneOscs.push(lfo);
+  }
+  function stopDrones(){droneOscs.forEach(o=>{try{o.stop();}catch(e){}});droneOscs=[];droneGains=[];}
+
+  function playMelNote(freq,dur,vol=.1){
+    const c=getCtx(); if(!c||!melGain) return;
+    const now=c.currentTime;
+    // Pure sines with subtle vibrato — silver, ethereal, Moon Court voice
+    [[0,'sine',1,3.2,freq*.0018,.08],[+7,'sine',.28,3.8,freq*.0012,.12]].forEach(([det,type,vScale,vibRate,vibDepth,atk])=>{
+      const osc=c.createOscillator(),g=c.createGain();
+      osc.type=type; osc.frequency.value=freq; osc.detune.value=det;
+      if(vibRate>0){
+        const vib=c.createOscillator(),vg=c.createGain();
+        vib.frequency.value=vibRate; vg.gain.value=vibDepth;
+        vib.connect(vg); vg.connect(osc.frequency);
+        vib.start(now+atk*2); vib.stop(now+dur+.3);
+      }
+      const v=vol*vScale;
+      g.gain.setValueAtTime(.0001,now);
+      g.gain.exponentialRampToValueAtTime(v,now+atk);
+      g.gain.setValueAtTime(v*.75,now+dur*.5);
+      g.gain.exponentialRampToValueAtTime(.0001,now+dur*1.1);
+      osc.connect(g); g.connect(melGain); osc.start(now); osc.stop(now+dur*1.2);
+    });
+  }
+  function playBassNote(freq,dur){
+    const c=getCtx(); if(!c||!bassGain) return;
+    const now=c.currentTime;
+    [[freq*.5,'sine',.28],[freq,'sine',.14],[freq*2,'sine',.05]].forEach(([f,t,v])=>{
+      const osc=c.createOscillator(),g=c.createGain();
+      osc.type=t; osc.frequency.value=f;
+      g.gain.setValueAtTime(.0001,now); g.gain.exponentialRampToValueAtTime(v,now+.14);
+      g.gain.exponentialRampToValueAtTime(v*.45,now+dur*.55); g.gain.exponentialRampToValueAtTime(.0001,now+dur*1.05);
+      osc.connect(g); g.connect(bassGain); osc.start(now); osc.stop(now+dur*1.15);
+    });
+  }
+  function playBell(){
+    const c=getCtx(); if(!c||!bellGain) return;
+    // Perfect 4ths and 5ths — pure, open, celestial
+    const pool=[0,7,12,5,7,3];
+    const deg=pool[Math.floor(Math.random()*pool.length)];
+    const freq=noteHz(deg,2); const now=c.currentTime;
+    [[1,1],[1.498,.32],[2,.15],[2.996,.07]].forEach(([ratio,v])=>{
+      const osc=c.createOscillator(),g=c.createGain();
+      osc.type='sine'; osc.frequency.value=freq*ratio;
+      g.gain.setValueAtTime(.0001,now); g.gain.exponentialRampToValueAtTime(.058*v,now+.006);
+      g.gain.exponentialRampToValueAtTime(.0001,now+4.2+v*2);
+      osc.connect(g); g.connect(bellGain); osc.start(now); osc.stop(now+6.5);
+    });
+  }
+  function scheduleBells(){
+    if(bellTimer)clearTimeout(bellTimer);
+    if(!running||!musicEnabled)return;
+    const interval=curScreen==='hub'?(6+Math.random()*16):curScreen==='echo'?(8+Math.random()*20):(12+Math.random()*22);
+    bellTimer=setTimeout(()=>{if(running&&musicEnabled){playBell();scheduleBells();}}, interval*1000);
+  }
+
+  function maybeTweak(){
+    if(Math.random()<.22) octShift=[-1,0,0,0,+1][Math.floor(Math.random()*5)];
+    skipChance=curScreen==='echo'?.16:.09;
+  }
+
+  function tick(){
+    if(!running||!musicEnabled) return;
+    const tempo=TEMPO[curScreen]||TEMPO.hub;
+    const phrases=PHRASES[curScreen]||PHRASES.hub;
+    const bass=BASS[curScreen]||BASS.hub;
+    const patLen=phrases[0].length;
+    const pat=phrases[melPat%phrases.length];
+    const deg=pat[melStep%patLen];
+    if(deg!=null&&Math.random()>skipChance){
+      const oct=curScreen==='paddle'?(1+Math.floor(paddleTension*1.5)+octShift):(1+octShift);
+      const dur=tempo*(curScreen==='echo'?2.9:curScreen==='hub'?2.3:1.9);
+      playMelNote(noteHz(deg,Math.max(0,Math.min(3,oct))),dur,.1+paddleTension*.04);
+    }
+    if(melStep%2===0){
+      const bDeg=bass[melStep%bass.length];
+      if(bDeg!=null) playBassNote(noteHz(bDeg,0),tempo*3.8);
+    }
+    melStep++;
+    if(melStep>=patLen){melStep=0;melPat=(melPat+1)%phrases.length;maybeTweak();}
+    seqTimer=setTimeout(tick,tempo*1000);
+  }
+
+  function getMasterVol(){return musicEnabled?musicVol*.86:.0001;}
+
+  function startEngine(){
+    const c=getCtx(); if(!c||running) return;
+    compressor=c.createDynamicsCompressor();
+    compressor.threshold.value=-16; compressor.knee.value=8;
+    compressor.ratio.value=3.2; compressor.attack.value=.08; compressor.release.value=.55;
+    master=c.createGain(); master.gain.value=.0001;
+    master.connect(compressor); compressor.connect(c.destination);
+    // Long reverb — resonant, spacious, ethereal
+    const rev=makeReverb(c,4.8,2.2);
+    const dry=c.createGain();dry.gain.value=.50;
+    const wet=c.createGain();wet.gain.value=.50;
+    rev.connect(wet); dry.connect(master); wet.connect(master);
+    melGain=c.createGain();melGain.gain.value=1;melGain.connect(dry);melGain.connect(rev);
+    bassGain=c.createGain();bassGain.gain.value=1;bassGain.connect(dry);bassGain.connect(rev);
+    bellGain=c.createGain();bellGain.gain.value=.85;bellGain.connect(dry);bellGain.connect(rev);
+    startDrones(c,dry,rev);
+    running=true;
+    master.gain.cancelScheduledValues(c.currentTime);
+    master.gain.setValueAtTime(.0001,c.currentTime);
+    master.gain.exponentialRampToValueAtTime(getMasterVol(),c.currentTime+3);
+    melStep=0;melPat=0;maybeTweak();
+    setTimeout(()=>{if(running){tick();scheduleBells();}},1000);
+  }
+
+  function ensure(){
+    const c=getCtx(); if(!c) return;
+    if(c.state==='suspended'){c.resume().then(()=>{if(!running)startEngine();});return;}
+    if(!running)startEngine();
+  }
+  // setTheme removed — single realm identity
+  function setIntensity(screen){
+    if(!running)ensure();
+    if(curScreen===screen)return;
+    curScreen=screen; paddleTension=0;
+    melStep=0;melPat=0;
+    if(seqTimer){clearTimeout(seqTimer);seqTimer=null;}
+    if(master&&actx){
+      const now=actx.currentTime,vol=getMasterVol();
+      master.gain.cancelScheduledValues(now);
+      master.gain.setTargetAtTime(vol*.25,now,.1);
+      master.gain.setTargetAtTime(vol,now+.5,.3);
+    }
+    if(running)setTimeout(()=>{if(running)tick();},200);
+  }
+  function setMusicVolume(v){musicVol=v;if(master&&actx)master.gain.setTargetAtTime(getMasterVol(),actx.currentTime,.3);}
+  function setMusicEnabled(on){
+    musicEnabled=on;
+    if(master&&actx){
+      if(on){master.gain.setTargetAtTime(getMasterVol(),actx.currentTime,.5);if(!running)startEngine();}
+      else{master.gain.setTargetAtTime(.0001,actx.currentTime,.4);}
+    }
+  }
+  function swell(amt=.006){
+    if(!master||!actx||!musicEnabled)return;
+    const now=actx.currentTime,vol=getMasterVol();
+    master.gain.cancelScheduledValues(now);
+    master.gain.setTargetAtTime(Math.min(vol*1.3,vol+amt*12),now,.07);
+    master.gain.setTargetAtTime(vol,now+.9,.55);
+  }
+  function setPaddleTension(t){
+    paddleTension=Math.max(0,Math.min(1,t));
+    if(!master||!actx||curScreen!=='paddle')return;
+    master.gain.setTargetAtTime(getMasterVol()*(1+paddleTension*.3),actx.currentTime,.3);
+  }
+  return {ensure,setIntensity,setMusicVolume,setMusicEnabled,swell,setPaddleTension};
+})();
+
+// ── HUB WORLD CANVAS ─────────────────────────────────────────────────────
+window.hubWorld = (() => {
+  const canvas = document.getElementById('hubCanvas');
+  if(!canvas) return {setTheme:()=>{},tick:()=>{}};
+  const ctx = canvas.getContext('2d');
+  let W=0,H=0,animId=null,running=false;
+  let theme = 'moon';
+  let particles=[];
+  let t=0;
+
+  const THEME_FOG = {
+    moon:['rgba(90,60,200,.05)','rgba(50,30,160,.04)','rgba(120,80,220,.04)'],
+  };
+
+  // Floating mist orbs
+  let orbs = [];
+  function initOrbs(){
+    orbs = [];
+    const colors = THEME_FOG[theme]||THEME_FOG.moon;
+    for(let i=0;i<8;i++){
+      orbs.push({
+        x:Math.random()*W, y:Math.random()*H,
+        r:120+Math.random()*220,
+        vx:(Math.random()-.5)*.15, vy:(Math.random()-.5)*.12,
+        color:colors[i%colors.length],
+        phase:Math.random()*Math.PI*2,
+        speed:(.2+Math.random()*.3)*(.001+Math.random()*.002)
+      });
+    }
+  }
+
+  // Constellation stars (static, large)
+  let constellationStars = [];
+  function initConstellation(){
+    constellationStars = [];
+    for(let i=0;i<40;i++){
+      constellationStars.push({
+        x:Math.random()*W, y:Math.random()*H,
+        r:Math.random()*1.8+.4,
+        bright:Math.random()*.6+.2,
+        phase:Math.random()*Math.PI*2,
+        speed:Math.random()*.008+.002
+      });
+    }
+  }
+
+  // Shooting stars
+  let shooters = [];
+  let nextShooter = 3;
+  function spawnShooter(){
+    shooters.push({
+      x:Math.random()*W*.6,
+      y:Math.random()*H*.4,
+      len:60+Math.random()*100,
+      vx:1.2+Math.random()*2.2,
+      vy:.4+Math.random()*.8,
+      life:1, alpha:.9
+    });
+    nextShooter = 4+Math.random()*10;
+  }
+
+  function resize(){
+    W = canvas.offsetWidth; H = canvas.offsetHeight;
+    canvas.width=W; canvas.height=H;
+    initOrbs(); initConstellation();
+  }
+
+  function draw(){
+    if(!running)return;
+    ctx.clearRect(0,0,W,H);
+    t += .016;
+
+    // Mist orbs
+    orbs.forEach(o=>{
+      o.x += o.vx; o.y += o.vy;
+      if(o.x<-o.r)o.x=W+o.r; if(o.x>W+o.r)o.x=-o.r;
+      if(o.y<-o.r)o.y=H+o.r; if(o.y>H+o.r)o.y=-o.r;
+      const pulse = 1+Math.sin(t*o.speed*50+o.phase)*.18;
+      const grad = ctx.createRadialGradient(o.x,o.y,0,o.x,o.y,o.r*pulse);
+      grad.addColorStop(0,o.color); grad.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=grad; ctx.fillRect(o.x-o.r*pulse,o.y-o.r*pulse,o.r*pulse*2,o.r*pulse*2);
+    });
+
+    // Constellation stars
+    constellationStars.forEach(s=>{
+      const alpha = s.bright*(0.5+0.5*Math.sin(t*s.speed*60+s.phase));
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,255,255,${alpha})`; ctx.fill();
+    });
+
+    // Shooting stars
+    nextShooter -= .016;
+    if(nextShooter<=0) spawnShooter();
+    shooters = shooters.filter(s=>{
+      s.x+=s.vx*2; s.y+=s.vy*2; s.life-=.018;
+      if(s.life<=0)return false;
+      const grad=ctx.createLinearGradient(s.x,s.y,s.x-s.vx*s.len,s.y-s.vy*s.len);
+      grad.addColorStop(0,`rgba(255,255,255,${s.life*.7})`);
+      grad.addColorStop(.3,`rgba(200,180,255,${s.life*.3})`);
+      grad.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath(); ctx.moveTo(s.x,s.y);
+      ctx.lineTo(s.x-s.vx*s.len,s.y-s.vy*s.len);
+      ctx.strokeStyle=grad; ctx.lineWidth=1.5; ctx.stroke();
+      return true;
+    });
+
+    animId = requestAnimationFrame(draw);
+  }
+
+  function start(){
+    if(running)return; // prevent stacking
+    running=true; resize(); draw();
+    window.addEventListener('resize',resize);
+  }
+  function stop(){
+    running=false;
+    if(animId){cancelAnimationFrame(animId);animId=null;}
+    window.removeEventListener('resize',resize);
+  }
+  function setArchetypeColors(colors){
+    // Briefly blend archetype colors into mist orbs, then fade back to realm colors
+    orbs.forEach((o,i)=>{ o.color=colors[i%colors.length]; });
+    setTimeout(()=>{ const c=THEME_FOG.moon; orbs.forEach((o,i)=>{ o.color=c[i%c.length]; }); }, 12000);
+  }
+
+  return {start,stop,setArchetypeColors};
+})();
+
+// ── SCREEN NAVIGATION ────────────────────────────────────────────────────
+const screens = {
+  hub: document.getElementById('hubScreen'),
+  sigil: document.getElementById('sigilScreen'),
+  paddle: document.getElementById('paddleScreen'),
+  echo: document.getElementById('echoDriftScreen'),
+  veilWithin: document.getElementById('veilWithinScreen'),
+};
+const veilTrans = document.getElementById('veilTrans');
+
+function pulseTransition(cb){
+  veilTrans.classList.add('active');
+  setTimeout(()=>{ veilTrans.classList.remove('active'); if(cb)cb(); }, 200);
+}
+
+function showOnly(key){
+  pulseTransition(()=>{
+    Object.values(screens).forEach(s=>s.classList.add('hidden'));
+    document.getElementById('hubHelpModal')?.classList.add('hidden');
+    screens[key]?.classList.remove('hidden');
+    if(key==='hub'){ window.hubWorld.start(); }
+    else { window.hubWorld.stop(); }
+  });
+}
+
+function backToHub(resetFn){
+  window.ambient.setIntensity('hub');
+  if(resetFn)resetFn();
+  closeSidebars();
+  showOnly('hub');
+  updateRecentCrossing();
+}
+window.backToHub = backToHub;
+
+// ── SIDEBAR TOGGLE (mobile) ───────────────────────────────────────────────
+function toggleSidebar(game){
+  const id={sg:'sgSidebar',vp:'vpSidebar',ed:'edSidebar'}[game];
+  const sb=document.getElementById(id); if(!sb)return;
+  const isOpen=sb.classList.contains('open');
+  closeSidebars();
+  if(!isOpen){
+    sb.classList.add('open');
+    // Inject drag handle if needed
+    if(!sb.querySelector('.drawer-bar')){
+      const bar=document.createElement('div');
+      bar.className='drawer-bar';
+      bar.style.cssText='display:flex;justify-content:center;padding:10px 0 6px;cursor:pointer;position:sticky;top:0;z-index:1;background:rgba(8,11,30,.88);backdrop-filter:blur(12px);border-radius:20px 20px 0 0;margin:-18px -18px 12px;';
+      bar.innerHTML='<div style="width:36px;height:3px;border-radius:999px;background:rgba(255,255,255,.18)"></div>';
+      bar.addEventListener('click',()=>closeSidebars());
+      sb.insertBefore(bar,sb.firstChild);
+    }
+  }
+}
+function closeSidebars(){
+  document.querySelectorAll('.sidebar').forEach(s=>s.classList.remove('open'));
+}
+// Close on tap outside
+document.addEventListener('pointerdown',e=>{
+  document.querySelectorAll('.sidebar.open').forEach(sb=>{
+    if(!sb.contains(e.target)){
+      const bar = sb.closest('.game-screen-wrap')?.querySelector('.sheet-bar');
+      if(!bar||!bar.contains(e.target)) sb.classList.remove('open');
+    }
+  });
+});
+
+// ── GAME LAUNCH ───────────────────────────────────────────────────────────
+const _sessionGames=new Set();
+function launchGame(game){
+  audio.ensure(); window.ambient.ensure();
+  try{localStorage.setItem('faeboundLastGame',game);}catch(e){}
+  _sessionGames.add(game);
+  if(_sessionGames.size===4&&!_sessionGames.has('_allFourCelebrated')){
+    _sessionGames.add('_allFourCelebrated');
+    setTimeout(()=>{
+      showMilestone('All Four Crossings','You have walked every path the Veil offers. Something shifts in the realm.');
+      obsLines.push('You have crossed all four thresholds. The Veil knows your shape now.');
+    },3500);
+  }
+
+  if(game==='sigil-grid'){
+    window.ambient.setIntensity('sigil');
+    showOnly('sigil');
+    setTimeout(()=>{ if (window.sg?.begin) window.sg.begin(); else if (window.sg?.resetScores) window.sg.resetScores(); else if (window.sg?.resetRound) window.sg.resetRound(); }, 40);
+    setTimeout(()=>{ if (document.getElementById('sgBoard') && document.getElementById('sgBoard').children.length===0) { if (window.sg?.begin) window.sg.begin(); } }, 220);
+    onFirstVisit('sigil','sgLorePanel');
+  }
+  if(game==='veil-paddle'){
+    window.ambient.setIntensity('paddle');
+    window.vp?.resetMatch();
+    showOnly('paddle');
+    setTimeout(()=>window.vp?.draw(),100);
+    onFirstVisit('paddle','vpLorePanel');
+  }
+  if(game==='echo-drift'){
+    window.ambient.setIntensity('echo');
+    window.ed?.resetAll();
+    showOnly('echo');
+    onFirstVisit('echo','edLorePanel');
+  }
+  if(game==='veil-within'){
+    window.ambient.setIntensity('echo');
+    window.vw?.begin();
+    showOnly('veilWithin');
+  }
+  updateRecentCrossing();
+}
+
+document.querySelectorAll('[data-launch],[data-launch-btn]').forEach(el=>{
+  el.addEventListener('click',e=>{
+    const game=e.currentTarget.dataset.launch||e.currentTarget.dataset.launchBtn;
+    launchGame(game);
+  });
+});
+
+// Court theme buttons removed
+
+document.getElementById('backFromSigilBtn')?.addEventListener('click',()=>backToHub(()=>window.sg?.resetRound()));
+document.getElementById('backFromPaddleBtn')?.addEventListener('click',()=>backToHub(()=>window.vp?.resetMatch()));
+document.getElementById('backFromEchoBtn')?.addEventListener('click',()=>backToHub(()=>window.ed?.resetAll()));
+document.getElementById('backFromVeilWithinBtn')?.addEventListener('click',()=>backToHub(()=>{}));
+
+// ── INTRO DISMISS ────────────────────────────────────────────────────────
+function dismissIntro(){
+  const intro=document.getElementById('introScreen');
+  if(!intro||intro.classList.contains('hidden'))return;
+  audio.ensure();
+  intro.style.transition='opacity .7s ease';
+  intro.style.opacity='0';
+  intro.style.pointerEvents='none';
+  setTimeout(()=>{
+    intro.classList.add('hidden');
+    // Start hub canvas slightly before full reveal so world appears through fade
+    window.hubWorld.start();
+    showOnly('hub');
+    setTimeout(()=>window.ambient.ensure(),200);
+  },400);
+}
+document.getElementById('introScreen')?.addEventListener('pointerdown',dismissIntro,{once:true});
+document.getElementById('introEnterBtn')?.addEventListener('click',dismissIntro);
+document.addEventListener('keydown',function onKey(e){
+  if(['Tab','Shift','Control','Alt','Meta'].includes(e.key))return;
+  document.removeEventListener('keydown',onKey); dismissIntro();
+});
+
+// ── OBSERVATORY ───────────────────────────────────────────────────────────
+const obsLines = [
+  "Four trials rest within the Veil.",
+  "Some forces reward precision. Others reward patience.",
+  "No two crossings feel the same.",
+  "The Veil remembers movement, not outcome.",
+  "Stillness reveals more than force.",
+  "Not all victories are visible.",
+  "What you place cannot be taken back.",
+  "The Warden has learned from every challenger before you.",
+  "The pattern exists only as long as you hold it.",
+  "What you carry here shapes what you find.",
+  "The Veil does not judge. It reflects.",
+  "Every drift is a practice in letting go.",
+  "The orb knows nothing of your intention. Only your timing.",
+  "Some crossings leave marks that are not yet visible.",
+  "The constellation is not yours until it is complete.",
+  "What you notice first reveals more than what you do next.",
+  "Presence is its own kind of skill.",
+  "The Warden has no patience — only persistence.",
+  "Memory is not recall. It is the shape that remains.",
+  "A draw is not a failure. It is a negotiation.",
+  "The Veil opens for the honest and the patient alike.",
+  "Speed is not always the advantage it appears to be.",
+  "Something here changes each time you return.",
+  "Not every pattern is visible from inside it.",
+  "What the Veil shows is not always what you expected to see.",
+  "The moon does not compete with the stars. It keeps its own light.",
+  "Hold what you see. Trust what you held.",
+  "The realm does not forget those who enter it more than once.",
+];
+let _obsShownThisSession=new Set();
+function tickObservatory(){
+  const el=document.getElementById('obsText'); if(!el)return;
+  // Pick a line not shown this session
+  const unseen=obsLines.filter(l=>!_obsShownThisSession.has(l));
+  const pool=unseen.length>0?unseen:obsLines;
+  if(unseen.length===0)_obsShownThisSession.clear();
+  const line=pool[Math.floor(Math.random()*pool.length)];
+  _obsShownThisSession.add(line);
+  el.classList.add('fading');
+  setTimeout(()=>{ el.textContent=line; el.classList.remove('fading'); },300);
+}
+setInterval(tickObservatory,7000);
+
+// ── RECENT CROSSING ───────────────────────────────────────────────────────
+function updateRecentCrossing(){
+  const val=document.getElementById('rcVal');
+  const btn=document.getElementById('resumeBtn');
+  const glyph=document.getElementById('rcGlyph');
+  try{
+    const last=localStorage.getItem('faeboundLastGame')||'';
+    const result=JSON.parse(localStorage.getItem('faeboundLastVeilWithinResult')||'null');
+    const labels={'sigil-grid':'Sigil Grid','veil-paddle':'Veil Paddle','echo-drift':'Echo Drift','veil-within':'The Veil Within'};
+    const glyphs={'sigil-grid':'✦','veil-paddle':'☾','echo-drift':'◇','veil-within':'✶'};
+    if(last&&labels[last]){
+      let txt=labels[last];
+      if(last==='veil-within'&&result){
+        txt=`The Veil Within · ${result.name}`;
+        // Tint hub mist toward archetype color
+        const arcColors={
+          'The Seer':['rgba(126,200,255,.07)','rgba(80,160,220,.05)','rgba(160,210,255,.05)'],
+          'The Ember':['rgba(220,140,40,.08)','rgba(200,100,20,.06)','rgba(240,180,60,.05)'],
+          'The Weaver':['rgba(160,120,255,.07)','rgba(130,90,220,.05)','rgba(190,155,255,.05)'],
+          'The Root':['rgba(60,200,140,.07)','rgba(40,160,100,.05)','rgba(80,220,160,.05)'],
+        };
+        if(arcColors[result.name]&&window.hubWorld?.setArchetypeColors){
+          window.hubWorld.setArchetypeColors(arcColors[result.name]);
+        }
+      }
+      if(val)val.textContent=txt;
+      if(glyph)glyph.textContent=glyphs[last]||'◈';
+      if(btn){btn.disabled=false; btn.onclick=()=>launchGame(last);}
+    } else {
+      if(val)val.textContent='None yet — enter a trial to begin';
+      if(btn)btn.disabled=true;
+    }
+  }catch(e){}
+}
+
+// ── LORE ─────────────────────────────────────────────────────────────────
+const LORE = {
+  sigil:[
+    {trigger:'first', text:"The Sigil Grid is the oldest of the Trials. It is said the first challenger played the Warden to a draw — and the Warden has remembered every move since."},
+    {trigger:'win',   text:"Your constellation holds. The Veil acknowledges the pattern."},
+    {trigger:'lose',  text:"The Warden has seen this shape before. It will remember yours."},
+    {trigger:'draw',  text:"The sky balances. Neither force nor counter-force prevailed. This is rarer than most believe."},
+  ],
+  paddle:[
+    {trigger:'first', text:"Veil Paddle tests whether you can hold your position as the world accelerates around you. The Warden does not tire."},
+    {trigger:'win',   text:"The arena stills. You held the line when the Warden could not."},
+    {trigger:'lose',  text:"The orb passed through. The Warden does not gloat — it simply waits for the next serve."},
+  ],
+  echo:[
+    {trigger:'first',   text:"Echo Drift is the quietest of the Trials. The Veil shows you the pattern once — and what you do with that moment is entirely yours."},
+    {trigger:'success', text:"What was seen has been held. The drift resolves cleanly."},
+    {trigger:'fail',    text:"Something slipped between seeing and remembering. The Veil makes no judgment of this."},
+  ],
+  veilWithin:[
+    {trigger:'first',    text:"The Veil Within is the oldest crossing. It does not ask you to win. It asks you to be honest."},
+    {trigger:'complete', text:"The Veil has seen your shape. What it returned is not a judgment — it is a reflection."},
+  ],
+};
+let loreShown={};
+try{loreShown=JSON.parse(localStorage.getItem('faeboundLore')||'{}');}catch(e){}
+function saveLore(){try{localStorage.setItem('faeboundLore',JSON.stringify(loreShown));}catch(e){}}
+function showLore(game,trigger){
+  const pool=LORE[game]||[];
+  const entry=pool.find(l=>l.trigger===trigger); if(!entry)return;
+  const ids={sigil:'sgLorePanel',paddle:'vpLorePanel',echo:'edLorePanel'};
+  const panel=document.getElementById(ids[game]); if(!panel)return;
+  const isNew=!loreShown[game+trigger]; loreShown[game+trigger]=true; saveLore();
+  panel.innerHTML=`<div class="sec-label">Archive Note${isNew?'<span class="lore-new">New</span>':''}</div><p class="lore-txt">${entry.text}</p>`;
+  panel.classList.remove('hidden');
+}
+function onFirstVisit(game,panelId){
+  try{
+    if(!localStorage.getItem('fbF_'+game)){
+      localStorage.setItem('fbF_'+game,'1');
+      setTimeout(()=>showLore(game,'first'),800);
+    }
+  }catch(e){}
+}
+
+// ── PROGRESSION ───────────────────────────────────────────────────────────
+const progression = (() => {
+  let depth=0;
+  try{depth=parseInt(localStorage.getItem('faeboundVeilDepth')||'0')||0;}catch(e){}
+  const MILESTONES={
+    3:{title:'The Veil Stirs',sub:'Three crossings complete. The world has noticed.'},
+    7:{title:'Known to the Veil',sub:'Seven crossings. The patterns are beginning to remember you.'},
+    13:{title:'Warden-Aware',sub:'Thirteen crossings. The Warden has your shape.'},
+    21:{title:'Veil-Deep',sub:'Twenty-one crossings. You move differently now.'},
+    34:{title:'The Veil Yields',sub:'Thirty-four crossings. Something ancient acknowledges you.'},
+  };
+  const DEPTH_OBS={
+    3:["The Veil recognizes the shape of your crossings.","Something has begun to track your movements here."],
+    7:["Seven crossings. The pattern holds longer than most.","The Warden has learned your hesitations."],
+    13:["Thirteen is not an accident. The Veil does not forget.","You have gone deep enough to carry something back."],
+    21:["Few reach this depth willingly.","What you carry from here is yours to keep."],
+  };
+  function render(){
+    ['veilDepthNum','arcVeilDepth'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=depth;});
+  }
+  function increment(){
+    depth++;
+    try{localStorage.setItem('faeboundVeilDepth',depth);}catch(e){}
+    render();
+    if(MILESTONES[depth]){ const m=MILESTONES[depth]; showMilestone(m.title,m.sub); }
+    Object.entries(DEPTH_OBS).forEach(([d,lines])=>{
+      if(depth>=parseInt(d)) lines.forEach(l=>{if(!obsLines.includes(l))obsLines.push(l);});
+    });
+  }
+  render();
+  return {increment,getDepth:()=>depth,render};
+})();
+
+function showMilestone(title,sub){
+  const toast=document.getElementById('milestoneToast'); if(!toast)return;
+  document.getElementById('mTitle').textContent=title;
+  document.getElementById('mSub').textContent=sub;
+  toast.classList.add('show');
+  // Burst particles from the depth badge
+  const badge=document.querySelector('.depth-badge');
+  if(badge){
+    const r=badge.getBoundingClientRect();
+    const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    for(let i=0;i<3;i++) setTimeout(()=>{
+      burst(cx,cy,'var(--gold)',18);
+      burst(cx,cy,'var(--accent)',10);
+    },i*180);
+  }
+  setTimeout(()=>toast.classList.remove('show'),5500);
+}
+
+// ── HIGH SCORES ───────────────────────────────────────────────────────────
+const hiscores=(() => {
+  let d={sgStreak:[],vpBestRally:[],edStreak:[]};
+  try{const s=localStorage.getItem('faeboundHiscores');if(s)d={...d,...JSON.parse(s)};}catch(e){}
+  function save(){try{localStorage.setItem('faeboundHiscores',JSON.stringify(d));}catch(e){}}
+  function add(game,val){
+    if(!d[game])d[game]=[];
+    d[game].push({val,date:new Date().toLocaleDateString()});
+    d[game].sort((a,b)=>b.val-a.val); d[game]=d[game].slice(0,5); save();
+  }
+  function getBest(game){return d[game]?.[0]?.val||0;}
+  return{add,getBest};
+})();
+
+// ── SETTINGS ─────────────────────────────────────────────────────────────
+let sfxVol=.8, sfxEnabled=true;
+const _origTone=audio.tone.bind(audio);
+audio.tone=function(f,d,t,v,s){ if(!sfxEnabled)return; _origTone(f,d,t,(v||.022)*sfxVol,s); };
+
+function loadSettings(){
+  try{
+    const s=JSON.parse(localStorage.getItem('faeboundSettings')||'{}');
+    if(s.musicVol!=null){document.getElementById('musicVol').value=s.musicVol*100;window.ambient.setMusicVolume(s.musicVol);document.getElementById('musicVolReadout').textContent=Math.round(s.musicVol*100)+'%';}
+    if(s.musicOn!=null){document.getElementById('musicToggle').checked=s.musicOn;window.ambient.setMusicEnabled(s.musicOn);}
+    if(s.sfxVol!=null){document.getElementById('sfxVol').value=s.sfxVol*100;sfxVol=s.sfxVol;document.getElementById('sfxVolReadout').textContent=Math.round(s.sfxVol*100)+'%';}
+    if(s.sfxOn!=null){document.getElementById('sfxToggle').checked=s.sfxOn;sfxEnabled=s.sfxOn;}
+  }catch(e){}
+}
+function saveSettings(){
+  try{localStorage.setItem('faeboundSettings',JSON.stringify({
+    musicVol:parseFloat(document.getElementById('musicVol').value)/100,
+    musicOn:document.getElementById('musicToggle').checked,
+    sfxVol:parseFloat(document.getElementById('sfxVol').value)/100,
+    sfxOn:document.getElementById('sfxToggle').checked,
+  }));}catch(e){}
+}
+
+document.getElementById('settingsBtn')?.addEventListener('click',()=>document.getElementById('settingsModal').classList.remove('hidden'));
+document.getElementById('settingsModal')?.addEventListener('click',(e)=>{
+  if(e.target===document.getElementById('settingsModal')){
+    document.getElementById('settingsModal').classList.add('hidden');
+    saveSettings();
+  }
+});
+document.getElementById('closeSettingsBtn')?.addEventListener('click',()=>{document.getElementById('settingsModal').classList.add('hidden');saveSettings();});
+document.getElementById('hubHelpBtn')?.addEventListener('click',()=>document.getElementById('hubHelpModal').classList.remove('hidden'));
+document.getElementById('closeHubHelpBtn')?.addEventListener('click',()=>document.getElementById('hubHelpModal').classList.add('hidden'));
+document.getElementById('musicVol')?.addEventListener('input',e=>{window.ambient.setMusicVolume(e.target.value/100);document.getElementById('musicVolReadout').textContent=e.target.value+'%';});
+document.getElementById('musicToggle')?.addEventListener('change',e=>window.ambient.setMusicEnabled(e.target.checked));
+document.getElementById('sfxVol')?.addEventListener('input',e=>{sfxVol=e.target.value/100;document.getElementById('sfxVolReadout').textContent=e.target.value+'%';});
+document.getElementById('sfxToggle')?.addEventListener('change',e=>{sfxEnabled=e.target.checked;});
+document.getElementById('clearArchiveBtn')?.addEventListener('click',()=>{
+  if(confirm('Clear all archive data? Cannot be undone.')){
+    try{
+      ['faeboundArchive','faeboundHiscores','faeboundVeilDepth','faeboundLore',
+       'faeboundLastGame','faeboundLastVeilWithinResult',
+       'fbF_sigil','fbF_paddle','fbF_echo','fbF_veilWithin',
+       'faeboundFirstVisit_sigil','faeboundFirstVisit_paddle','faeboundFirstVisit_echo',
+      ].forEach(k=>{try{localStorage.removeItem(k);}catch(e){}});
+    }catch(e){}
+    archive.render(); progression.render(); updateRecentCrossing();
+    document.getElementById('settingsModal').classList.add('hidden');
+  }
+});
+
+// ── MOBILE HUD SYNC ───────────────────────────────────────────────────────
+function syncSgHud(x,o,status){
+  document.getElementById('sgMobX')&&(document.getElementById('sgMobX').textContent=x);
+  document.getElementById('sgMobO')&&(document.getElementById('sgMobO').textContent=o);
+  document.getElementById('sgMobStatus')&&(document.getElementById('sgMobStatus').textContent=status||'');
+}
+function syncVpHud(l,r,status){
+  document.getElementById('vpMobL')&&(document.getElementById('vpMobL').textContent=l);
+  document.getElementById('vpMobR')&&(document.getElementById('vpMobR').textContent=r);
+  document.getElementById('vpMobStatus')&&(document.getElementById('vpMobStatus').textContent=status||'');
+}
+function syncEdHud(streak,best,status,sealOn){
+  document.getElementById('edMobStreak')&&(document.getElementById('edMobStreak').textContent=streak);
+  document.getElementById('edMobBest')&&(document.getElementById('edMobBest').textContent=best);
+  document.getElementById('edMobStatus')&&(document.getElementById('edMobStatus').textContent=status||'');
+  const sc=document.getElementById('edMobCheck'); if(sc)sc.disabled=!sealOn;
+}
+
+setTimeout(()=>{
+  document.getElementById('edMobStart')?.addEventListener('click',()=>window.ed?.startRound());
+  document.getElementById('edMobCheck')?.addEventListener('click',()=>window.ed?.checkResult());
+  document.getElementById('vpMobStart')?.addEventListener('click',()=>window.vp?.startServe());
+  document.getElementById('vpMobPause')?.addEventListener('click',()=>window.vp?.togglePause());
+},150);
+
+// ── SIGIL GRID BG (constellation) ────────────────────────────────────────
+const sgBg = (() => {
+  const canvas=document.getElementById('sgBgCanvas'); if(!canvas)return{draw:()=>{}};
+  const ctx=canvas.getContext('2d');
+  function resize(){const p=canvas.parentElement;if(!p)return;canvas.width=p.offsetWidth;canvas.height=p.offsetHeight;}
+  function draw(){
+    resize(); ctx.clearRect(0,0,canvas.width,canvas.height);
+    const cells=document.querySelectorAll('.sg-board .sg-cell'); if(cells.length!==9)return;
+    const pr=canvas.getBoundingClientRect();
+    const pos=[...cells].map(c=>{
+      const r=c.getBoundingClientRect();
+      const mark=c.querySelector('.sg-mark');
+      return {x:r.left-pr.left+r.width/2,y:r.top-pr.top+r.height/2,
+        val:mark?(mark.classList.contains('star')?'star':'moon'):'',r:r.width*.38};
+    });
+    // Draw node halos
+    pos.forEach(p=>{
+      if(!p.val)return;
+      const col=p.val==='star'?'rgba(126,200,255,':'rgba(255,158,200,';
+      const grad=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*1.8);
+      grad.addColorStop(0,col+'.1)'); grad.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=grad; ctx.beginPath(); ctx.arc(p.x,p.y,p.r*1.8,0,Math.PI*2); ctx.fill();
+    });
+    // Draw constellation lines between same-player adjacent cells
+    [[0,1],[1,2],[3,4],[4,5],[6,7],[7,8],[0,3],[3,6],[1,4],[4,7],[2,5],[5,8],[0,4],[4,8],[2,4],[4,6]].forEach(([a,b])=>{
+      if(pos[a].val&&pos[a].val===pos[b].val){
+        const col=pos[a].val==='star'?'rgba(126,200,255,':'rgba(255,158,200,';
+        const grad=ctx.createLinearGradient(pos[a].x,pos[a].y,pos[b].x,pos[b].y);
+        grad.addColorStop(0,col+'.22)'); grad.addColorStop(.5,col+'.32)'); grad.addColorStop(1,col+'.22)');
+        ctx.beginPath(); ctx.moveTo(pos[a].x,pos[a].y); ctx.lineTo(pos[b].x,pos[b].y);
+        ctx.strokeStyle=grad; ctx.lineWidth=1.5; ctx.shadowBlur=6; ctx.shadowColor=col+'.2)';
+        ctx.stroke(); ctx.shadowBlur=0;
+      }
+    });
+  }
+  return{draw};
+})();
+
+// ── ECHO DRIFT BG (particle fog) ─────────────────────────────────────────
+const edBg = (() => {
+  const canvas=document.getElementById('edBgCanvas'); if(!canvas)return{setPhase:()=>{}};
+  const ctx=canvas.getContext('2d');
+  let phase='idle', particles=[], animId=null;
+  function resize(){const p=canvas.parentElement;if(!p)return;canvas.width=p.offsetWidth;canvas.height=p.offsetHeight;}
+  function spawnP(){return{x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*4+1,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.3,op:Math.random()*.28+.04,life:1,decay:Math.random()*.003+.001};}
+  function frame(){
+    resize(); ctx.clearRect(0,0,canvas.width,canvas.height);
+    const target=phase==='reveal'?80:phase==='input'?28:6;
+    while(particles.length<target)particles.push(spawnP());
+    particles=particles.filter(p=>p.life>0);
+    particles.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy; p.life-=p.decay;
+      if(p.x<0)p.x=canvas.width; if(p.x>canvas.width)p.x=0;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(187,168,255,${p.op*p.life})`; ctx.fill();
+    });
+    animId=requestAnimationFrame(frame);
+  }
+  function setPhase(p){
+    phase=p;
+    if(p==='idle'){
+      // After a moment of idle particles, stop the loop to save CPU
+      setTimeout(()=>{ if(phase==='idle'){ if(animId){cancelAnimationFrame(animId);animId=null;} } },8000);
+    }
+    if(!animId)frame();
+  }
+  return{setPhase};
+})();
+
+// ── INIT ─────────────────────────────────────────────────────────────────
+initStars();
+// No court system — realm identity is fixed
+loadSettings();
+updateRecentCrossing();
+</script>
+
+<!-- ═══ SIGIL GRID ═══ -->
+<script>
+
+window.sg = (() => {
+  const boardEl = document.getElementById('sgBoard');
+  const boardWrapEl = document.querySelector('.sg-board-wrap');
+  const statusText = document.getElementById('sgStatusText');
+  const scoreXEl = document.getElementById('sgScoreX');
+  const scoreOEl = document.getElementById('sgScoreO');
+  const scoreDrawEl = document.getElementById('sgScoreDraw');
+  const labelXEl = document.getElementById('sgLabelX');
+  const labelOEl = document.getElementById('sgLabelO');
+  const activeModeLabelEl = document.getElementById('sgModeLabel');
+  const opponentLabelEl = document.getElementById('sgOpponentLabel');
+  const historyListEl = document.getElementById('sgHistory');
+  const turnOrbEl = document.getElementById('sgTurnOrb');
+  const turnLabelEl = document.getElementById('sgTurnLabel');
+  const winLineEl = document.getElementById('sgWinLine');
+  const winLines = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+
+  let board = Array(9).fill('');
+  let currentPlayer = 'star';
+  let roundOver = false;
+  let aiThinking = false;
+  let selectedMode = 'pvp';
+  let difficulty = 'initiate'; // initiate | adept | warden
+  let scores = { star:0, moon:0, draw:0 };
+  let roundHistory = [];
+
+  const wardenLines = ['The Warden studies your constellation…','A counter-sigil forms in the Veil…','Moonlight gathers at the edge of the board…','The Warden answers your pattern…','A hesitation… the pattern is unfamiliar.','The Veil flickers — your intent is seen.'];
+
+  // Difficulty button wiring
+  document.querySelectorAll('[data-sg-diff]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      difficulty = btn.dataset.sgDiff;
+      document.querySelectorAll('[data-sg-diff]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (selectedMode === 'ai') resetScores();
+    });
+  });
+
+  function soundPlace(token) {
+    if (token==='star') {
+      audio.tone(880, 0.12, 'sine', 0.028, 1108); // chime fundamental
+      setTimeout(()=>audio.tone(1320, 0.10, 'sine', 0.014, 1760), 18); // harmonic
+      setTimeout(()=>audio.tone(440, 0.18, 'triangle', 0.016, 330), 8); // body
+    } else {
+      audio.tone(440, 0.14, 'sine', 0.026, 330); // moon tone descends
+      setTimeout(()=>audio.tone(660, 0.10, 'sine', 0.012, 550), 18);
+      setTimeout(()=>audio.tone(220, 0.22, 'triangle', 0.018, 165), 10);
+    }
+    window.ambient.swell(.0015);
+  }
+  function soundWin() { audio.tone(540,.09,'sine',.035,620); setTimeout(()=>audio.tone(680,.11,'sine',.03,760),70); setTimeout(()=>audio.tone(860,.14,'triangle',.028,980),150); window.ambient.swell(.004); }
+  function soundReset() { audio.tone(300,.08,'triangle',.025,240); }
+
+  function playerLabel(t) { return t==='star'?'Star':'Moon'; }
+  function displayLabel(t) { return selectedMode==='ai'?(t==='star'?'You':'Warden'):playerLabel(t); }
+
+  function updateModeUI() {
+    const isAI = selectedMode==='ai';
+    activeModeLabelEl.textContent = isAI ? 'Veil Trial' : 'Two Players';
+    opponentLabelEl.textContent = isAI ? 'Warden' : 'Human';
+    labelXEl.textContent = isAI ? 'You ✦' : 'Star ✦';
+    labelOEl.textContent = isAI ? 'Warden ☾' : 'Moon ☾';
+  }
+
+  function setStatusForTurn() {
+    if (selectedMode==='ai') {
+      if (currentPlayer==='star') { statusText.textContent='Ready — your turn'; turnLabelEl.textContent='Star is active'; }
+      else { statusText.textContent=aiThinking?wardenLines[Math.floor(Math.random()*wardenLines.length)]:"Warden's turn"; turnLabelEl.textContent=aiThinking?'Moonlight gathers…':'Moon is active'; }
+    } else {
+      statusText.textContent=`${playerLabel(currentPlayer)} turn`; turnLabelEl.textContent=`${playerLabel(currentPlayer)} is active`;
+    }
+    turnOrbEl.style.background = currentPlayer==='star'?'var(--blue)':'var(--pink)';
+    turnOrbEl.style.boxShadow = currentPlayer==='star'?'0 0 16px rgba(154,215,255,.45)':'0 0 16px rgba(255,181,229,.45)';
+    // Subtle board edge glow follows active player
+    const panel=document.getElementById('sgGamePanel');
+    if(panel&&!roundOver){
+      panel.style.boxShadow=currentPlayer==='star'
+        ?'0 0 0 1px rgba(126,200,255,.08),0 0 40px rgba(126,200,255,.06)'
+        :'0 0 0 1px rgba(255,158,200,.08),0 0 40px rgba(255,158,200,.06)';
+    }
+  }
+
+  function updateScores() { scoreXEl.textContent=scores.star; scoreOEl.textContent=scores.moon; scoreDrawEl.textContent=scores.draw; syncSgHud(scores.star, scores.moon, statusText.textContent||''); }
+  function updateHistory() {
+    historyListEl.innerHTML='';
+    if (!roundHistory.length) { const p=document.createElement('div'); p.className='h-pill'; p.textContent='No rounds yet'; historyListEl.appendChild(p); return; }
+    roundHistory.slice(-8).forEach((result,idx,arr) => {
+      const n = roundHistory.length-arr.length+idx+1;
+      const p = document.createElement('div');
+      p.className=`h-pill ${result==='star'?'x':result==='moon'?'o':'draw'}`;
+      p.textContent = result==='draw'?`R${n}: Draw`:`R${n}: ${displayLabel(result)}`;
+      historyListEl.appendChild(p);
+    });
+  }
+
+  function createBoard() {
+    if (!boardEl) return;
+    boardEl.innerHTML='';
+    board.forEach((value,index) => {
+      const cell = document.createElement('button');
+      cell.className='sg-cell'; cell.type='button';
+      if (roundOver||aiThinking) cell.classList.add('locked');
+      if (value) cell.classList.add('filled');
+      cell.dataset.index=index;
+      cell.addEventListener('click',()=>handleCellClick(index,cell));
+      cell.addEventListener('mouseenter',()=>{ if(!board[index]&&!roundOver&&!aiThinking&&!(selectedMode==='ai'&&currentPlayer==='moon')){ cell.classList.add(currentPlayer==='star'?'preview-star':'preview-moon'); audio.tone(currentPlayer==='star'?1200:900,.025,'sine',.004); } });
+      cell.addEventListener('mouseleave',()=>cell.classList.remove('preview-star','preview-moon'));
+      if (value) {
+        const m=document.createElement('div');
+        m.className=`sg-mark ${value}`;
+        // Pure CSS clip-path marks — no SVG, no background issues
+        // Visual shape and animation handled entirely by CSS ::after pseudo-element
+        cell.appendChild(m);
+      }
+      boardEl.appendChild(cell);
+    });
+    // Update constellation background
+    setTimeout(()=>sgBg.draw(board),50);
+  }
+
+  function getWinningLine() { return winLines.find(([a,b,c])=>board[a]&&board[a]===board[b]&&board[a]===board[c]); }
+
+  function drawWinLine(line) {
+    const cells=[...document.querySelectorAll('.sg-board .sg-cell')];
+    const s=cells[line[0]], e=cells[line[2]]; if(!s||!e) return;
+    const wr=boardWrapEl.getBoundingClientRect(), sr=s.getBoundingClientRect(), er=e.getBoundingClientRect();
+    const x1=sr.left-wr.left+sr.width/2, y1=sr.top-wr.top+sr.height/2;
+    const x2=er.left-wr.left+er.width/2, y2=er.top-wr.top+er.height/2;
+    const dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy), angle=Math.atan2(dy,dx)*180/Math.PI;
+    winLineEl.style.cssText=`width:${len}px;left:${x1}px;top:${y1}px;opacity:1;transform:translateY(-50%) rotate(${angle}deg) scaleX(1)`;
+  }
+
+  function clearWinLine() { winLineEl.style.cssText='width:0;opacity:0;transform:scaleX(0)'; }
+
+  function winCeremony(line) {
+    const cells=[...document.querySelectorAll('.sg-board .sg-cell')];
+    const points = line.map(i=>{ const r=cells[i].getBoundingClientRect(); return {x:r.left+r.width/2,y:r.top+r.height/2}; });
+    boardWrapEl.animate([{filter:'brightness(1)'},{filter:'brightness(.65)'},{filter:'brightness(1)'}],{duration:700,easing:'ease-out'});
+    points.forEach((p,i)=>setTimeout(()=>burstParticles(p,'mint',22),i*90));
+    const r=boardWrapEl.getBoundingClientRect();
+    setTimeout(()=>burstParticles({x:r.left+r.width/2,y:r.top+r.height/2},'mint',40),140);
+    cells.forEach((cell,i)=>{ if(!line.includes(i)) cell.animate([{opacity:1},{opacity:.25},{opacity:1}],{duration:900}); });
+  }
+
+  // AI DIFFICULTY LOGIC
+  function findStrategicMove(token) {
+    for (const [a,b,c] of winLines) {
+      const vals=[board[a],board[b],board[c]];
+      if (vals.filter(v=>v===token).length===2 && vals.includes('')) return [a,b,c][vals.indexOf('')];
+    }
+    return null;
+  }
+
+  function chooseAIMove() {
+    const empty = board.map((v,i)=>v===''?i:null).filter(v=>v!==null);
+    if (!empty.length) return null;
+
+    if (difficulty==='initiate') {
+      // Random with occasional blocking (30% chance to block)
+      if (Math.random() < .3) { const block=findStrategicMove('star'); if(block!==null) return block; }
+      return empty[Math.floor(Math.random()*empty.length)];
+    }
+
+    if (difficulty==='adept') {
+      // Win if possible, block if needed, prefer center/corners
+      const win=findStrategicMove('moon'); if(win!==null) return win;
+      const block=findStrategicMove('star'); if(block!==null) return block;
+      if (board[4]==='') return 4;
+      const corners=[0,2,6,8].filter(i=>board[i]==='');
+      if (corners.length) return corners[Math.floor(Math.random()*corners.length)];
+      return empty[Math.floor(Math.random()*empty.length)];
+    }
+
+    // warden: perfect minimax
+    return minimax(board, 'moon').index;
+  }
+
+  function minimax(b, player) {
+    const empty = b.map((v,i)=>v===''?i:null).filter(v=>v!==null);
+    const winner = getWinner(b);
+    if (winner==='moon') return {score:10};
+    if (winner==='star') return {score:-10};
+    if (!empty.length) return {score:0};
+    const moves = [];
+    for (const i of empty) {
+      const nb=[...b]; nb[i]=player;
+      const result = minimax(nb, player==='moon'?'star':'moon');
+      moves.push({index:i, score:result.score});
+    }
+    if (player==='moon') return moves.reduce((a,b)=>b.score>a.score?b:a);
+    return moves.reduce((a,b)=>b.score<a.score?b:a);
+  }
+
+  function getWinner(b) {
+    for (const [a,bc,c] of winLines) {
+      if (b[a]&&b[a]===b[bc]&&b[a]===b[c]) return b[a];
+    }
+    return null;
+  }
+
+  function applyMove(index, token, sourceCell=null) {
+    board[index]=token; soundPlace(token);
+    const cell=sourceCell||document.querySelector(`.sg-board .sg-cell[data-index="${index}"]`);
+    if (cell) { const r=cell.getBoundingClientRect(); burstParticles({x:r.left+r.width/2,y:r.top+r.height/2},token==='star'?'blue':'pink'); }
+    createBoard();
+    const wl=getWinningLine();
+    if (wl) {
+      roundOver=true; scores[token]+=1; roundHistory.push(token); updateScores(); updateHistory();
+      [...document.querySelectorAll('.sg-board .sg-cell')].forEach((c,i)=>{ if(wl.includes(i)) c.classList.add('win-cell'); });
+      winCeremony(wl); setTimeout(()=>{ drawWinLine(wl); },320);
+      statusText.textContent = selectedMode==='ai'?(token==='star'?'Your stars prevail':'The Warden veils the board'):`${playerLabel(token)} wins`;
+      turnLabelEl.textContent = token==='star'?'Constellation complete':'Moon phase complete';
+      soundWin(); window.archive?.inc?.('trialsCompleted'); window.progression?.increment?.(); hiscores.add('sgStreak', scores.star);
+      // Show end overlay after ceremony
+      setTimeout(() => showSgEnd(token), 1800);
+      // Lore
+      const loreT = selectedMode==='ai'?(token==='star'?'win':'lose'):'win';
+      setTimeout(() => showLore('sigil', loreT), 400);
+      return;
+    }
+    if (board.every(v=>v)) { roundOver=true; scores.draw+=1; roundHistory.push('draw'); updateScores(); updateHistory(); statusText.textContent='Draw — the sky balances'; turnLabelEl.textContent='The sky is balanced'; setTimeout(()=>showSgEnd('draw'),1400); setTimeout(()=>showLore('sigil','draw'),300); }
+  }
+
+  function maybeTriggerAI() {
+    if (!(selectedMode==='ai'&&currentPlayer==='moon')||roundOver) return;
+    aiThinking=true; createBoard(); setStatusForTurn(); audio.tone(260,.05,'sine',.018,300);
+    // Pulsing glow on center cell while Warden thinks
+    const centerCell=document.querySelector('.sg-board .sg-cell[data-index="4"]');
+    if(centerCell) centerCell.style.boxShadow='0 0 0 2px rgba(255,158,200,.18), 0 0 20px rgba(255,158,200,.12)';
+    setTimeout(()=>{const cc=document.querySelector('.sg-board .sg-cell[data-index="4"]');if(cc)cc.style.boxShadow='';},750);
+    setTimeout(() => {
+      if (roundOver) return;
+      const move=chooseAIMove(); aiThinking=false;
+      if (move!==null) applyMove(move,'moon');
+      if (!roundOver) { currentPlayer='star'; setStatusForTurn(); createBoard(); }
+    }, 440+Math.floor(Math.random()*360));
+  }
+
+  function handleCellClick(index, cell) {
+    audio.ensure(); window.ambient.ensure();
+    if (board[index]||roundOver||aiThinking||(selectedMode==='ai'&&currentPlayer==='moon')) return;
+    window.archive?.inc?.('trialsPlayed');
+    applyMove(index,currentPlayer,cell);
+    if (!roundOver) { currentPlayer=currentPlayer==='star'?'moon':'star'; setStatusForTurn(); createBoard(); maybeTriggerAI(); }
+  }
+
+  function resetRound() {
+    soundReset();
+    board=Array(9).fill('');
+    currentPlayer='star';
+    roundOver=false;
+    aiThinking=false;
+    clearWinLine();
+    setStatusForTurn();
+    createBoard();
+  }
+  function resetScores() {
+    scores={star:0,moon:0,draw:0};
+    roundHistory=[];
+    updateScores();
+    updateHistory();
+    resetRound();
+  }
+  function setMode(mode) {
+    selectedMode=mode;
+    updateModeUI();
+    resetScores();
+  }
+
+  function showSgEnd(result) {
+    const overlay = document.getElementById('sgEndOverlay');
+    const card = document.getElementById('sgEndCard');
+    const sigil = document.getElementById('sgEndSigil');
+    const title = document.getElementById('sgEndTitle');
+    const sub = document.getElementById('sgEndSub');
+    document.getElementById('sgEndRounds').textContent = roundHistory.length;
+    document.getElementById('sgEndWins').textContent = selectedMode==='ai' ? scores.star : (scores.star + scores.moon);
+    document.getElementById('sgEndDraws').textContent = scores.draw;
+    if (result === 'star') {
+      card.className='end-card win'; sigil.textContent='✦';
+      title.textContent = selectedMode==='ai' ? 'The Stars Prevail' : 'Star Wins';
+      title.className='end-title win';
+      try{const vwr=JSON.parse(localStorage.getItem('faeboundLastVeilWithinResult')||'null');
+        sub.textContent=vwr&&vwr.name==='The Seer'?'The constellation is complete. The Seer always knew where this was going.':
+          vwr&&vwr.name==='The Weaver'?'The constellation is complete. You saw the pattern before it closed.':
+          'The constellation is complete. The Veil acknowledges your shape.';}
+      catch(e){sub.textContent='The constellation is complete. The Veil acknowledges your pattern.';}
+    } else if (result === 'moon') {
+      card.className='end-card lose'; sigil.textContent='☾';
+      title.textContent = selectedMode==='ai' ? 'The Warden Prevails' : 'Moon Wins';
+      title.className='end-title lose';
+      sub.textContent = 'The Warden has seen this before. It will remember your shape.';
+    } else {
+      card.className='end-card'; sigil.textContent='✶';
+      title.textContent = 'The Sky Balances';
+      title.className='end-title';
+      sub.textContent = 'Neither force nor counter-force. This is rarer than most believe.';
+    }
+    overlay.classList.remove('hidden');
+  }
+
+  document.getElementById('sgEndPlayAgain').addEventListener('click', () => {
+    document.getElementById('sgEndOverlay').classList.add('hidden'); resetScores();
+  });
+  document.getElementById('sgEndHub').addEventListener('click', () => {
+    document.getElementById('sgEndOverlay').classList.add('hidden');
+    backToHub(() => window.sg?.resetRound());
+  });
+
+  document.getElementById('sgResetRoundBtn').addEventListener('click', resetRound);
+  document.getElementById('sgResetScoresBtn').addEventListener('click', resetScores);
+  document.getElementById('sgSwapModeBtn').addEventListener('click', ()=>setMode(selectedMode==='pvp'?'ai':'pvp'));
+
+  function begin() {
+    setMode('ai');
+    currentPlayer='star';
+    roundOver=false;
+    aiThinking=false;
+    createBoard();
+    setStatusForTurn();
+    updateScores();
+    updateHistory();
+  }
+
+  begin();
+  return { begin, resetRound, resetScores, setMode };
+})();
+
+</script>
+
+<!-- ═══ VEIL PADDLE ═══ -->
+<script>
+
+window.vp = (() => {
+  const canvas = document.getElementById('vpCanvas');
+  const ctx = canvas.getContext('2d');
+  const W=canvas.width, H=canvas.height, PW=16, PH=112, BS=16, MAX_SCORE=5;
+
+  const els = {
+    status: document.getElementById('vpStatusText'),
+    turnOrb: document.getElementById('vpTurnOrb'),
+    turnLabel: document.getElementById('vpTurnLabel'),
+    scoreLeft: document.getElementById('vpScoreLeft'),
+    scoreRight: document.getElementById('vpScoreRight'),
+    bestRally: document.getElementById('vpBestRally'),
+    modeLabel: document.getElementById('vpActiveModeLabel'),
+    controlLabel: document.getElementById('vpControlLabel'),
+    labelLeft: document.getElementById('vpLabelLeft'),
+    labelRight: document.getElementById('vpLabelRight'),
+    history: document.getElementById('vpHistory'),
+    hud: document.getElementById('vpHudBanner'),
+    pauseBtn: document.getElementById('vpPauseBtn'),
+  };
+
+  // DIFFICULTY CONFIG
+  const DIFF = {
+    initiate: { ballSpeed:280, maxSpeed:680, accel:16, aiSpeed:240, aiReaction:.65, aiError:28 },
+    adept:    { ballSpeed:360, maxSpeed:860, accel:22, aiSpeed:360, aiReaction:.82, aiError:12 },
+    warden:   { ballSpeed:440, maxSpeed:1020,accel:28, aiSpeed:480, aiReaction:.96, aiError:3  },
+  };
+  let difficulty = 'initiate';
+  let diffCfg = DIFF.initiate;
+
+  document.querySelectorAll('[data-vp-diff]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      difficulty=btn.dataset.vpDiff; diffCfg=DIFF[difficulty];
+      document.querySelectorAll('[data-vp-diff]').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      resetMatch();
+    });
+  });
+
+  let selectedMode='solo', running=false, paused=false, animId=null, lastTime=0;
+  let currentRally=0, bestRally=0, matchHistory=[], currentTension=0;
+  const keys={w:false,s:false,ArrowUp:false,ArrowDown:false};
+  const paddleVel={left:0,right:0};
+
+  const left  = {x:34, y:H/2-PH/2, w:PW, h:PH, speed:500, color:'#9ad7ff'};
+  const right = {x:W-34-PW, y:H/2-PH/2, w:PW, h:PH, speed:430, color:'#ffb5e5'};
+  const ball  = {x:W/2, y:H/2, size:BS, vx:0, vy:0, trail:[]};
+  const score = {left:0, right:0};
+
+  // ── TOUCH CONTROLS ──────────────────────────────────────────────────
+  let touchId = null, touchStartY = 0, touchPaddleY = 0;
+
+  canvas.addEventListener('touchstart', e => {
+    e.preventDefault();
+    const touch = e.changedTouches[0];
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = W / rect.width;
+    const tx = (touch.clientX - rect.left) * scaleX;
+    // Only activate if touching left half of canvas
+    if (tx < W/2) {
+      touchId = touch.identifier;
+      touchStartY = touch.clientY;
+      touchPaddleY = left.y;
+    }
+  }, {passive:false});
+
+  canvas.addEventListener('touchmove', e => {
+    e.preventDefault();
+    for (let i=0;i<e.changedTouches.length;i++) {
+      const t = e.changedTouches[i];
+      if (t.identifier===touchId) {
+        const rect = canvas.getBoundingClientRect();
+        const scaleY = H / rect.height;
+        const dy = (t.clientY - touchStartY) * scaleY;
+        left.y = Math.max(18, Math.min(H-18-PH, touchPaddleY + dy));
+      }
+    }
+  }, {passive:false});
+
+  canvas.addEventListener('touchend', e => {
+    for (let i=0;i<e.changedTouches.length;i++) {
+      if (e.changedTouches[i].identifier===touchId) touchId=null;
+    }
+  });
+
+  // ── KEYBOARD ────────────────────────────────────────────────────────
+  document.addEventListener('keydown', e => { if(e.key in keys){ keys[e.key]=true; e.preventDefault(); } });
+  document.addEventListener('keyup',   e => { if(e.key in keys) keys[e.key]=false; });
+
+  // ── SOUNDS ──────────────────────────────────────────────────────────
+  function soundServe() { audio.tone(440,.08,'triangle',.03,520); window.ambient.swell(.002); }
+  function soundWall()  {
+    const t=currentTension||0;
+    const f=300+Math.round(t*180); // higher pitch when tension is high
+    const v=.018+t*.016;
+    audio.tone(f,.06,'sine',v,f*.8);
+  }
+  function soundPaddle(side,perfect=false) {
+    const f = side==='left' ? 180 : 150;
+    audio.tone(f, 0.12, 'triangle', 0.035, f*0.6);   // thud body
+    audio.tone(f*3, 0.06, 'sine', 0.018, f*4);        // click attack
+    if(perfect){
+      setTimeout(()=>audio.tone(880, 0.09, 'sine', 0.018, 1100), 30);
+      setTimeout(()=>audio.tone(1320, 0.07, 'sine', 0.010, 1760), 55);
+    }
+    window.ambient.swell(perfect?.004:.0018);
+  }
+  function soundScore(left) { if(left){audio.tone(540,.09,'sine',.035,640);setTimeout(()=>audio.tone(760,.12,'triangle',.03,880),90);}else{audio.tone(320,.12,'sawtooth',.02,260);} window.ambient.swell(.004); }
+
+  function setStatus(text, orb='stable', banner=text) {
+    els.status.textContent=text; const hudBanner=document.getElementById('vpHudBanner');if(hudBanner)hudBanner.textContent=banner;
+    const orbStyles = { player:'var(--blue)', warden:'var(--pink)', pulse:'var(--mint)', stable:'var(--accent)' };
+    const shadowStyles = { player:'rgba(154,215,255,.45)', warden:'rgba(255,181,229,.45)', pulse:'rgba(127,236,201,.45)', stable:'rgba(199,182,255,.4)' };
+    const labels = { player:selectedMode==='solo'?'You hold the line':'Left side engaged', warden:selectedMode==='solo'?'Warden responds':'Right side engaged', pulse:'Arena in motion', stable:'Arena is stable' };
+    els.turnOrb.style.background=orbStyles[orb]||orbStyles.stable;
+    els.turnOrb.style.boxShadow=`0 0 16px ${shadowStyles[orb]||shadowStyles.stable}`;
+    els.turnLabel.textContent=labels[orb]||labels.stable;
+  }
+
+  function updateScores() { els.scoreLeft.textContent=score.left; els.scoreRight.textContent=score.right; els.bestRally.textContent=bestRally; syncVpHud(score.left, score.right, els.status.textContent||''); document.getElementById('vpHudLeft')&&(document.getElementById('vpHudLeft').textContent='You: '+score.left); document.getElementById('vpHudRight')&&(document.getElementById('vpHudRight').textContent='Warden: '+score.right); }
+  function updateHistory() {
+    els.history.innerHTML='';
+    if (!matchHistory.length) { const p=document.createElement('div'); p.className='h-pill'; p.textContent='No matches yet'; els.history.appendChild(p); return; }
+    matchHistory.slice(-6).forEach((winner,index,arr) => {
+      const n=matchHistory.length-arr.length+index+1;
+      const p=document.createElement('div'); p.className=`h-pill ${winner}`;
+      const label=selectedMode==='solo'?(winner==='player'?'You':'Warden'):(winner==='player'?'Left':'Right');
+      p.textContent=`M${n}: ${label}`; els.history.appendChild(p);
+    });
+  }
+
+  function setMode(mode,reset=true) {
+    selectedMode=mode;
+    els.modeLabel.textContent=mode==='solo'?'Solo vs Warden':'Two Players';
+    els.controlLabel.textContent=mode==='solo'?'W/S or Touch':'W/S + Arrows';
+    els.labelLeft.textContent=mode==='solo'?'You':'Left';
+    els.labelRight.textContent=mode==='solo'?'Warden':'Right';
+    if(reset) resetMatch();
+  }
+
+  function clamp(p) { if(p.y<18) p.y=18; if(p.y+p.h>H-18) p.y=H-18-p.h; }
+
+  function resetBall(dir=1) {
+    ball.x=W/2; ball.y=H/2; ball.trail=[];
+    const spd=diffCfg.ballSpeed;
+    const aim=selectedMode==='solo'?(keys.w?-.35:keys.s?.35:Math.random()*.8-.4):Math.random()*.8-.4;
+    ball.vx=Math.cos(aim)*spd*dir; ball.vy=Math.sin(aim)*spd;
+    currentRally=0;
+  }
+
+  function resetPaddles() { left.y=H/2-PH/2; right.y=H/2-PH/2; paddleVel.left=0; paddleVel.right=0; }
+
+  function updateTension() {
+    if (!running) return;
+    const ballSpd = Math.hypot(ball.vx, ball.vy);
+    const maxSpd = diffCfg.maxSpeed;
+    const speedFactor = Math.min(1, (ballSpd - diffCfg.ballSpeed) / (maxSpd - diffCfg.ballSpeed + 1));
+    const scoreDiff = Math.abs(score.left - score.right);
+    const closeScore = (score.left + score.right >= 3 && scoreDiff <= 1) ? 0.4 : 0;
+    const rallyFactor = Math.min(1, currentRally / 12);
+    currentTension = Math.min(1, speedFactor * 0.5 + closeScore + rallyFactor * 0.3);
+    window.ambient.setPaddleTension(currentTension);
+  }
+
+  function startServe() {
+    audio.ensure(); window.ambient.ensure();
+    if (!running&&!paused) {
+      setStatus('Serve incoming…','pulse','Ready…');
+      audio.tone(360,.06,'triangle',.018,420);
+      setTimeout(()=>{
+        if(running)return; // guard against double-call
+        running=true; paused=false;
+        if (ball.vx===0&&ball.vy===0) resetBall(Math.random()>.5?1:-1);
+        setStatus('Arena live','pulse','Rally in motion'); soundServe();
+        if (!animId) { lastTime=performance.now(); animId=requestAnimationFrame(loop); }
+        window.archive?.inc?.('trialsPlayed');
+      },900);
+    } else if(paused){
+      // Resume
+      paused=false; setStatus('Arena live','pulse','Rally in motion');
+      els.pauseBtn.textContent='Pause';
+    }
+  }
+
+  function togglePause() {
+    if (!running) return; paused=!paused;
+    audio.tone(260,.06,'triangle',.02,220);
+    if (paused) { setStatus('Paused','stable','Paused'); els.pauseBtn.textContent='Resume'; }
+    else { setStatus('Arena live','pulse','Rally in motion'); els.pauseBtn.textContent='Pause'; }
+  }
+
+  function resetMatch() {
+    window.ambient.setPaddleTension(0);
+    running=false; paused=false; els.pauseBtn.textContent='Pause';
+    score.left=0; score.right=0; currentRally=0; bestRally=0;
+    resetPaddles(); resetBall(Math.random()>.5?1:-1);
+    updateScores(); draw();
+    setStatus('Ready — press Start','stable','Ready');
+    if (animId) { cancelAnimationFrame(animId); animId=null; }
+  }
+
+  function updatePaddles(dt) {
+    // Left paddle: keyboard + touch (touch sets position directly)
+    if (touchId===null) {
+      // Keyboard only when not touching
+      const prevL=left.y;
+      if (keys.w) left.y-=left.speed*dt;
+      if (keys.s) left.y+=left.speed*dt;
+      paddleVel.left=(left.y-prevL)/dt;
+    }
+    clamp(left);
+
+    // Right paddle: keyboard (2p) or AI
+    const prevR=right.y;
+    if (selectedMode==='pvp') {
+      if (keys.ArrowUp) right.y-=right.speed*dt;
+      if (keys.ArrowDown) right.y+=right.speed*dt;
+      paddleVel.right=(right.y-prevR)/dt;
+    } else {
+      // AI with difficulty-based reaction and error
+      const aiSpd = diffCfg.aiSpeed;
+      const reaction = diffCfg.aiReaction;
+      const error = diffCfg.aiError;
+      if (Math.random() < reaction) {
+        const target = ball.y + (Math.random()-.5)*error - right.h/2;
+        if (right.y + right.h/2 < target) right.y=Math.min(right.y+aiSpd*dt, target);
+        else right.y=Math.max(right.y-aiSpd*dt, target);
+      }
+      paddleVel.right=(right.y-prevR)/dt;
+    }
+    clamp(right);
+  }
+
+  function updateBall(dt) {
+    const spd=diffCfg.ballSpeed, maxSpd=diffCfg.maxSpeed, accel=diffCfg.accel;
+    ball.trail.push({x:ball.x,y:ball.y});
+    if(ball.trail.length>12) ball.trail.shift();
+    ball.x+=ball.vx*dt; ball.y+=ball.vy*dt;
+    // Wall bounce
+    if(ball.y-ball.size/2<0){ball.y=ball.size/2;ball.vy=Math.abs(ball.vy);soundWall();}
+    if(ball.y+ball.size/2>H){ball.y=H-ball.size/2;ball.vy=-Math.abs(ball.vy);soundWall();}
+    // Paddle collision helpers
+    function hitPaddle(paddle,side){
+      const relY=(ball.y-(paddle.y+paddle.h/2))/(paddle.h/2);
+      const angle=relY*(.28*Math.PI);
+      const curSpd=Math.min(Math.hypot(ball.vx,ball.vy)+accel, maxSpd);
+      ball.vx=(side==='left'?1:-1)*curSpd*Math.cos(angle);
+      ball.vy=curSpd*Math.sin(angle);
+      const perfect=Math.abs(relY)<.15;
+      soundPaddle(side,perfect); currentRally++;
+      if(currentRally>bestRally){bestRally=currentRally;updateScores();}
+      // Update paddle tension for music
+      updateTension();
+    }
+    // Left paddle
+    if(ball.vx<0&&ball.x-ball.size/2<left.x+left.w&&ball.x-ball.size/2>left.x&&ball.y>left.y&&ball.y<left.y+left.h){
+      ball.x=left.x+left.w+ball.size/2; hitPaddle(left,'left');
+    }
+    // Right paddle
+    if(ball.vx>0&&ball.x+ball.size/2>right.x&&ball.x+ball.size/2<right.x+right.w&&ball.y>right.y&&ball.y<right.y+right.h){
+      ball.x=right.x-ball.size/2; hitPaddle(right,'right');
+    }
+    // Score
+    if(ball.x<0){
+      score.right+=1; soundScore(false); updateScores();
+      const r=canvas.getBoundingClientRect(); burstParticles({x:r.left,y:r.top+r.height/2},'pink',20);
+      setStatus('Warden scores','warden','Warden scores');
+      if(score.right>=MAX_SCORE){endMatch('warden'); return;}
+      setTimeout(()=>resetBall(1),600);
+    }
+    if(ball.x>W){
+      score.left+=1; soundScore(true); updateScores();
+      const r=canvas.getBoundingClientRect(); burstParticles({x:r.left+r.width,y:r.top+r.height/2},'blue',20);
+      setStatus('You score','player','You score');
+      if(score.left>=MAX_SCORE){endMatch('player'); return;}
+      setTimeout(()=>resetBall(-1),600);
+    }
+  }
+
+  function endMatch(winner) {
+    running=false; matchHistory.push(winner); updateHistory();
+    window.archive?.inc?.('trialsCompleted'); window.progression?.increment?.();
+    if(winner==='player'){
+      setStatus('You prevail — rally ends','player','Victory');
+      audio.tone(540,.09,'sine',.035,680); setTimeout(()=>audio.tone(760,.12,'triangle',.03,920),90);
+    } else {
+      setStatus('The Warden holds — rally ends','warden','Defeated');
+      audio.tone(320,.14,'sawtooth',.025,240);
+    }
+    window.ambient.swell(.006);
+    hiscores.add('vpBestRally', bestRally);
+    setTimeout(() => showVpEnd(winner), 1600);
+    setTimeout(() => showLore('paddle', winner==='player'?'win':'lose'), 400);
+  }
+
+  function showVpEnd(winner) {
+    const overlay = document.getElementById('vpEndOverlay');
+    const card = document.getElementById('vpEndCard');
+    const sigil = document.getElementById('vpEndSigil');
+    const title = document.getElementById('vpEndTitle');
+    const sub = document.getElementById('vpEndSub');
+    document.getElementById('vpEndYours').textContent = score.left;
+    document.getElementById('vpEndRally').textContent = bestRally;
+    document.getElementById('vpEndMatches').textContent = matchHistory.length;
+    if (winner==='player') {
+      card.className='end-card win'; sigil.textContent='✦';
+      title.textContent='The Arena Yields'; title.className='end-title win';
+      sub.textContent='You held the line when the Warden could not. The orb remembers your timing.';
+    } else {
+      card.className='end-card lose'; sigil.textContent='☾';
+      title.textContent='The Warden Holds'; title.className='end-title lose';
+      sub.textContent='The orb passed through. The Warden does not gloat. It simply waits for the next serve.';
+    }
+    overlay.classList.remove('hidden');
+  }
+
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+    // Background — pulses with tension
+    const t = currentTension;
+    const grd=ctx.createLinearGradient(0,0,0,H);
+    grd.addColorStop(0,`rgba(${11+Math.round(t*18)},${14+Math.round(t*8)},28,.97)`);
+    grd.addColorStop(1,`rgba(14,${19+Math.round(t*10)},${40+Math.round(t*12)},.99)`);
+    ctx.fillStyle=grd; ctx.fillRect(0,0,W,H);
+    // Tension glow — radial pulse centered on ball when tension is high
+    if(t>0.2 && (ball.vx!==0||ball.vy!==0)){
+      const glowR = 80 + t*180;
+      const glowAlpha = t*0.10;
+      const glow = ctx.createRadialGradient(ball.x,ball.y,0,ball.x,ball.y,glowR);
+      glow.addColorStop(0,`rgba(255,181,229,${glowAlpha})`);
+      glow.addColorStop(1,'rgba(255,181,229,0)');
+      ctx.fillStyle=glow; ctx.fillRect(0,0,W,H);
+    }
+    // Edge vignette intensifies with tension
+    if(t>0.3){
+      const vign=ctx.createRadialGradient(W/2,H/2,H*0.3,W/2,H/2,H*0.85);
+      vign.addColorStop(0,'rgba(199,182,255,0)');
+      vign.addColorStop(1,`rgba(199,182,255,${t*0.08})`);
+      ctx.fillStyle=vign; ctx.fillRect(0,0,W,H);
+    }
+    // Center line
+    ctx.setLineDash([12,18]); ctx.strokeStyle=`rgba(255,255,255,${0.04+t*0.06})`; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(W/2,0); ctx.lineTo(W/2,H); ctx.stroke(); ctx.setLineDash([]);
+    // Ball trail
+    ball.trail.forEach((p,i) => {
+      const a=(i/ball.trail.length)*.25;
+      ctx.beginPath(); ctx.arc(p.x,p.y,(ball.size/2)*(i/ball.trail.length)*.8,0,Math.PI*2);
+      ctx.fillStyle=`rgba(127,236,201,${a})`; ctx.fill();
+    });
+    // Ball — always render, pulse gently when stationary
+    {
+      const isMoving=ball.vx!==0||ball.vy!==0;
+      const ballAlpha=isMoving?0.92:(0.45+0.2*Math.sin(Date.now()*.003));
+      const glowColor=isMoving?'rgba(127,236,201,.7)':'rgba(187,168,255,.5)';
+      const bg=ctx.createRadialGradient(ball.x,ball.y,0,ball.x,ball.y,ball.size);
+      bg.addColorStop(0,`rgba(255,255,255,${ballAlpha})`); bg.addColorStop(.5,glowColor); bg.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath(); ctx.arc(ball.x,ball.y,ball.size/2,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,255,255,${ballAlpha})`; ctx.fill();
+      ctx.beginPath(); ctx.arc(ball.x,ball.y,ball.size,0,Math.PI*2);
+      ctx.fillStyle=bg; ctx.fill();
+    }
+    // Paddles
+    function drawPaddle(p, hexColor, glowRgb) {
+      ctx.shadowColor=hexColor; ctx.shadowBlur=16+currentTension*12;
+      const grad=ctx.createLinearGradient(p.x,p.y,p.x,p.y+p.h);
+      grad.addColorStop(0,`rgba(${glowRgb},.7)`);
+      grad.addColorStop(.5,'rgba(255,255,255,.92)');
+      grad.addColorStop(1,`rgba(${glowRgb},.7)`);
+      ctx.fillStyle=grad;
+      ctx.beginPath();
+      if(ctx.roundRect) ctx.roundRect(p.x,p.y,p.w,p.h,8); else ctx.rect(p.x,p.y,p.w,p.h);
+      ctx.fill(); ctx.shadowBlur=0;
+    }
+    drawPaddle(left,'#7ec8ff','126,200,255'); drawPaddle(right,'#ff9ec8','255,158,200');
+    // Score overlay — readable but not distracting
+    ctx.font='700 52px Inter,system-ui,sans-serif'; ctx.textAlign='center';
+    ctx.fillStyle='rgba(126,200,255,.28)'; ctx.fillText(score.left, W/2-90, 66);
+    ctx.fillStyle='rgba(255,158,200,.28)'; ctx.fillText(score.right, W/2+90, 66);
+  }
+
+  function loop(ts) {
+    if (!running||paused) { animId=requestAnimationFrame(loop); return; }
+    const dt=Math.min((ts-lastTime)/1000,.05); lastTime=ts;
+    updatePaddles(dt); updateBall(dt); draw();
+    animId=requestAnimationFrame(loop);
+  }
+
+  document.getElementById('vpEndPlayAgain').addEventListener('click', () => {
+    document.getElementById('vpEndOverlay').classList.add('hidden'); resetMatch();
+  });
+  document.getElementById('vpEndHub').addEventListener('click', () => {
+    document.getElementById('vpEndOverlay').classList.add('hidden');
+    backToHub(() => window.vp?.resetMatch());
+  });
+  document.getElementById('vpStartRoundBtn').addEventListener('click', startServe);
+  document.getElementById('vpPauseBtn').addEventListener('click', togglePause);
+  document.getElementById('vpResetMatchBtn').addEventListener('click', resetMatch);
+  document.getElementById('vpSwapModeBtn').addEventListener('click', ()=>setMode(selectedMode==='solo'?'pvp':'solo'));
+
+  setMode('solo', true);
+  return { resetMatch, draw, setMode, startServe, togglePause, getTension:()=>currentTension };
+})();
+
+</script>
+
+<!-- ═══ ECHO DRIFT ═══ -->
+<script>
+
+window.ed = (() => {
+  const RUNES = [
+    {symbol:'✦', name:'Aethra', cls:'rune-aethra'},
+    {symbol:'☾', name:'Nyxil',  cls:'rune-nyxil' },
+    {symbol:'◇', name:'Virel',  cls:'rune-virel' },
+    {symbol:'∴', name:'Thalen', cls:'rune-thalen'},
+    {symbol:'⌁', name:'Kairo',  cls:'rune-kairo' },
+  ];
+
+  // DIFFICULTY CONFIG
+  const DIFF = {
+    initiate: { count:4, revealMs:2200, decoys:0 },
+    adept:    { count:5, revealMs:1600, decoys:2 },
+    warden:   { count:6, revealMs:1100, decoys:4 },
+  };
+  let difficulty='initiate';
+
+  document.querySelectorAll('[data-ed-diff]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      difficulty=btn.dataset.edDiff;
+      document.querySelectorAll('[data-ed-diff]').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      resetAll();
+    });
+  });
+
+  const state = {phase:'idle', pattern:[], player:new Map(), runeMap:new Map(), selectedTile:null, selectedRune:null, streak:0, bestStreak:0};
+  const els = {
+    board: document.getElementById('edBoard'),
+    tray: document.getElementById('edTray'),
+    stage: document.getElementById('echoStage'),
+    statusText: document.getElementById('edStatusText'),
+    messageBox: document.getElementById('edMsg'),
+    eventBanner: document.getElementById('edEventBanner'),
+    turnLabel: document.getElementById('edTurnLabel'),
+    turnOrb: document.getElementById('edTurnOrb'),
+    startBtn: document.getElementById('edStartBtn'),
+    checkBtn: document.getElementById('edCheckBtn'),
+    resetBtn: document.getElementById('edResetBtn'),
+  };
+
+  const tiles = [], trayRunes = [];
+
+  function tone(f,d=.08,t='triangle',v=.025,s=null){ try{audio.tone(f,d,t,v,s);}catch(e){} }
+  function setStatus(text,detail){ els.statusText.textContent=text; els.messageBox.innerHTML=`<strong>${text}</strong>${detail}`; }
+  function setTurn(label,kind='neutral'){
+    els.turnLabel.textContent=label;
+    const colors={reveal:'var(--gold)',input:'var(--blue)',resolve:'var(--pink)',neutral:'var(--accent)'};
+    const shadows={reveal:'rgba(242,221,152,.4)',input:'rgba(154,215,255,.45)',resolve:'rgba(255,181,229,.45)',neutral:'rgba(199,182,255,.4)'};
+    els.turnOrb.style.background=colors[kind]||colors.neutral;
+    els.turnOrb.style.boxShadow=`0 0 16px ${shadows[kind]||shadows.neutral}`;
+  }
+  function showEvent(t){ els.eventBanner.textContent=t; els.eventBanner.classList.add('active'); }
+  function hideEvent(){ els.eventBanner.classList.remove('active'); }
+  function clearSelections(){ tiles.forEach(t=>t.classList.remove('selected')); trayRunes.forEach(r=>r.classList.remove('active')); state.selectedTile=null; state.selectedRune=null; }
+  function clearBoard(){ tiles.forEach(t=>{ t.textContent=''; t.className='echo-tile ghost'; t.style.opacity=''; }); clearSelections(); }
+  function pulse(kind='success'){
+    els.stage.style.transform='scale(1.01)';els.stage.style.filter='brightness(1.08)'; setTimeout(()=>{els.stage.style.transform='';els.stage.style.filter='';},320);
+    if(kind==='fail') els.stage.animate([{transform:'translateX(0)'},{transform:'translateX(6px)'},{transform:'translateX(-6px)'},{transform:'translateX(0)'}],{duration:260,easing:'ease'});
+  }
+
+  function generatePattern(count){
+    const out=[]; while(out.length<count){ const i=Math.floor(Math.random()*9); if(!out.includes(i)) out.push(i); } return out;
+  }
+  function assignRunes(){ state.runeMap.clear(); state.pattern.forEach(index=>{ state.runeMap.set(index,RUNES[Math.floor(Math.random()*RUNES.length)]); }); }
+
+  function placeDecoys(count){
+    const cfg=DIFF[difficulty];
+    const emptyTiles=tiles.map((_,i)=>i).filter(i=>!state.pattern.includes(i));
+    const shuffled=[...emptyTiles].sort(()=>Math.random()-.5).slice(0,count);
+    shuffled.forEach(i=>{
+      const rune=RUNES[Math.floor(Math.random()*RUNES.length)];
+      tiles[i].textContent=rune.symbol; tiles[i].classList.add(rune.cls,'decoy'); tiles[i].classList.remove('ghost');
+    });
+  }
+
+  function revealPattern(){
+    state.pattern.forEach(index=>{
+      const rune=state.runeMap.get(index), tile=tiles[index];
+      tile.textContent=rune.symbol; tile.classList.add(rune.cls,'reveal'); tile.classList.remove('ghost');
+    });
+  }
+
+  function hidePattern(){
+    showEvent('The Veil closes');
+    state.pattern.forEach(index=>{ tiles[index].style.opacity='.35'; });
+    const cfg=DIFF[difficulty];
+    setTimeout(()=>{
+      // Clear pattern tiles
+      state.pattern.forEach(index=>{ const t=tiles[index]; t.style.opacity=''; t.textContent=''; t.className='echo-tile ghost'; });
+      // Place decoys
+      if(cfg.decoys>0) placeDecoys(cfg.decoys);
+      state.phase='input'; els.checkBtn.disabled=false; hideEvent(); setTurn('Reconstruction phase','input'); edBg.setPhase('input');
+      const targetCount = DIFF[difficulty].count;
+      setStatus('Recreate what remains',`Select a tile, then choose its rune. <strong style="color:var(--gold)">0 of ${targetCount}</strong> placed.`);
+      pulse('success'); tone(460,.07,'triangle',.022,520);
+    }, 420);
+  }
+
+  function startRound(){
+    const cfg=DIFF[difficulty];
+    clearBoard(); state.player=new Map(); state.pattern=generatePattern(cfg.count);
+    assignRunes(); state.phase='reveal'; els.checkBtn.disabled=true; hideEvent();
+    setTurn('Reveal phase','reveal');
+    setStatus('Hold what you see','The pattern is present only briefly. Let the runes settle before they pass from sight.');
+    revealPattern(); tone(560,.07,'triangle',.024,640); edBg.setPhase('reveal');
+    window.archive?.inc?.('trialsPlayed');
+    setTimeout(()=>{ setStatus('The Veil closes','The runes are slipping away.'); hidePattern(); }, cfg.revealMs);
+  }
+
+  function selectTile(index){
+    if(state.phase!=='input') return;
+    if(tiles[index].classList.contains('decoy')) return;
+
+    const tile = tiles[index];
+    const isAlreadySelected = tile.classList.contains('selected');
+    const isPlayerPlaced = tile.classList.contains('player-on');
+
+    // Tap a placed tile to CLEAR it back to empty
+    if(isPlayerPlaced && !isAlreadySelected){
+      tile.textContent=''; tile.className='echo-tile ghost';
+      state.player.delete(index);
+      clearSelections();
+      tone(300,.06,'sine',.012,240); // soft "erase" tone
+      // Re-disable seal if no longer fully filled
+      const filled=state.pattern.filter(i=>state.player.has(i)).length;
+      if(filled<state.pattern.length){
+        els.checkBtn.disabled=true;
+        setStatus('Recreate what remains','Select a tile, then choose the rune you believe was held there.');
+      }
+      return;
+    }
+
+    // Tap already-selected empty tile to deselect
+    if(isAlreadySelected && !isPlayerPlaced){
+      clearSelections();
+      return;
+    }
+
+    // Select the tile
+    tiles.forEach(t=>t.classList.remove('selected'));
+    tile.classList.add('selected'); state.selectedTile=index;
+    tone(420,.04,'sine',.015,470);
+    if(state.selectedRune!==null) placeRune();
+  }
+
+  function selectRune(symbol){
+    if(state.phase!=='input') return;
+    trayRunes.forEach(r=>r.classList.remove('active'));
+    const btn=trayRunes.find(r=>r.textContent===symbol);
+    if(btn) btn.classList.add('active');
+    state.selectedRune=symbol;
+    if(state.selectedTile!==null) placeRune();
+  }
+
+  function placeRune(){
+    if(state.phase!=='input'||state.selectedTile===null||!state.selectedRune) return;
+    const tile=tiles[state.selectedTile];
+    const rune=RUNES.find(r=>r.symbol===state.selectedRune);
+    tile.textContent=rune.symbol; tile.className=`echo-tile place ${rune.cls}`;
+    setTimeout(()=>{ tile.className=`echo-tile player-on ${rune.cls}`; },150);
+    state.player.set(state.selectedTile,rune.symbol); clearSelections();
+    // Crystalline shimmer — three quick partials
+    tone(1240, 0.08, 'sine', 0.022, 1480);
+    setTimeout(()=>tone(1860, 0.06, 'sine', 0.014, 2100), 12);
+    setTimeout(()=>tone(620,  0.12, 'sine', 0.018, 490),  5);
+    const filled=state.pattern.filter(i=>state.player.has(i)).length;
+    const target=state.pattern.length;
+    if(filled===target){
+      els.checkBtn.disabled=false;
+      setStatus('Seal when ready',`All ${target} positions placed. Seal the pattern when you are certain.`);
+    } else {
+      setStatus('Recreate what remains',`<strong style="color:var(--gold)">${filled} of ${target}</strong> placed. Continue selecting tiles and runes.`);
+    }
+  }
+
+  function checkResult(){
+    if(state.phase!=='input') return;
+    state.phase='resolve'; els.checkBtn.disabled=true; setTurn('Resolution phase','resolve');
+    const correct=state.pattern.every(index=>state.player.has(index)&&state.player.get(index)===state.runeMap.get(index).symbol);
+    if(correct){
+      state.streak++;
+      if(state.streak > state.bestStreak) state.bestStreak = state.streak;
+      showEvent('The Veil holds');
+      setStatus('The Veil holds','You retained both symbol and place after the pattern passed from sight. The drift resolves cleanly.');
+      pulse('success'); tone(680,.09,'triangle',.026,820);
+      window.archive?.inc?.('trialsCompleted'); window.progression?.increment?.();
+      window.ambient.swell(.004);
+      hiscores.add('edStreak', state.streak);
+      if(state.streak > (archive.get('bestStreak')||0)) archive.inc('bestStreak', state.streak - (archive.get('bestStreak')||0));
+      setTimeout(()=>showEdEnd(true), 3500);
+      setTimeout(()=>showLore('echo','success'), 400);
+    } else {
+      const finalStreak = state.streak;
+      state.streak = 0;
+      showEvent('The Veil distorts');
+      setStatus('The Veil distorts','Something slipped. What returned was not what was first seen.');
+      setTimeout(()=>showEdEnd(false, finalStreak), 4000);
+      setTimeout(()=>showLore('echo','fail'), 400);
+      // Show correct answers
+      state.pattern.forEach(index=>{
+        const correct_rune=state.runeMap.get(index);
+        const player_rune=state.player.get(index);
+        if(!player_rune||player_rune!==correct_rune.symbol){
+          tiles[index].textContent=correct_rune.symbol;
+          tiles[index].className=`echo-tile ${correct_rune.cls}`;
+          tiles[index].style.opacity='.6';
+        }
+      });
+      pulse('fail'); tone(360,.11,'sawtooth',.022,280);
+    }
+    // Board state is preserved — only player action (Drift Again / Return) advances
+  }
+
+  function showEdEnd(success, displayStreak=null) {
+    const overlay = document.getElementById('edEndOverlay');
+    const card = document.getElementById('edEndCard');
+    const sigil = document.getElementById('edEndSigil');
+    const title = document.getElementById('edEndTitle');
+    const sub = document.getElementById('edEndSub');
+    const streak = displayStreak !== null ? displayStreak : state.streak;
+    document.getElementById('edEndStreak').textContent = streak;
+    document.getElementById('edEndBest').textContent = state.bestStreak;
+    document.getElementById('edEndDiff').textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+    if (success) {
+      card.className='end-card win'; sigil.textContent='◇';
+      title.textContent='The Pattern Holds'; title.className='end-title win';
+      sub.textContent='What was seen has been remembered. The drift resolves cleanly through the Veil.';
+    } else {
+      card.className='end-card lose'; sigil.textContent='⌁';
+      title.textContent='The Veil Distorts'; title.className='end-title lose';
+      sub.textContent='Something slipped between seeing and remembering. The Veil makes no judgment of this.';
+    }
+    overlay.classList.remove('hidden');
+  }
+
+  document.getElementById('edEndPlayAgain').addEventListener('click', () => {
+    document.getElementById('edEndOverlay').classList.add('hidden'); startRound();
+  });
+  document.getElementById('edEndHub').addEventListener('click', () => {
+    document.getElementById('edEndOverlay').classList.add('hidden');
+    backToHub(() => window.ed?.resetAll());
+  });
+
+  function resetAll(){
+    edBg.setPhase('idle');
+    state.phase='idle'; state.pattern=[]; state.player=new Map(); state.runeMap=new Map(); state.streak=0;
+    clearBoard(); els.checkBtn.disabled=true; hideEvent();
+    setTurn('Awaiting first reveal','neutral');
+    setStatus('Ready — press Begin Drift','The board is still. Nothing has crossed the Veil yet.');
+  }
+
+  // Build board tiles
+  for(let i=0;i<9;i++){
+    const t=document.createElement('button'); t.className='echo-tile ghost'; t.type='button'; t.dataset.index=i;
+    t.addEventListener('click',()=>selectTile(i));
+    tiles.push(t); els.board.appendChild(t);
+  }
+  // Build rune tray
+  RUNES.forEach(rune=>{
+    const el=document.createElement('button'); el.type='button';
+    el.className=`e-rune-btn ${rune.cls}`; el.textContent=rune.symbol; el.title=rune.name;
+    el.addEventListener('click',()=>selectRune(rune.symbol));
+    trayRunes.push(el); els.tray.appendChild(el);
+  });
+
+  els.startBtn.addEventListener('click', startRound);
+  els.checkBtn.addEventListener('click', checkResult);
+  els.resetBtn.addEventListener('click', resetAll);
+
+  resetAll();
+  return { resetAll, startRound, checkResult };
+})();
+
+</script>
+
+<!-- ═══ VEIL WITHIN ═══ -->
+<script>
+
+window.vw = (() => {
+  const wrap = document.getElementById('vwWrap');
+  if (!wrap) return { begin(){ console.warn('vwWrap not found'); } };
+
+  // ── CHAMBERS ─────────────────────────────────────────────────────────────
+  // Five chambers mapping to the Mayer-Salovey-Caruso four-branch model
+  // plus a fifth chamber exploring emotional regulation vocabulary (RULER).
+  // Branch assignment per choice is weighted, not binary, to allow nuance.
+  //
+  // Branches:
+  //   seer   → Branch 1: Perceiving emotion (reading self + others)
+  //   ember  → Branch 2: Using emotion to facilitate thought/action
+  //   weaver → Branch 3: Understanding emotion (complexity, blending, progression)
+  //   root   → Branch 4: Managing emotion (regulation, staying, steadying)
+
+  const CHAMBERS = [
+    {
+      id: 'sight',
+      eyebrow: 'Chamber I — Sight',
+      title: 'What you notice before you understand',
+      prose: `You arrive at the edge of something unfamiliar. There is light from nowhere obvious, and a silence that feels inhabited.<br><br><em>Before you know what this place is, it is already asking how you notice.</em>`,
+      question: 'Something in this room is asking for your attention. What is it?',
+      choices: [
+        { text: 'The heaviness in the far corner — a feeling left behind by someone who was here before you.', scores: { seer:3, weaver:1 } },
+        { text: 'The reaction in your own body. Something is asking something of you, and you feel it before you name it.', scores: { ember:2, root:2 } },
+        { text: 'The edge of the room, where what is known ends and something stranger begins.', scores: { weaver:3, seer:1 } },
+        { text: 'The stillness itself — what it seems to be protecting, and what might be underneath it.', scores: { root:3, seer:1 } }
+      ]
+    },
+    {
+      id: 'flame',
+      eyebrow: 'Chamber II — Flame',
+      title: 'What feeling does when it enters the room',
+      prose: `This chamber is warmer. Nothing burns wildly here. The heat is steady, deliberate, almost patient.<br><br><em>You are not here to extinguish what you feel. You are here to see what it becomes when you stay with it long enough.</em>`,
+      question: 'A difficult feeling has followed you into this chamber. What does it do to the way you move through the world?',
+      choices: [
+        { text: 'It sharpens me. I notice more, move more carefully, become more precise.', scores: { ember:3, seer:1 } },
+        { text: 'It slows me. I need to sit with it and understand it before I can act from it.', scores: { weaver:3, root:1 } },
+        { text: 'It becomes fuel. Even the hard feelings carry something I can use.', scores: { ember:3, root:1 } },
+        { text: 'It asks me to remain with it without rushing it toward anything. The staying is the work.', scores: { root:3, weaver:1 } }
+      ]
+    },
+    {
+      id: 'threads',
+      eyebrow: 'Chamber III — Threads',
+      title: 'What lives beneath what happens',
+      prose: `Everything in this chamber is connected. Nothing stands alone for long. A conversation, a pause, a sharp word — all of it belongs to something older than the moment it arrived in.<br><br><em>The Veil is not asking what happened. It is asking what lives underneath what happened.</em>`,
+      question: 'Two people are in conflict. What do you notice first — something they have not named yet?',
+      choices: [
+        { text: 'They are both afraid of the same thing, but neither of them knows that yet.', scores: { weaver:3, seer:1 } },
+        { text: 'The moment is coming when one will need someone to stay, and both are already preparing to leave.', scores: { root:2, weaver:2 } },
+        { text: 'The argument is only the surface. The real wound is older and quieter than anything being said.', scores: { seer:2, weaver:2 } },
+        { text: 'Neither knows how to receive care right now. They only know how to need it.', scores: { root:3, seer:1 } }
+      ]
+    },
+    {
+      id: 'earth',
+      eyebrow: 'Chamber IV — Earth',
+      title: 'What you do when something is heavy',
+      prose: `The last chamber feels held. The ground here does not reject weight. It simply receives it.<br><br><em>You are with someone who is struggling. Nothing is required of you except the kind of presence you are capable of bringing.</em>`,
+      question: 'What do you find yourself doing?',
+      choices: [
+        { text: 'Watching for the quiet signals — the pause, the voice that shifts, the thing that almost gets said.', scores: { seer:3, weaver:1 } },
+        { text: 'Feeling some of it alongside them, so they are not carrying it entirely alone.', scores: { root:2, ember:2 } },
+        { text: 'Staying quiet but present. Making sure they know, without announcement, that they are not alone.', scores: { root:3, seer:1 } },
+        { text: 'Thinking about what the situation needs next — not just what is being asked for, but what would actually help.', scores: { weaver:2, ember:2 } }
+      ]
+    },
+    {
+      id: 'river',
+      eyebrow: 'Chamber V — The River',
+      title: 'How you move through what you cannot hold still',
+      prose: `This is the deepest chamber. The water here does not stop for anything.<br><br>Emotions are like water. They move. They change. They carry things from one place to another. The question is not whether you will feel — it is what you do in the space between feeling and acting.<br><br><em>The Veil is asking about your relationship with the current — not whether you swim, but how.</em>`,
+      question: 'An emotion you did not expect arrives — sudden, strong, and not entirely welcome. What is your first instinct?',
+      choices: [
+        { text: 'I try to name it precisely. Getting the word right feels like the first step toward holding it correctly.', scores: { weaver:3, seer:1 } },
+        { text: 'I feel it fully, without immediately trying to change it. It needs to be real before it can move.', scores: { root:2, ember:2 } },
+        { text: 'I notice what it is pointing at. Strong feelings are usually signals about something that matters.', scores: { seer:2, ember:2 } },
+        { text: 'I look for what it needs — not what it wants, but what would genuinely help it resolve.', scores: { root:3, weaver:1 } }
+      ]
+    }
+  ];
+
+  // ── ARCHETYPES ────────────────────────────────────────────────────────────
+  // Each archetype maps to one of the four MSC branches.
+  // The description, gift, edge, and practices are grounded in that branch's
+  // research characteristics while translated into experiential language.
+
+  const ARCHETYPES = {
+    seer: {
+      sigil: '✦',
+      name: 'The Seer',
+      court: 'Moon Court',
+      color: 'var(--blue)',
+      glow: 'rgba(126,200,255,.22)',
+      tagline: 'You feel the room before you understand it.',
+      branch: 'Perceiving Emotion',
+      description: [
+        'The Veil shows you what others move through without seeing. You read emotional weather quickly — the grief that sits beneath anger, the pause that holds more than silence, the shift in a room before anyone names it.',
+        'This does not always feel like a gift. Sometimes it feels like carrying information no one handed you, in a language only you can read. But it is often why people feel seen in your presence, even when they cannot explain why.',
+        'Your growing edge is expression. What you perceive wants movement. The Veil in you deepens when seeing becomes language — when the thing you noticed becomes something you can offer.'
+      ],
+      gift: 'You read emotional weather others move through without noticing.',
+      edge: 'Perception can become silence when it most needs to become speech.',
+      secondary_note: 'Your perception is strongest in close relationships, where the signals are subtle and the stakes are real.',
+      practices: [
+        { label: 'Name what you notice', text: 'Once a day, take one emotional signal you observed — in yourself or someone else — and put it into a sentence. "I noticed ___ when ___." The act of naming makes what you see available to others.' },
+        { label: 'Share the forecast', text: 'When you sense a shift in a room or a relationship, practice saying it aloud: "Something feels different here." You do not need to be right. You need to be present enough to offer it.' },
+        { label: 'Slow your intake', text: 'Seers can become overwhelmed by absorbing too much. Build brief windows of low-stimulus time — walks without input, moments of deliberate quiet — so your sensitivity stays as resource rather than becoming noise.' }
+      ],
+      ruler: { recognize: 'quickly and accurately', understand: 'intuitively through pattern', label: 'richly, with nuance', express: 'when trust is established', regulate: 'by seeking stillness and space' }
+    },
+
+    ember: {
+      sigil: '◈',
+      name: 'The Ember',
+      court: 'Ember Court',
+      color: 'var(--gold)',
+      glow: 'rgba(238,216,122,.22)',
+      tagline: 'Feeling is not what stops you. It is what moves you.',
+      branch: 'Using Emotion',
+      description: [
+        'You know emotion is not the enemy of clarity. It can orient you, focus you, tell you where the living part of a moment actually is. When something matters to you, that mattering is information — and you have learned to move with it.',
+        'You are often least lost when something is at stake. Feeling gives you traction instead of pulling you under. Where others pause, you find direction. Where others shut down, you find motion.',
+        'Your growing edge is warmth. The fire you carry is real and useful — but fire changes the space around it. The Ember in you is strongest when others can stand near it without feeling the heat as pressure.'
+      ],
+      gift: 'You use emotion as a compass when others treat it as interference.',
+      edge: 'Intensity can narrow the space around you, making it hard for others to stay close.',
+      secondary_note: 'You tend to be most effective in moments of genuine stakes — when the work actually matters, you become more yourself, not less.',
+      practices: [
+        { label: 'Create space before acting', text: 'When a feeling is driving you, practice a brief deliberate pause — not to suppress it, but to let it become precise. Ask: "What is this feeling trying to accomplish?" The answer often refines the action.' },
+        { label: 'Invite others into the warmth', text: 'Notice when your energy is moving forward without checking who is behind you. Slow once to look back. Ask a question. Let someone else\'s pace matter for a moment.' },
+        { label: 'Rest the furnace', text: 'The Ember can sustain high intensity longer than most — but sustained intensity without rest changes the quality of what you produce. Build deliberate recovery into high-stakes periods, not just after them.' }
+      ],
+      ruler: { recognize: 'through bodily intensity and direction', understand: 'through action and outcome', label: 'in motion — the word follows the impulse', express: 'directly and with conviction', regulate: 'by redirecting energy into purposeful action' }
+    },
+
+    weaver: {
+      sigil: '◇',
+      name: 'The Weaver',
+      court: 'Veil Court',
+      color: 'var(--accent)',
+      glow: 'rgba(187,168,255,.22)',
+      tagline: 'You see where this is going before it gets there.',
+      branch: 'Understanding Emotion',
+      description: [
+        'You understand the architecture of emotion — how feelings build on each other, transform into each other, and follow patterns that repeat across situations and across lives. You can read the logic of what someone is carrying even when they cannot.',
+        'This can feel like intimacy of a different kind. Not less caring, but more structural. You often know what a situation is becoming before it arrives. This is a real intelligence — and it can feel lonely when others are still in the middle of something you already see the shape of.',
+        'Your growing edge is staying in the territory instead of only reading the map. Sometimes people do not need your accuracy first. They need your company. The Weaver is at their deepest not when they are most correct, but when they are most present.'
+      ],
+      gift: 'You understand the emotional logic beneath what is happening.',
+      edge: 'Understanding can create distance — getting so far ahead that others feel analyzed rather than accompanied.',
+      secondary_note: 'You tend to be most generous in situations of complexity, where the emotions involved are layered and unclear to everyone else.',
+      practices: [
+        { label: 'Stay in the chapter', text: 'When you find yourself already at the end of a conversation, practice returning to the middle of it. Ask a question whose answer you do not already know. Let someone finish without offering the conclusion.' },
+        { label: 'Name the pattern without owning the outcome', text: 'Share what you are seeing — "It seems like this might be about ___" — but hold the interpretation lightly. Leave room for the person to disagree with your map of their territory.' },
+        { label: 'Let some things stay unresolved', text: 'Weavers can be uncomfortable with emotional ambiguity they cannot yet name. Practice sitting with the not-yet-understood as a deliberate act, not a failure of perception.' }
+      ],
+      ruler: { recognize: 'through conceptual categories and patterns', understand: 'deeply — you trace emotional logic across time', label: 'precisely, often with multiple words for the same feeling', express: 'carefully, after analysis', regulate: 'by finding meaning and structure in the experience' }
+    },
+
+    root: {
+      sigil: '∴',
+      name: 'The Root',
+      court: 'Root Court',
+      color: 'var(--mint)',
+      glow: 'rgba(94,221,168,.22)',
+      tagline: 'You hold the ground when things get heavy.',
+      branch: 'Managing Emotion',
+      description: [
+        'There is a kind of strength that does not announce itself. It stays. It steadies. It makes weight feel survivable — not by removing it, but by not flinching when it arrives. You carry this kind of strength.',
+        'You are often the person who does not rush to fix, perform, or escape. Presence itself becomes part of what heals a room. When things break, people look for you. Not because you have answers, but because you remain.',
+        'Your growing edge is movement. Endurance is a profound gift — but the Veil also asks whether you know when staying is holding something up and when it is holding something back. The Root grows when it learns when to let go as well as when to hold.'
+      ],
+      gift: 'You bring steadiness and emotional safety — the ground people stand on.',
+      edge: 'Staying can become stuckness when the holding outlasts what needed to be held.',
+      secondary_note: 'You tend to be most essential in moments of crisis or sustained difficulty, when others run out of endurance before you do.',
+      practices: [
+        { label: 'Name your own experience first', text: 'Roots can be so focused on steadying others that their own emotional experience goes unnamed. Once a day, ask yourself: "What am I actually carrying right now?" Not what others need — what is yours.' },
+        { label: 'Practice chosen movement', text: 'Distinguish between staying because it is needed and staying because movement feels risky. When you notice the difference, practice one small act of deliberate forward motion — a decision, a boundary, a release.' },
+        { label: 'Let yourself be held sometimes', text: 'The Root is often the one who holds. But receiving steadiness from others is also part of the practice. Notice where you resist being supported, and get curious about why.' }
+      ],
+      ruler: { recognize: 'steadily, often after the initial wave has passed', understand: 'through experience and duration — you have stayed with things long enough to know them', label: 'simply, without decoration', express: 'in action more than words — presence as the primary expression', regulate: 'by grounding in the body and in what remains constant' }
+    }
+  };
+
+  // ── STATE ─────────────────────────────────────────────────────────────────
+  let chamberIndex = 0;
+  let selectedChoice = null;
+  let phase = 'intro';
+  let scores = { seer:0, ember:0, weaver:0, root:0 };
+
+  // ── HELPERS ───────────────────────────────────────────────────────────────
+  function chime(freq=440, vol=.02) {
+    try {
+      if (window.audio?.tone) {
+        window.audio.tone(freq, 0.18, 'sine', vol, freq * 0.65);
+        setTimeout(() => window.audio.tone(freq * 1.5, 0.12, 'sine', vol * 0.45, freq * 1.25), 28);
+      }
+    } catch(e) {}
+  }
+
+  function progressPips() {
+    if (phase !== 'chamber') return '';
+    return `<div class="vw-pips" style="margin-bottom:24px">${CHAMBERS.map((_,i) => {
+      const cls = i === chamberIndex ? 'active' : i < chamberIndex ? 'done' : '';
+      return `<div class="vw-pip ${cls}"></div>`;
+    }).join('')}</div>`;
+  }
+
+  function proseFmt(text) {
+    return text.split('<br><br>').map(p => `<p style="margin:0 0 14px">${p}</p>`).join('');
+  }
+
+  function slideIn(el) {
+    if (!el) return;
+    el.style.cssText = 'opacity:0;transform:translateX(24px);transition:opacity .36s ease,transform .36s cubic-bezier(.2,.8,.2,1)';
+    requestAnimationFrame(() => { el.style.opacity = '1'; el.style.transform = 'none'; });
+  }
+
+  // ── INTRO ─────────────────────────────────────────────────────────────────
+  function renderIntro() {
+    wrap.innerHTML = `
+      <div class="vw-chamber" style="text-align:center">
+        <div class="vw-intro-sigil" style="margin:0 auto 24px">
+          <div class="vw-intro-sigil-core">✶</div>
+        </div>
+        <p class="vw-eyebrow" style="justify-content:center">Reflection Trial</p>
+        <h1 class="vw-title" style="color:var(--gold);text-align:center">The Veil Within</h1>
+        <div class="vw-prose" style="max-width:560px;margin:0 auto 24px;text-align:center">
+          ${(()=>{try{const r=JSON.parse(localStorage.getItem('faeboundLastVeilWithinResult')||'null');if(r&&r.name)return`<p style="margin:0 0 14px;font-size:.84rem;color:rgba(188,197,239,.5);font-style:italic">You have crossed this threshold before. Last time, the Veil saw <em style="color:rgba(238,216,122,.65)">${r.name}</em>.</p>`;}catch(e){}return '';})()}
+          <p style="margin:0 0 14px">Five chambers. Five ways of meeting what is human in you.</p>
+          <p style="margin:0 0 14px">There are no right answers here — only honest ones. The Veil does not judge what you carry. It reflects it.</p>
+          <p style="margin:0"><em>Choose with what is actually true, not with what you wish were true.</em></p>
+        </div>
+        <div style="max-width:520px;margin:0 auto 28px;padding:16px;border-radius:14px;
+             border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025)">
+          <p style="font-size:.81rem;color:rgba(188,197,239,.52);line-height:1.72;margin:0">
+            This experience draws on emotional intelligence research — specifically the four-branch model developed by Mayer, Salovey, and Caruso (1997) and the RULER framework (Brackett, Yale Center for Emotional Intelligence, 2019). It is not a diagnostic tool or clinical assessment. What it offers is reflection, not measurement.
+          </p>
+        </div>
+        <div class="vw-nav" style="justify-content:center">
+          <button id="vwBeginBtn" class="btn btn-gold" style="padding:17px 38px;font-size:.97rem">Enter the First Chamber</button>
+          <button id="vwBackFromIntroBtn" class="btn btn-ghost">Return to Realm</button>
+        </div>
+      </div>`;
+    slideIn(wrap.querySelector('.vw-chamber'));
+    document.getElementById('vwBeginBtn').addEventListener('click', () => {
+      phase = 'chamber'; chamberIndex = 0;
+      scores = { seer:0, ember:0, weaver:0, root:0 };
+      chime(440, .022);
+      setTimeout(renderChamber, 60);
+    });
+    document.getElementById('vwBackFromIntroBtn').addEventListener('click', () => {
+      if (typeof backToHub === 'function') backToHub(()=>{});
+    });
+  }
+
+  // ── CHAMBER ───────────────────────────────────────────────────────────────
+  function renderChamber() {
+    const ch = CHAMBERS[chamberIndex];
+    selectedChoice = null;
+    wrap.innerHTML = `
+      ${progressPips()}
+      <div class="vw-chamber">
+        <p class="vw-eyebrow">${ch.eyebrow}</p>
+        <h2 class="vw-title">${ch.title}</h2>
+        <div class="vw-prose">${proseFmt(ch.prose)}</div>
+        <p class="vw-question">${ch.question}</p>
+        <div class="vw-choices">
+          ${ch.choices.map((choice, i) => `
+            <button class="vw-choice" data-vw-choice="${i}">
+              <span class="vw-choice-num">${['One','Two','Three','Four'][i]}</span>
+              ${choice.text}
+            </button>`).join('')}
+        </div>
+        <div class="vw-nav">
+          <button id="vwNextBtn" class="btn btn-primary" disabled style="opacity:.38;min-width:160px">
+            ${chamberIndex < CHAMBERS.length - 1 ? 'Continue →' : 'The Veil reflects →'}
+          </button>
+        </div>
+      </div>`;
+
+    slideIn(wrap.querySelector('.vw-chamber'));
+
+    wrap.querySelectorAll('[data-vw-choice]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        wrap.querySelectorAll('[data-vw-choice]').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedChoice = Number(btn.dataset.vwChoice);
+        const nxt = document.getElementById('vwNextBtn');
+        nxt.disabled = false;
+        nxt.style.opacity = '1';
+        chime(500 + chamberIndex * 40, .018);
+      });
+    });
+
+    document.getElementById('vwNextBtn').addEventListener('click', () => {
+      if (selectedChoice === null) return;
+      const choiceScores = ch.choices[selectedChoice].scores || {};
+      Object.entries(choiceScores).forEach(([k, v]) => { scores[k] = (scores[k] || 0) + v; });
+      if (window.ambient?.swell) window.ambient.swell(0.003);
+      chamberIndex++;
+      if (chamberIndex >= CHAMBERS.length) {
+        phase = 'result';
+        try{localStorage.removeItem('faeboundVWProgress');}catch(e){}
+        setTimeout(renderResult, 180);
+      } else {
+        saveProgress();
+        setTimeout(renderChamber, 120);
+      }
+    });
+  }
+
+  // ── RESULT ────────────────────────────────────────────────────────────────
+  function renderResult() {
+    const order = ['seer','ember','weaver','root'];
+    const winner = order.reduce((best, k) => scores[k] > scores[best] ? k : best, order[0]);
+    // Second archetype — highest score that isn't the winner
+    const second = order.filter(k => k !== winner).reduce((best, k) => scores[k] > scores[best] ? k : best);
+    const a = ARCHETYPES[winner];
+    const b2 = ARCHETYPES[second];
+    const total = Object.values(scores).reduce((s, v) => s + v, 0) || 1;
+    const breakdown = order.map(k => ({
+      key: k, name: ARCHETYPES[k].name, sigil: ARCHETYPES[k].sigil,
+      pct: Math.round((scores[k] / total) * 100),
+      color: ARCHETYPES[k].color
+    })).sort((x, y) => y.pct - x.pct);
+
+    try {
+      localStorage.setItem('faeboundLastVeilWithinResult', JSON.stringify({
+        name: a.name, court: a.court, tagline: a.tagline
+      }));
+      if (window.progression?.increment) window.progression.increment();
+      if (window.archive?.inc) window.archive.inc('trialsCompleted');
+    } catch(e) {}
+
+    wrap.innerHTML = `
+      <div class="vw-result">
+
+        <!-- Archetype header -->
+        <p class="vw-eyebrow" style="text-align:center;justify-content:center;color:rgba(238,216,122,.6)">The Veil has seen your shape</p>
+        <span class="vw-arch-sigil" style="color:${a.color};text-shadow:0 0 36px ${a.glow}">${a.sigil}</span>
+        <h1 class="vw-arch-name" style="color:${a.color}">${a.name}</h1>
+        <p class="vw-arch-court">${a.court} · ${a.tagline}</p>
+
+        <!-- Branch badge -->
+        <div style="display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;
+             background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+             font-size:.72rem;text-transform:uppercase;letter-spacing:.14em;
+             color:var(--muted);margin-bottom:28px">
+          <span style="color:${a.color};opacity:.8">◈</span>
+          ${a.branch}
+        </div>
+
+        <!-- Description -->
+        <div class="vw-arch-desc">
+          ${a.description.map(p => `<p>${p}</p>`).join('')}
+        </div>
+
+        <!-- Gift + Edge -->
+        <div class="vw-traits" style="margin-bottom:22px">
+          <div class="vw-trait">
+            <div class="vt-label">Your Gift</div>
+            <div class="vt-val">${a.gift}</div>
+          </div>
+          <div class="vw-trait">
+            <div class="vt-label">Growing Edge</div>
+            <div class="vt-val">${a.edge}</div>
+          </div>
+        </div>
+
+        <!-- RULER profile -->
+        <div style="margin-bottom:26px;padding:18px;border-radius:16px;
+             background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.055)">
+          <div class="sec-label" style="margin-bottom:12px">How you tend to move through emotion</div>
+          <div style="display:grid;gap:8px">
+            ${[
+              ['Recognize', a.ruler.recognize],
+              ['Understand', a.ruler.understand],
+              ['Label', a.ruler.label],
+              ['Express', a.ruler.express],
+              ['Regulate', a.ruler.regulate]
+            ].map(([label, val]) => `
+              <div style="display:flex;gap:12px;align-items:baseline">
+                <span style="font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;
+                  color:${a.color};opacity:.7;min-width:80px;flex-shrink:0">${label}</span>
+                <span style="font-size:.86rem;color:var(--muted);line-height:1.5">${val}</span>
+              </div>`).join('')}
+          </div>
+        </div>
+
+        <!-- Growth practices -->
+        <div style="margin-bottom:26px">
+          <div class="sec-label" style="margin-bottom:14px">Three practices for the path forward</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            ${a.practices.map((p, i) => `
+              <div style="padding:16px 18px;border-radius:14px;
+                   background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.055);
+                   border-left:2px solid ${a.color}">
+                <div style="font-size:.74rem;text-transform:uppercase;letter-spacing:.12em;
+                  color:${a.color};opacity:.8;margin-bottom:6px">${p.label}</div>
+                <div style="font-size:.88rem;color:var(--muted);line-height:1.68">${p.text}</div>
+              </div>`).join('')}
+          </div>
+        </div>
+
+        <!-- Secondary archetype -->
+        <div style="margin-bottom:26px;padding:16px 18px;border-radius:14px;
+             background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.05)">
+          <div class="sec-label" style="margin-bottom:10px">Your secondary pattern — ${b2.name}</div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+            <span style="font-size:1.8rem;color:${b2.color};text-shadow:0 0 16px ${b2.glow}">${b2.sigil}</span>
+            <div>
+              <div style="font-size:.9rem;font-weight:700;color:${b2.color}">${b2.name}</div>
+              <div style="font-size:.76rem;color:var(--muted);opacity:.7">${b2.branch} · ${b2.tagline}</div>
+            </div>
+          </div>
+          <p style="font-size:.86rem;color:var(--muted);line-height:1.65;margin:0">
+            ${b2.secondary_note} The Veil saw both patterns in you. The dominant one is where you tend to move first — the secondary one is where you often arrive.
+          </p>
+        </div>
+
+        <!-- Score breakdown -->
+        <div style="margin-bottom:26px">
+          <div class="sec-label" style="margin-bottom:12px">How the Veil saw you across all five chambers</div>
+          ${breakdown.map(b => `
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+              <span style="font-size:.95rem;color:${b.color};width:22px;text-align:center;flex-shrink:0">${b.sigil}</span>
+              <span style="font-size:.78rem;color:rgba(188,197,239,.45);min-width:84px;flex-shrink:0">${b.name}</span>
+              <div style="flex:1;height:4px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden">
+                <div class="vw-bar" data-width="${b.pct}" style="width:0%;height:100%;border-radius:999px;
+                  background:${b.color};opacity:${b.key===winner?1:.45};transition:width 1.1s cubic-bezier(.2,.8,.2,1)"></div>
+              </div>
+              <span style="font-size:.78rem;color:rgba(188,197,239,.35);min-width:34px;text-align:right">${b.pct}%</span>
+            </div>`).join('')}
+        </div>
+
+        <!-- Previous archetype note -->
+        ${prevResult&&prevResult.name&&prevResult.name!==a.name?`
+        <div style="margin-bottom:18px;padding:13px 16px;border-radius:12px;
+             background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.04);
+             font-size:.82rem;color:rgba(188,197,239,.45);text-align:center;line-height:1.65">
+          In your last crossing, the Veil saw <em style="color:rgba(188,197,239,.65)">${prevResult.name}</em>.
+          This time, it sees something different.
+        </div>`:''}
+
+        <!-- Disclaimer -->
+        <div class="vw-disclaimer">
+          The Veil Within is an invitation to reflection, not a fixed truth. All four patterns live in everyone — what changes is which one tends to lead. This result reflects the choices you made today, in this reading. Another day, another crossing might find a different shape.
+        </div>
+
+        <!-- Navigation -->
+        <div class="vw-nav" style="justify-content:center">
+          <button id="vwRetakeBtn" class="btn btn-ghost">Take Again</button>
+          <button id="vwHubBtn" class="btn btn-primary">← Return to the Realm</button>
+        </div>
+      </div>`;
+
+    // Animate bars in
+    setTimeout(() => {
+      wrap.querySelectorAll('.vw-bar').forEach(el => { el.style.width = `${el.dataset.width}%`; });
+    }, 80);
+
+    slideIn(wrap.querySelector('.vw-result'));
+    // Archetype-specific chime sequence
+    const archChimes={
+      seer:[{f:880,v:.02},{f:1046,v:.016},{f:1318,v:.012}],    // high, clear, resonant
+      ember:[{f:440,v:.025},{f:554,v:.02},{f:659,v:.018}],      // warm, mid, rounded
+      weaver:[{f:370,v:.022},{f:494,v:.018},{f:740,v:.015}],    // complex, layered
+      root:[{f:220,v:.028},{f:293,v:.022},{f:369,v:.016}],      // low, sustained, grounded
+    };
+    const chimes=archChimes[winner]||archChimes.seer;
+    chimes.forEach((ch,i)=>setTimeout(()=>chime(ch.f,ch.v),i*260));
+
+    document.getElementById('vwRetakeBtn').addEventListener('click', begin);
+    document.getElementById('vwHubBtn').addEventListener('click', () => {
+      if (typeof backToHub === 'function') backToHub(()=>{});
+    });
+  }
+
+  // ── ENTRY POINT ───────────────────────────────────────────────────────────
+  function begin() {
+    phase = 'intro';
+    chamberIndex = 0;
+    selectedChoice = null;
+    scores = { seer:0, ember:0, weaver:0, root:0 };
+    // Clear any saved progress on fresh start
+    try{localStorage.removeItem('faeboundVWProgress');}catch(e){}
+    renderIntro();
+  }
+
+  function saveProgress(){
+    try{localStorage.setItem('faeboundVWProgress',JSON.stringify({chamberIndex,scores,phase}));}catch(e){}
+  }
+
+  function loadProgress(){
+    try{
+      const p=JSON.parse(localStorage.getItem('faeboundVWProgress')||'null');
+      if(p&&p.phase==='chamber'&&p.chamberIndex>0&&p.chamberIndex<CHAMBERS.length){
+        return p;
+      }
+    }catch(e){}
+    return null;
+  }
+
+  return { begin, saveProgress, loadProgress };
+})();
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
