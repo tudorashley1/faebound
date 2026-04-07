@@ -165,6 +165,7 @@ button{appearance:none;font:inherit;cursor:pointer;touch-action:manipulation}
 /* PORTALS — 2x2 + full-width 4th */
 .portal-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;
   width:min(880px,100%);margin-bottom:22px}
+.portal-grid .portal[data-launch="veil-within"]{grid-column:1/-1}
 .portal{padding:22px;border-radius:22px;cursor:pointer;
   background:rgba(8,11,28,.72);border:1px solid rgba(255,255,255,.07);
   transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;
@@ -194,14 +195,10 @@ button{appearance:none;font:inherit;cursor:pointer;touch-action:manipulation}
 
 .portal-glow{position:absolute;top:-30px;right:-30px;
   width:160px;height:160px;border-radius:50%;filter:blur(60px);opacity:.07;pointer-events:none}
-.portal-sigil-grid .portal-glow{background:var(--blue)}
-.portal-paddle .portal-glow{background:var(--pink)}
 .portal-echo .portal-glow{background:var(--mint)}
 .portal-within .portal-glow{background:var(--gold)}
 
 .portal-icon{font-size:1.9rem;line-height:1;margin-bottom:2px}
-.portal-sigil-grid .portal-icon{color:var(--blue);filter:drop-shadow(0 0 10px rgba(126,200,255,.4))}
-.portal-paddle .portal-icon{color:var(--pink);filter:drop-shadow(0 0 10px rgba(255,158,200,.4))}
 .portal-echo .portal-icon{color:var(--mint);filter:drop-shadow(0 0 10px rgba(94,221,168,.35))}
 .portal-within .portal-icon{color:var(--gold);filter:drop-shadow(0 0 10px rgba(238,216,122,.45))}
 
@@ -294,59 +291,7 @@ button{appearance:none;font:inherit;cursor:pointer;touch-action:manipulation}
   background:rgba(5,7,16,.9);border:1px solid rgba(255,255,255,.065);
   display:flex;align-items:center;justify-content:center}
 
-/* SIGIL GRID */
-.sg-board-wrap{padding:24px;position:relative;z-index:2}
-.sg-board{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
-  width:min(420px,100%);min-width:320px}
-.sg-cell{aspect-ratio:1;min-height:96px;border-radius:18px;cursor:pointer;position:relative;
-  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
-  display:grid;place-items:center;overflow:hidden;
-  transition:all .15s ease}
-.sg-cell::before{content:'';position:absolute;inset:0;
-  background:radial-gradient(circle,rgba(255,255,255,.07),transparent 66%);
-  opacity:0;transition:opacity .18s ease}
-.sg-cell:hover:not(.locked):not(.filled)::before{opacity:1}
-.sg-cell:hover:not(.locked):not(.filled){border-color:rgba(255,255,255,.18);
-  background:rgba(255,255,255,.07);transform:scale(1.04)}
-.sg-cell.locked,.sg-cell.filled{cursor:default}
-.sg-cell.filled{background:rgba(255,255,255,.04)!important}
-.sg-cell.preview-star{border-color:rgba(126,200,255,.2);background:rgba(126,200,255,.04)}
-.sg-cell.preview-moon{border-color:rgba(255,158,200,.2);background:rgba(255,158,200,.04)}
-.sg-cell.win-cell{animation:win-flash .8s ease 2}
-.sg-mark{position:absolute;inset:0;display:grid;place-items:center;
-  z-index:2;pointer-events:none}
-/* Star: CSS clip-path 8-point star — no SVG, no background issues */
-.sg-mark.star::after{
-  content:'';display:block;
-  width:44%;aspect-ratio:1;
-  background:var(--blue);
-  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
-  filter:drop-shadow(0 0 8px var(--blue)) drop-shadow(0 0 18px rgba(126,200,255,.5));
-  animation:rune-in .38s cubic-bezier(.2,.8,.2,1) forwards}
-/* Moon: CSS crescent — circle minus offset ellipse approximated via path */
-.sg-mark.moon::after{
-  content:'';display:block;
-  width:42%;aspect-ratio:1;
-  border-radius:50%;
-  background:var(--pink);
-  clip-path:polygon(50% 2%,66% 7%,79% 18%,87% 33%,89% 50%,86% 66%,77% 79%,63% 88%,50% 92%,46% 84%,44% 72%,44% 56%,46% 40%,51% 26%,50% 2%);
-  filter:drop-shadow(0 0 8px var(--pink)) drop-shadow(0 0 18px rgba(255,158,200,.5));
-  animation:rune-in .38s cubic-bezier(.2,.8,.2,1) forwards}
-.sg-win-line{position:absolute;height:2.5px;border-radius:999px;
-  background:linear-gradient(90deg,transparent,var(--mint),transparent);
-  box-shadow:0 0 14px var(--mint),0 0 30px rgba(94,221,168,.3);
-  transform-origin:left center;pointer-events:none;z-index:3}
-canvas.sg-bg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.45;z-index:1}
-
-/* PADDLE */
-#vpCanvas{display:block;width:100%;height:auto;border-radius:14px}
-.arena-panel{flex-direction:column;padding:18px;gap:10px}
-.vp-top-bar{width:100%;display:flex;align-items:center;justify-content:space-between;
-  padding:7px 14px;border-radius:10px;
-  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.05);z-index:2}
-.vp-top-txt{font-size:.8rem;color:var(--muted)}
-.touch-hint{display:none;text-align:center;font-size:.78rem;color:var(--muted);
-  margin-top:8px;letter-spacing:.07em}
+/* Sigil Grid and Veil Paddle CSS removed */
 
 /* ECHO DRIFT */
 .echo-stage{width:min(680px,100%);padding:22px;display:flex;
@@ -550,6 +495,7 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
   .mobile-hud{display:flex!important}
   .sheet-bar{display:block!important}
   .portal-grid{grid-template-columns:1fr}
+  .portal-grid .portal[data-launch='veil-within']{grid-column:1}
   .hub-stats{grid-template-columns:repeat(2,1fr)}
   .vw-traits{grid-template-columns:1fr}
   .sg-board{gap:9px}
@@ -695,26 +641,6 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
 
     <!-- Trial Portals -->
     <div class="portal-grid">
-      <article class="portal portal-sigil-grid" data-launch="sigil-grid">
-        <div class="portal-glow"></div>
-        <div class="portal-icon">✦</div>
-        <span class="portal-kicker">Pattern Trial</span>
-        <h3 class="portal-name">Sigil Grid</h3>
-        <p class="portal-desc">A shifting constellation of symbols responds to your perception. Challenge the Warden or a second player — three paths, three thresholds of difficulty.</p>
-        <p class="portal-promise"><strong>What this crossing offers:</strong> sharper pattern recognition and cleaner decisions.</p>
-        <button class="btn btn-primary btn-sm portal-enter" data-launch-btn="sigil-grid">Enter Trial</button>
-      </article>
-
-      <article class="portal portal-paddle" data-launch="veil-paddle">
-        <div class="portal-glow"></div>
-        <div class="portal-icon">☾</div>
-        <span class="portal-kicker">Motion Trial</span>
-        <h3 class="portal-name">Veil Paddle</h3>
-        <p class="portal-desc">A living current of motion that adapts to your rhythm. The orb accelerates. The Warden adapts. Touch-ready for mobile.</p>
-        <p class="portal-promise"><strong>What this crossing offers:</strong> better rhythm, focus, and responsiveness under pressure.</p>
-        <button class="btn btn-primary btn-sm portal-enter" data-launch-btn="veil-paddle">Enter Trial</button>
-      </article>
-
       <article class="portal portal-echo" data-launch="echo-drift">
         <div class="portal-glow"></div>
         <div class="portal-icon">◇</div>
@@ -723,6 +649,15 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
         <p class="portal-desc">A memory surfaces, then dissolves. The Veil closes. Reconstruct what you held — rune and position both matter. Decoys cloud the path.</p>
         <p class="portal-promise"><strong>What this crossing offers:</strong> stronger recall and calm under vanishing information.</p>
         <button class="btn btn-primary btn-sm portal-enter" data-launch-btn="echo-drift">Enter Trial</button>
+      </article>
+
+      <article class="portal portal-archive coming-soon" style="opacity:.55;cursor:default;border-style:dashed">
+        <div class="portal-glow" style="background:var(--gold)"></div>
+        <div class="portal-icon" style="color:var(--gold);filter:drop-shadow(0 0 10px rgba(238,216,122,.4))">📖</div>
+        <span class="portal-kicker">Reflection Space</span>
+        <h3 class="portal-name" style="color:var(--gold)">The Archive</h3>
+        <p class="portal-desc">A private space to write, reflect, and be witnessed. The Archivist holds what you bring here.</p>
+        <p class="portal-promise" style="color:rgba(238,216,122,.45)"><em>Opening soon — the realm is preparing this space.</em></p>
       </article>
 
       <article class="portal portal-within glass-gold" data-launch="veil-within">
@@ -787,16 +722,8 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
 <!-- HUB HELP MODAL -->
 <div class="modal-wrap hidden" id="hubHelpModal">
   <div class="modal">
-    <div class="eyebrow">The Trials</div>
-    <h2>Four paths through the Veil</h2>
-    <div class="modal-sec">
-      <h3>✦ Sigil Grid — Pattern Trial</h3>
-      <p>A turn-based duel on a 3×3 field. You are Star (✦), the Warden is Moon (☾). Three in a row claims the constellation. Three difficulty paths: Drifted, Veiled, Warden-Touched.</p>
-    </div>
-    <div class="modal-sec">
-      <h3>☾ Veil Paddle — Motion Trial</h3>
-      <p>Keep the orb in play. Desktop: W/S keys. Mobile: drag the left half of the arena. The ball accelerates with every rally. Three difficulty paths.</p>
-    </div>
+    <div class="eyebrow">Faebound Realm</div>
+    <h2>The crossings of the Veil</h2>
     <div class="modal-sec">
       <h3>◇ Echo Drift — Memory Trial</h3>
       <p>A pattern of runes appears briefly, then the Veil closes. Reconstruct what you saw — rune and position both matter. Higher difficulty adds decoy runes and reduces reveal time.</p>
@@ -807,48 +734,18 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
       <p style="margin-top:8px">Draws on the Four-Branch Model of Emotional Intelligence (Mayer & Salovey, 1997) and RULER (Brackett/Yale, 2019).</p>
     </div>
     <div class="modal-sec">
-      <h3>Court Themes</h3>
-      <p>Moon, Ember, and Veil courts shift color, music frequencies, and ambient tones. Choose the one that feels right.</p>
+      <h3>📖 The Archive — Coming Soon</h3>
+      <p>A private space for reflection. Write what you're carrying. The Archivist witnesses without judgment and holds what you bring here. Nothing leaves this space.</p>
+    </div>
+    <div class="modal-sec">
+      <h3>More crossings are coming</h3>
+      <p>New experiences are being woven into the realm — Sigil Trace, The Tide, The Crossing, Veil Echo, and more. Each one deepens what the Veil can reflect back to you.</p>
     </div>
     <div class="btns"><button class="btn btn-primary" id="closeHubHelpBtn">Back to the Hub</button></div>
   </div>
 </div>
 
 <!-- END OVERLAYS -->
-<div class="end-overlay hidden" id="sgEndOverlay">
-  <div class="end-card" id="sgEndCard">
-    <span class="end-sigil" id="sgEndSigil">✦</span>
-    <h2 class="end-title" id="sgEndTitle">The Stars Prevail</h2>
-    <p class="end-sub" id="sgEndSub">The constellation is complete.</p>
-    <div class="end-stats">
-      <div class="end-stat">Rounds<strong id="sgEndRounds">0</strong></div>
-      <div class="end-stat">Wins<strong id="sgEndWins">0</strong></div>
-      <div class="end-stat">Draws<strong id="sgEndDraws">0</strong></div>
-    </div>
-    <div class="end-btns">
-      <button class="btn btn-primary" id="sgEndPlayAgain">Cross Again</button>
-      <button class="btn btn-ghost" id="sgEndHub">Return to Realm</button>
-    </div>
-  </div>
-</div>
-
-<div class="end-overlay hidden" id="vpEndOverlay">
-  <div class="end-card" id="vpEndCard">
-    <span class="end-sigil" id="vpEndSigil">☾</span>
-    <h2 class="end-title" id="vpEndTitle">The Arena Stills</h2>
-    <p class="end-sub" id="vpEndSub">The rally is over.</p>
-    <div class="end-stats">
-      <div class="end-stat">Your Score<strong id="vpEndYours">0</strong></div>
-      <div class="end-stat">Best Rally<strong id="vpEndRally">0</strong></div>
-      <div class="end-stat">Matches<strong id="vpEndMatches">0</strong></div>
-    </div>
-    <div class="end-btns">
-      <button class="btn btn-primary" id="vpEndPlayAgain">Cross Again</button>
-      <button class="btn btn-ghost" id="vpEndHub">Return to Realm</button>
-    </div>
-  </div>
-</div>
-
 <div class="end-overlay hidden" id="edEndOverlay">
   <div class="end-card" id="edEndCard">
     <span class="end-sigil" id="edEndSigil">◇</span>
@@ -865,190 +762,6 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
     </div>
   </div>
 </div>
-
-<!-- SIGIL GRID SCREEN -->
-<section class="game-screen-wrap hidden" id="sigilScreen">
-  <!-- Mobile HUD -->
-  <div class="mobile-hud" id="sgMobHud">
-    <div class="mob-scores">
-      <div class="mob-score you"><span>You</span><strong id="sgMobX">0</strong></div>
-      <div class="mob-score" style="font-size:.65rem;color:var(--muted)">vs</div>
-      <div class="mob-score warden"><span>Warden</span><strong id="sgMobO">0</strong></div>
-    </div>
-    <div class="mob-status" id="sgMobStatus">Ready</div>
-    <div class="mob-btns">
-      <button onclick="window.sg?.resetRound()">↺</button>
-    </div>
-  </div>
-  <!-- Sheet bar -->
-  <div class="sheet-bar" id="sgSheetBar">
-    <div class="sheet-pull" onclick="toggleSidebar('sg')">
-      <div class="sheet-line"></div>
-      <span class="sheet-lbl">◈ Details</span>
-      <div class="sheet-btns">
-        <button onclick="event.stopPropagation();window.sg?.resetRound()">Reset</button>
-        <button onclick="event.stopPropagation();backToHub(()=>window.sg?.resetRound())">Hub</button>
-      </div>
-    </div>
-  </div>
-
-  <section class="game-shell">
-    <aside class="sidebar" id="sgSidebar">
-      <div class="obs-box">
-        <div class="sec-label">Observatory</div>
-        <div class="obs-txt" id="obsText">The Veil is quiet… for now.</div>
-      </div>
-      <div>
-        <div class="eyebrow">Pattern Trial</div>
-        <h2 style="font-size:1.5rem;margin-bottom:3px">Sigil Grid</h2>
-        <p style="font-size:.9rem;color:var(--muted)">Three in a row claims the constellation.</p>
-      </div>
-      <div class="sidebar-sec">
-        <div class="sec-label">Status</div>
-        <div class="sec-status" id="sgStatusText">Ready — Star's turn</div>
-        <div class="turn-strip">
-          <div class="t-orb" id="sgTurnOrb"></div>
-          <span class="t-txt" id="sgTurnLabel">Star is active</span>
-        </div>
-      </div>
-      <div class="sidebar-sec">
-        <div class="sec-label">Score</div>
-        <div class="score-row">
-          <div class="sc-cell sc-you"><div class="sc-lbl" id="sgLabelX">You ✦</div><div class="sc-val" id="sgScoreX">0</div></div>
-          <div class="sc-cell sc-warden"><div class="sc-lbl" id="sgLabelO">Warden ☾</div><div class="sc-val" id="sgScoreO">0</div></div>
-          <div class="sc-cell sc-draw"><div class="sc-lbl">Draws</div><div class="sc-val" id="sgScoreDraw">0</div></div>
-        </div>
-      </div>
-      <div class="sidebar-sec">
-        <div class="sec-label">Difficulty</div>
-        <div class="diff-row">
-          <button class="diff-btn active" data-sg-diff="initiate">Drifted</button>
-          <button class="diff-btn" data-sg-diff="adept">Veiled</button>
-          <button class="diff-btn" data-sg-diff="warden">Warden-Touched</button>
-        </div>
-      </div>
-      <div class="sidebar-sec">
-        <div class="sec-label">Mode</div>
-        <div class="mode-row">
-          <div class="mode-cell"><div class="mc-lbl">Active</div><div class="mc-val" id="sgModeLabel">Two Players</div></div>
-          <div class="mode-cell"><div class="mc-lbl">Opponent</div><div class="mc-val" id="sgOpponentLabel">Human</div></div>
-        </div>
-      </div>
-      <div class="sidebar-sec">
-        <div class="sec-label">Round History</div>
-        <div class="h-pills" id="sgHistory"></div>
-      </div>
-      <div class="lore-panel hidden" id="sgLorePanel"></div>
-      <div class="btns" style="flex-wrap:wrap;gap:7px">
-        <button class="btn btn-sm" id="sgResetRoundBtn">Reset Round</button>
-        <button class="btn btn-ghost btn-sm" id="sgResetScoresBtn">Reset Scores</button>
-        <button class="btn btn-sm" id="sgSwapModeBtn">Swap Mode</button>
-        <button class="btn btn-ghost btn-sm" id="backFromSigilBtn">Return to Realm</button>
-      </div>
-    </aside>
-
-    <section class="game-panel" id="sgGamePanel">
-      <canvas class="sg-bg" id="sgBgCanvas"></canvas>
-      <div style="text-align:center;color:var(--muted);font-size:.82rem;margin-bottom:14px;opacity:.78">Shape the constellation by claiming three in a row.</div><div class="sg-board-wrap">
-        <div class="sg-board" id="sgBoard"></div>
-        <div class="sg-win-line" id="sgWinLine" style="opacity:0;width:0"></div>
-      </div>
-    </section>
-  </section>
-</section>
-
-<!-- VEIL PADDLE SCREEN -->
-<section class="game-screen-wrap hidden" id="paddleScreen">
-  <div class="mobile-hud" id="vpMobHud">
-    <div class="mob-scores">
-      <div class="mob-score you"><span>You</span><strong id="vpMobL">0</strong></div>
-      <div class="mob-score" style="font-size:.65rem;color:var(--muted)">vs</div>
-      <div class="mob-score warden"><span>Warden</span><strong id="vpMobR">0</strong></div>
-    </div>
-    <div class="mob-status" id="vpMobStatus">Ready</div>
-    <div class="mob-btns">
-      <button id="vpMobStart">▶</button>
-      <button id="vpMobPause">⏸</button>
-    </div>
-  </div>
-  <div class="sheet-bar" id="vpSheetBar">
-    <div class="sheet-pull" onclick="toggleSidebar('vp')">
-      <div class="sheet-line"></div>
-      <span class="sheet-lbl">◈ Details</span>
-      <div class="sheet-btns">
-        <button onclick="event.stopPropagation();window.vp?.resetMatch()">Reset</button>
-        <button onclick="event.stopPropagation();backToHub(()=>window.vp?.resetMatch())">Hub</button>
-      </div>
-    </div>
-  </div>
-
-  <section class="game-shell">
-    <aside class="sidebar" id="vpSidebar">
-      <div>
-        <div class="eyebrow">Motion Trial</div>
-        <h2 style="font-size:1.5rem;margin-bottom:3px">Veil Paddle</h2>
-        <p style="font-size:.9rem;color:var(--muted)">Keep the orb alive. Score when the Warden fails.</p>
-      </div>
-      <div class="sidebar-sec">
-        <div class="sec-label">Status</div>
-        <div class="sec-status" id="vpStatusText">Ready — press Start</div>
-        <div class="turn-strip">
-          <div class="t-orb" id="vpTurnOrb"></div>
-          <span class="t-txt" id="vpTurnLabel">Arena is stable</span>
-        </div>
-      </div>
-      <div class="sidebar-sec">
-        <div class="sec-label">Score</div>
-        <div class="score-row">
-          <div class="sc-cell sc-you"><div class="sc-lbl" id="vpLabelLeft">You</div><div class="sc-val" id="vpScoreLeft">0</div></div>
-          <div class="sc-cell sc-warden"><div class="sc-lbl" id="vpLabelRight">Warden</div><div class="sc-val" id="vpScoreRight">0</div></div>
-          <div class="sc-cell sc-rally"><div class="sc-lbl">Best Rally</div><div class="sc-val" id="vpBestRally">0</div></div>
-        </div>
-      </div>
-      <div class="sidebar-sec">
-        <div class="sec-label">Difficulty</div>
-        <div class="diff-row">
-          <button class="diff-btn active" data-vp-diff="initiate">Drifted</button>
-          <button class="diff-btn" data-vp-diff="adept">Veiled</button>
-          <button class="diff-btn" data-vp-diff="warden">Warden-Touched</button>
-        </div>
-      </div>
-      <div class="sidebar-sec">
-        <div class="sec-label">Mode</div>
-        <div class="mode-row">
-          <div class="mode-cell"><div class="mc-lbl">Active</div><div class="mc-val" id="vpModeLabel">Solo vs Warden</div></div>
-          <div class="mode-cell"><div class="mc-lbl">Controls</div><div class="mc-val" id="vpControlLabel">W/S or Touch</div></div>
-        </div>
-      </div>
-      <div class="sidebar-sec">
-        <div class="sec-label">Match Ledger</div>
-        <div class="h-pills" id="vpHistory"></div>
-      </div>
-      <div class="sidebar-sec">
-        <div class="sec-label">Controls</div>
-        <p style="font-size:.82rem;color:var(--muted)">Desktop: W/S keys. Mobile: drag left side of arena. Two Players: Arrow keys for right paddle.</p>
-      </div>
-      <div class="lore-panel hidden" id="vpLorePanel"></div>
-      <div class="btns" style="flex-wrap:wrap;gap:7px">
-        <button class="btn btn-sm" id="vpStartRoundBtn">Start / Serve</button>
-        <button class="btn btn-ghost btn-sm" id="vpPauseBtn">Pause</button>
-        <button class="btn btn-ghost btn-sm" id="vpResetMatchBtn">Reset</button>
-        <button class="btn btn-sm" id="vpSwapModeBtn">Swap Mode</button>
-        <button class="btn btn-ghost btn-sm" id="backFromPaddleBtn">Return to Realm</button>
-      </div>
-    </aside>
-
-    <section class="arena-panel" id="vpArenaPanel">
-      <div class="vp-top-bar">
-        <span class="vp-top-txt" id="vpHudLeft">You: 0</span>
-        <span class="vp-top-txt" id="vpHudBanner">Ready — press Start</span>
-        <span class="vp-top-txt" id="vpHudRight">Warden: 0</span>
-      </div>
-      <canvas id="vpCanvas" width="960" height="540"></canvas>
-      <p class="touch-hint" id="vpTouchHint">Drag anywhere on the <strong style="color:var(--blue)">left half</strong> to move your paddle</p>
-    </section>
-  </section>
-</section>
 
 <!-- ECHO DRIFT SCREEN -->
 <section class="game-screen-wrap hidden" id="echoDriftScreen">
@@ -1614,8 +1327,6 @@ window.hubWorld = (() => {
 // ── SCREEN NAVIGATION ────────────────────────────────────────────────────
 const screens = {
   hub: document.getElementById('hubScreen'),
-  sigil: document.getElementById('sigilScreen'),
-  paddle: document.getElementById('paddleScreen'),
   echo: document.getElementById('echoDriftScreen'),
   veilWithin: document.getElementById('veilWithinScreen'),
 };
@@ -1683,28 +1394,14 @@ function launchGame(game){
   audio.ensure(); window.ambient.ensure();
   try{localStorage.setItem('faeboundLastGame',game);}catch(e){}
   _sessionGames.add(game);
-  if(_sessionGames.size===4&&!_sessionGames.has('_allFourCelebrated')){
-    _sessionGames.add('_allFourCelebrated');
+  if(_sessionGames.size===2&&!_sessionGames.has('_allTwoCelebrated')){
+    _sessionGames.add('_allTwoCelebrated');
     setTimeout(()=>{
       showMilestone('All Four Crossings','You have walked every path the Veil offers. Something shifts in the realm.');
-      obsLines.push('You have crossed all four thresholds. The Veil knows your shape now.');
+      obsLines.push('You have walked both paths the realm currently offers. The Veil is paying attention.');
     },3500);
   }
 
-  if(game==='sigil-grid'){
-    window.ambient.setIntensity('sigil');
-    showOnly('sigil');
-    setTimeout(()=>{ if (window.sg?.begin) window.sg.begin(); else if (window.sg?.resetScores) window.sg.resetScores(); else if (window.sg?.resetRound) window.sg.resetRound(); }, 40);
-    setTimeout(()=>{ if (document.getElementById('sgBoard') && document.getElementById('sgBoard').children.length===0) { if (window.sg?.begin) window.sg.begin(); } }, 220);
-    onFirstVisit('sigil','sgLorePanel');
-  }
-  if(game==='veil-paddle'){
-    window.ambient.setIntensity('paddle');
-    window.vp?.resetMatch();
-    showOnly('paddle');
-    setTimeout(()=>window.vp?.draw(),100);
-    onFirstVisit('paddle','vpLorePanel');
-  }
   if(game==='echo-drift'){
     window.ambient.setIntensity('echo');
     window.ed?.resetAll();
@@ -1728,8 +1425,6 @@ document.querySelectorAll('[data-launch],[data-launch-btn]').forEach(el=>{
 
 // Court theme buttons removed
 
-document.getElementById('backFromSigilBtn')?.addEventListener('click',()=>backToHub(()=>window.sg?.resetRound()));
-document.getElementById('backFromPaddleBtn')?.addEventListener('click',()=>backToHub(()=>window.vp?.resetMatch()));
 document.getElementById('backFromEchoBtn')?.addEventListener('click',()=>backToHub(()=>window.ed?.resetAll()));
 document.getElementById('backFromVeilWithinBtn')?.addEventListener('click',()=>backToHub(()=>{}));
 
@@ -1764,26 +1459,18 @@ const obsLines = [
   "The Veil remembers movement, not outcome.",
   "Stillness reveals more than force.",
   "Not all victories are visible.",
-  "What you place cannot be taken back.",
-  "The Warden has learned from every challenger before you.",
-  "The pattern exists only as long as you hold it.",
   "What you carry here shapes what you find.",
   "The Veil does not judge. It reflects.",
   "Every drift is a practice in letting go.",
-  "The orb knows nothing of your intention. Only your timing.",
   "Some crossings leave marks that are not yet visible.",
-  "The constellation is not yours until it is complete.",
   "What you notice first reveals more than what you do next.",
   "Presence is its own kind of skill.",
   "The Warden has no patience — only persistence.",
   "Memory is not recall. It is the shape that remains.",
-  "A draw is not a failure. It is a negotiation.",
   "The Veil opens for the honest and the patient alike.",
-  "Speed is not always the advantage it appears to be.",
   "Something here changes each time you return.",
   "Not every pattern is visible from inside it.",
   "What the Veil shows is not always what you expected to see.",
-  "The moon does not compete with the stars. It keeps its own light.",
   "Hold what you see. Trust what you held.",
   "The realm does not forget those who enter it more than once.",
 ];
@@ -1809,8 +1496,8 @@ function updateRecentCrossing(){
   try{
     const last=localStorage.getItem('faeboundLastGame')||'';
     const result=JSON.parse(localStorage.getItem('faeboundLastVeilWithinResult')||'null');
-    const labels={'sigil-grid':'Sigil Grid','veil-paddle':'Veil Paddle','echo-drift':'Echo Drift','veil-within':'The Veil Within'};
-    const glyphs={'sigil-grid':'✦','veil-paddle':'☾','echo-drift':'◇','veil-within':'✶'};
+    const labels={'echo-drift':'Echo Drift','veil-within':'The Veil Within'};
+    const glyphs={'echo-drift':'◇','veil-within':'✶'};
     if(last&&labels[last]){
       let txt=labels[last];
       if(last==='veil-within'&&result){
@@ -1838,17 +1525,6 @@ function updateRecentCrossing(){
 
 // ── LORE ─────────────────────────────────────────────────────────────────
 const LORE = {
-  sigil:[
-    {trigger:'first', text:"The Sigil Grid is the oldest of the Trials. It is said the first challenger played the Warden to a draw — and the Warden has remembered every move since."},
-    {trigger:'win',   text:"Your constellation holds. The Veil acknowledges the pattern."},
-    {trigger:'lose',  text:"The Warden has seen this shape before. It will remember yours."},
-    {trigger:'draw',  text:"The sky balances. Neither force nor counter-force prevailed. This is rarer than most believe."},
-  ],
-  paddle:[
-    {trigger:'first', text:"Veil Paddle tests whether you can hold your position as the world accelerates around you. The Warden does not tire."},
-    {trigger:'win',   text:"The arena stills. You held the line when the Warden could not."},
-    {trigger:'lose',  text:"The orb passed through. The Warden does not gloat — it simply waits for the next serve."},
-  ],
   echo:[
     {trigger:'first',   text:"Echo Drift is the quietest of the Trials. The Veil shows you the pattern once — and what you do with that moment is entirely yours."},
     {trigger:'success', text:"What was seen has been held. The drift resolves cleanly."},
@@ -1933,7 +1609,7 @@ function showMilestone(title,sub){
 
 // ── HIGH SCORES ───────────────────────────────────────────────────────────
 const hiscores=(() => {
-  let d={sgStreak:[],vpBestRally:[],edStreak:[]};
+  let d={edStreak:[]};
   try{const s=localStorage.getItem('faeboundHiscores');if(s)d={...d,...JSON.parse(s)};}catch(e){}
   function save(){try{localStorage.setItem('faeboundHiscores',JSON.stringify(d));}catch(e){}}
   function add(game,val){
@@ -1997,16 +1673,7 @@ document.getElementById('clearArchiveBtn')?.addEventListener('click',()=>{
 });
 
 // ── MOBILE HUD SYNC ───────────────────────────────────────────────────────
-function syncSgHud(x,o,status){
-  document.getElementById('sgMobX')&&(document.getElementById('sgMobX').textContent=x);
-  document.getElementById('sgMobO')&&(document.getElementById('sgMobO').textContent=o);
-  document.getElementById('sgMobStatus')&&(document.getElementById('sgMobStatus').textContent=status||'');
-}
-function syncVpHud(l,r,status){
-  document.getElementById('vpMobL')&&(document.getElementById('vpMobL').textContent=l);
-  document.getElementById('vpMobR')&&(document.getElementById('vpMobR').textContent=r);
-  document.getElementById('vpMobStatus')&&(document.getElementById('vpMobStatus').textContent=status||'');
-}
+
 function syncEdHud(streak,best,status,sealOn){
   document.getElementById('edMobStreak')&&(document.getElementById('edMobStreak').textContent=streak);
   document.getElementById('edMobBest')&&(document.getElementById('edMobBest').textContent=best);
@@ -2017,47 +1684,7 @@ function syncEdHud(streak,best,status,sealOn){
 setTimeout(()=>{
   document.getElementById('edMobStart')?.addEventListener('click',()=>window.ed?.startRound());
   document.getElementById('edMobCheck')?.addEventListener('click',()=>window.ed?.checkResult());
-  document.getElementById('vpMobStart')?.addEventListener('click',()=>window.vp?.startServe());
-  document.getElementById('vpMobPause')?.addEventListener('click',()=>window.vp?.togglePause());
 },150);
-
-// ── SIGIL GRID BG (constellation) ────────────────────────────────────────
-const sgBg = (() => {
-  const canvas=document.getElementById('sgBgCanvas'); if(!canvas)return{draw:()=>{}};
-  const ctx=canvas.getContext('2d');
-  function resize(){const p=canvas.parentElement;if(!p)return;canvas.width=p.offsetWidth;canvas.height=p.offsetHeight;}
-  function draw(){
-    resize(); ctx.clearRect(0,0,canvas.width,canvas.height);
-    const cells=document.querySelectorAll('.sg-board .sg-cell'); if(cells.length!==9)return;
-    const pr=canvas.getBoundingClientRect();
-    const pos=[...cells].map(c=>{
-      const r=c.getBoundingClientRect();
-      const mark=c.querySelector('.sg-mark');
-      return {x:r.left-pr.left+r.width/2,y:r.top-pr.top+r.height/2,
-        val:mark?(mark.classList.contains('star')?'star':'moon'):'',r:r.width*.38};
-    });
-    // Draw node halos
-    pos.forEach(p=>{
-      if(!p.val)return;
-      const col=p.val==='star'?'rgba(126,200,255,':'rgba(255,158,200,';
-      const grad=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*1.8);
-      grad.addColorStop(0,col+'.1)'); grad.addColorStop(1,'rgba(0,0,0,0)');
-      ctx.fillStyle=grad; ctx.beginPath(); ctx.arc(p.x,p.y,p.r*1.8,0,Math.PI*2); ctx.fill();
-    });
-    // Draw constellation lines between same-player adjacent cells
-    [[0,1],[1,2],[3,4],[4,5],[6,7],[7,8],[0,3],[3,6],[1,4],[4,7],[2,5],[5,8],[0,4],[4,8],[2,4],[4,6]].forEach(([a,b])=>{
-      if(pos[a].val&&pos[a].val===pos[b].val){
-        const col=pos[a].val==='star'?'rgba(126,200,255,':'rgba(255,158,200,';
-        const grad=ctx.createLinearGradient(pos[a].x,pos[a].y,pos[b].x,pos[b].y);
-        grad.addColorStop(0,col+'.22)'); grad.addColorStop(.5,col+'.32)'); grad.addColorStop(1,col+'.22)');
-        ctx.beginPath(); ctx.moveTo(pos[a].x,pos[a].y); ctx.lineTo(pos[b].x,pos[b].y);
-        ctx.strokeStyle=grad; ctx.lineWidth=1.5; ctx.shadowBlur=6; ctx.shadowColor=col+'.2)';
-        ctx.stroke(); ctx.shadowBlur=0;
-      }
-    });
-  }
-  return{draw};
-})();
 
 // ── ECHO DRIFT BG (particle fog) ─────────────────────────────────────────
 const edBg = (() => {
@@ -2095,747 +1722,6 @@ initStars();
 // No court system — realm identity is fixed
 loadSettings();
 updateRecentCrossing();
-</script>
-
-<!-- ═══ SIGIL GRID ═══ -->
-<script>
-
-window.sg = (() => {
-  const boardEl = document.getElementById('sgBoard');
-  const boardWrapEl = document.querySelector('.sg-board-wrap');
-  const statusText = document.getElementById('sgStatusText');
-  const scoreXEl = document.getElementById('sgScoreX');
-  const scoreOEl = document.getElementById('sgScoreO');
-  const scoreDrawEl = document.getElementById('sgScoreDraw');
-  const labelXEl = document.getElementById('sgLabelX');
-  const labelOEl = document.getElementById('sgLabelO');
-  const activeModeLabelEl = document.getElementById('sgModeLabel');
-  const opponentLabelEl = document.getElementById('sgOpponentLabel');
-  const historyListEl = document.getElementById('sgHistory');
-  const turnOrbEl = document.getElementById('sgTurnOrb');
-  const turnLabelEl = document.getElementById('sgTurnLabel');
-  const winLineEl = document.getElementById('sgWinLine');
-  const winLines = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-
-  let board = Array(9).fill('');
-  let currentPlayer = 'star';
-  let roundOver = false;
-  let aiThinking = false;
-  let selectedMode = 'pvp';
-  let difficulty = 'initiate'; // initiate | adept | warden
-  let scores = { star:0, moon:0, draw:0 };
-  let roundHistory = [];
-
-  const wardenLines = ['The Warden studies your constellation…','A counter-sigil forms in the Veil…','Moonlight gathers at the edge of the board…','The Warden answers your pattern…','A hesitation… the pattern is unfamiliar.','The Veil flickers — your intent is seen.'];
-
-  // Difficulty button wiring
-  document.querySelectorAll('[data-sg-diff]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      difficulty = btn.dataset.sgDiff;
-      document.querySelectorAll('[data-sg-diff]').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      if (selectedMode === 'ai') resetScores();
-    });
-  });
-
-  function soundPlace(token) {
-    if (token==='star') {
-      audio.tone(880, 0.12, 'sine', 0.028, 1108); // chime fundamental
-      setTimeout(()=>audio.tone(1320, 0.10, 'sine', 0.014, 1760), 18); // harmonic
-      setTimeout(()=>audio.tone(440, 0.18, 'triangle', 0.016, 330), 8); // body
-    } else {
-      audio.tone(440, 0.14, 'sine', 0.026, 330); // moon tone descends
-      setTimeout(()=>audio.tone(660, 0.10, 'sine', 0.012, 550), 18);
-      setTimeout(()=>audio.tone(220, 0.22, 'triangle', 0.018, 165), 10);
-    }
-    window.ambient.swell(.0015);
-  }
-  function soundWin() { audio.tone(540,.09,'sine',.035,620); setTimeout(()=>audio.tone(680,.11,'sine',.03,760),70); setTimeout(()=>audio.tone(860,.14,'triangle',.028,980),150); window.ambient.swell(.004); }
-  function soundReset() { audio.tone(300,.08,'triangle',.025,240); }
-
-  function playerLabel(t) { return t==='star'?'Star':'Moon'; }
-  function displayLabel(t) { return selectedMode==='ai'?(t==='star'?'You':'Warden'):playerLabel(t); }
-
-  function updateModeUI() {
-    const isAI = selectedMode==='ai';
-    activeModeLabelEl.textContent = isAI ? 'Veil Trial' : 'Two Players';
-    opponentLabelEl.textContent = isAI ? 'Warden' : 'Human';
-    labelXEl.textContent = isAI ? 'You ✦' : 'Star ✦';
-    labelOEl.textContent = isAI ? 'Warden ☾' : 'Moon ☾';
-  }
-
-  function setStatusForTurn() {
-    if (selectedMode==='ai') {
-      if (currentPlayer==='star') { statusText.textContent='Ready — your turn'; turnLabelEl.textContent='Star is active'; }
-      else { statusText.textContent=aiThinking?wardenLines[Math.floor(Math.random()*wardenLines.length)]:"Warden's turn"; turnLabelEl.textContent=aiThinking?'Moonlight gathers…':'Moon is active'; }
-    } else {
-      statusText.textContent=`${playerLabel(currentPlayer)} turn`; turnLabelEl.textContent=`${playerLabel(currentPlayer)} is active`;
-    }
-    turnOrbEl.style.background = currentPlayer==='star'?'var(--blue)':'var(--pink)';
-    turnOrbEl.style.boxShadow = currentPlayer==='star'?'0 0 16px rgba(154,215,255,.45)':'0 0 16px rgba(255,181,229,.45)';
-    // Subtle board edge glow follows active player
-    const panel=document.getElementById('sgGamePanel');
-    if(panel&&!roundOver){
-      panel.style.boxShadow=currentPlayer==='star'
-        ?'0 0 0 1px rgba(126,200,255,.08),0 0 40px rgba(126,200,255,.06)'
-        :'0 0 0 1px rgba(255,158,200,.08),0 0 40px rgba(255,158,200,.06)';
-    }
-  }
-
-  function updateScores() { scoreXEl.textContent=scores.star; scoreOEl.textContent=scores.moon; scoreDrawEl.textContent=scores.draw; syncSgHud(scores.star, scores.moon, statusText.textContent||''); }
-  function updateHistory() {
-    historyListEl.innerHTML='';
-    if (!roundHistory.length) { const p=document.createElement('div'); p.className='h-pill'; p.textContent='No rounds yet'; historyListEl.appendChild(p); return; }
-    roundHistory.slice(-8).forEach((result,idx,arr) => {
-      const n = roundHistory.length-arr.length+idx+1;
-      const p = document.createElement('div');
-      p.className=`h-pill ${result==='star'?'x':result==='moon'?'o':'draw'}`;
-      p.textContent = result==='draw'?`R${n}: Draw`:`R${n}: ${displayLabel(result)}`;
-      historyListEl.appendChild(p);
-    });
-  }
-
-  function createBoard() {
-    if (!boardEl) return;
-    boardEl.innerHTML='';
-    board.forEach((value,index) => {
-      const cell = document.createElement('button');
-      cell.className='sg-cell'; cell.type='button';
-      if (roundOver||aiThinking) cell.classList.add('locked');
-      if (value) cell.classList.add('filled');
-      cell.dataset.index=index;
-      cell.addEventListener('click',()=>handleCellClick(index,cell));
-      cell.addEventListener('mouseenter',()=>{ if(!board[index]&&!roundOver&&!aiThinking&&!(selectedMode==='ai'&&currentPlayer==='moon')){ cell.classList.add(currentPlayer==='star'?'preview-star':'preview-moon'); audio.tone(currentPlayer==='star'?1200:900,.025,'sine',.004); } });
-      cell.addEventListener('mouseleave',()=>cell.classList.remove('preview-star','preview-moon'));
-      if (value) {
-        const m=document.createElement('div');
-        m.className=`sg-mark ${value}`;
-        // Pure CSS clip-path marks — no SVG, no background issues
-        // Visual shape and animation handled entirely by CSS ::after pseudo-element
-        cell.appendChild(m);
-      }
-      boardEl.appendChild(cell);
-    });
-    // Update constellation background
-    setTimeout(()=>sgBg.draw(board),50);
-  }
-
-  function getWinningLine() { return winLines.find(([a,b,c])=>board[a]&&board[a]===board[b]&&board[a]===board[c]); }
-
-  function drawWinLine(line) {
-    const cells=[...document.querySelectorAll('.sg-board .sg-cell')];
-    const s=cells[line[0]], e=cells[line[2]]; if(!s||!e) return;
-    const wr=boardWrapEl.getBoundingClientRect(), sr=s.getBoundingClientRect(), er=e.getBoundingClientRect();
-    const x1=sr.left-wr.left+sr.width/2, y1=sr.top-wr.top+sr.height/2;
-    const x2=er.left-wr.left+er.width/2, y2=er.top-wr.top+er.height/2;
-    const dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy), angle=Math.atan2(dy,dx)*180/Math.PI;
-    winLineEl.style.cssText=`width:${len}px;left:${x1}px;top:${y1}px;opacity:1;transform:translateY(-50%) rotate(${angle}deg) scaleX(1)`;
-  }
-
-  function clearWinLine() { winLineEl.style.cssText='width:0;opacity:0;transform:scaleX(0)'; }
-
-  function winCeremony(line) {
-    const cells=[...document.querySelectorAll('.sg-board .sg-cell')];
-    const points = line.map(i=>{ const r=cells[i].getBoundingClientRect(); return {x:r.left+r.width/2,y:r.top+r.height/2}; });
-    boardWrapEl.animate([{filter:'brightness(1)'},{filter:'brightness(.65)'},{filter:'brightness(1)'}],{duration:700,easing:'ease-out'});
-    points.forEach((p,i)=>setTimeout(()=>burstParticles(p,'mint',22),i*90));
-    const r=boardWrapEl.getBoundingClientRect();
-    setTimeout(()=>burstParticles({x:r.left+r.width/2,y:r.top+r.height/2},'mint',40),140);
-    cells.forEach((cell,i)=>{ if(!line.includes(i)) cell.animate([{opacity:1},{opacity:.25},{opacity:1}],{duration:900}); });
-  }
-
-  // AI DIFFICULTY LOGIC
-  function findStrategicMove(token) {
-    for (const [a,b,c] of winLines) {
-      const vals=[board[a],board[b],board[c]];
-      if (vals.filter(v=>v===token).length===2 && vals.includes('')) return [a,b,c][vals.indexOf('')];
-    }
-    return null;
-  }
-
-  function chooseAIMove() {
-    const empty = board.map((v,i)=>v===''?i:null).filter(v=>v!==null);
-    if (!empty.length) return null;
-
-    if (difficulty==='initiate') {
-      // Random with occasional blocking (30% chance to block)
-      if (Math.random() < .3) { const block=findStrategicMove('star'); if(block!==null) return block; }
-      return empty[Math.floor(Math.random()*empty.length)];
-    }
-
-    if (difficulty==='adept') {
-      // Win if possible, block if needed, prefer center/corners
-      const win=findStrategicMove('moon'); if(win!==null) return win;
-      const block=findStrategicMove('star'); if(block!==null) return block;
-      if (board[4]==='') return 4;
-      const corners=[0,2,6,8].filter(i=>board[i]==='');
-      if (corners.length) return corners[Math.floor(Math.random()*corners.length)];
-      return empty[Math.floor(Math.random()*empty.length)];
-    }
-
-    // warden: perfect minimax
-    return minimax(board, 'moon').index;
-  }
-
-  function minimax(b, player) {
-    const empty = b.map((v,i)=>v===''?i:null).filter(v=>v!==null);
-    const winner = getWinner(b);
-    if (winner==='moon') return {score:10};
-    if (winner==='star') return {score:-10};
-    if (!empty.length) return {score:0};
-    const moves = [];
-    for (const i of empty) {
-      const nb=[...b]; nb[i]=player;
-      const result = minimax(nb, player==='moon'?'star':'moon');
-      moves.push({index:i, score:result.score});
-    }
-    if (player==='moon') return moves.reduce((a,b)=>b.score>a.score?b:a);
-    return moves.reduce((a,b)=>b.score<a.score?b:a);
-  }
-
-  function getWinner(b) {
-    for (const [a,bc,c] of winLines) {
-      if (b[a]&&b[a]===b[bc]&&b[a]===b[c]) return b[a];
-    }
-    return null;
-  }
-
-  function applyMove(index, token, sourceCell=null) {
-    board[index]=token; soundPlace(token);
-    const cell=sourceCell||document.querySelector(`.sg-board .sg-cell[data-index="${index}"]`);
-    if (cell) { const r=cell.getBoundingClientRect(); burstParticles({x:r.left+r.width/2,y:r.top+r.height/2},token==='star'?'blue':'pink'); }
-    createBoard();
-    const wl=getWinningLine();
-    if (wl) {
-      roundOver=true; scores[token]+=1; roundHistory.push(token); updateScores(); updateHistory();
-      [...document.querySelectorAll('.sg-board .sg-cell')].forEach((c,i)=>{ if(wl.includes(i)) c.classList.add('win-cell'); });
-      winCeremony(wl); setTimeout(()=>{ drawWinLine(wl); },320);
-      statusText.textContent = selectedMode==='ai'?(token==='star'?'Your stars prevail':'The Warden veils the board'):`${playerLabel(token)} wins`;
-      turnLabelEl.textContent = token==='star'?'Constellation complete':'Moon phase complete';
-      soundWin(); window.archive?.inc?.('trialsCompleted'); window.progression?.increment?.(); hiscores.add('sgStreak', scores.star);
-      // Show end overlay after ceremony
-      setTimeout(() => showSgEnd(token), 1800);
-      // Lore
-      const loreT = selectedMode==='ai'?(token==='star'?'win':'lose'):'win';
-      setTimeout(() => showLore('sigil', loreT), 400);
-      return;
-    }
-    if (board.every(v=>v)) { roundOver=true; scores.draw+=1; roundHistory.push('draw'); updateScores(); updateHistory(); statusText.textContent='Draw — the sky balances'; turnLabelEl.textContent='The sky is balanced'; setTimeout(()=>showSgEnd('draw'),1400); setTimeout(()=>showLore('sigil','draw'),300); }
-  }
-
-  function maybeTriggerAI() {
-    if (!(selectedMode==='ai'&&currentPlayer==='moon')||roundOver) return;
-    aiThinking=true; createBoard(); setStatusForTurn(); audio.tone(260,.05,'sine',.018,300);
-    // Pulsing glow on center cell while Warden thinks
-    const centerCell=document.querySelector('.sg-board .sg-cell[data-index="4"]');
-    if(centerCell) centerCell.style.boxShadow='0 0 0 2px rgba(255,158,200,.18), 0 0 20px rgba(255,158,200,.12)';
-    setTimeout(()=>{const cc=document.querySelector('.sg-board .sg-cell[data-index="4"]');if(cc)cc.style.boxShadow='';},750);
-    setTimeout(() => {
-      if (roundOver) return;
-      const move=chooseAIMove(); aiThinking=false;
-      if (move!==null) applyMove(move,'moon');
-      if (!roundOver) { currentPlayer='star'; setStatusForTurn(); createBoard(); }
-    }, 440+Math.floor(Math.random()*360));
-  }
-
-  function handleCellClick(index, cell) {
-    audio.ensure(); window.ambient.ensure();
-    if (board[index]||roundOver||aiThinking||(selectedMode==='ai'&&currentPlayer==='moon')) return;
-    window.archive?.inc?.('trialsPlayed');
-    applyMove(index,currentPlayer,cell);
-    if (!roundOver) { currentPlayer=currentPlayer==='star'?'moon':'star'; setStatusForTurn(); createBoard(); maybeTriggerAI(); }
-  }
-
-  function resetRound() {
-    soundReset();
-    board=Array(9).fill('');
-    currentPlayer='star';
-    roundOver=false;
-    aiThinking=false;
-    clearWinLine();
-    setStatusForTurn();
-    createBoard();
-  }
-  function resetScores() {
-    scores={star:0,moon:0,draw:0};
-    roundHistory=[];
-    updateScores();
-    updateHistory();
-    resetRound();
-  }
-  function setMode(mode) {
-    selectedMode=mode;
-    updateModeUI();
-    resetScores();
-  }
-
-  function showSgEnd(result) {
-    const overlay = document.getElementById('sgEndOverlay');
-    const card = document.getElementById('sgEndCard');
-    const sigil = document.getElementById('sgEndSigil');
-    const title = document.getElementById('sgEndTitle');
-    const sub = document.getElementById('sgEndSub');
-    document.getElementById('sgEndRounds').textContent = roundHistory.length;
-    document.getElementById('sgEndWins').textContent = selectedMode==='ai' ? scores.star : (scores.star + scores.moon);
-    document.getElementById('sgEndDraws').textContent = scores.draw;
-    if (result === 'star') {
-      card.className='end-card win'; sigil.textContent='✦';
-      title.textContent = selectedMode==='ai' ? 'The Stars Prevail' : 'Star Wins';
-      title.className='end-title win';
-      try{const vwr=JSON.parse(localStorage.getItem('faeboundLastVeilWithinResult')||'null');
-        sub.textContent=vwr&&vwr.name==='The Seer'?'The constellation is complete. The Seer always knew where this was going.':
-          vwr&&vwr.name==='The Weaver'?'The constellation is complete. You saw the pattern before it closed.':
-          'The constellation is complete. The Veil acknowledges your shape.';}
-      catch(e){sub.textContent='The constellation is complete. The Veil acknowledges your pattern.';}
-    } else if (result === 'moon') {
-      card.className='end-card lose'; sigil.textContent='☾';
-      title.textContent = selectedMode==='ai' ? 'The Warden Prevails' : 'Moon Wins';
-      title.className='end-title lose';
-      sub.textContent = 'The Warden has seen this before. It will remember your shape.';
-    } else {
-      card.className='end-card'; sigil.textContent='✶';
-      title.textContent = 'The Sky Balances';
-      title.className='end-title';
-      sub.textContent = 'Neither force nor counter-force. This is rarer than most believe.';
-    }
-    overlay.classList.remove('hidden');
-  }
-
-  document.getElementById('sgEndPlayAgain').addEventListener('click', () => {
-    document.getElementById('sgEndOverlay').classList.add('hidden'); resetScores();
-  });
-  document.getElementById('sgEndHub').addEventListener('click', () => {
-    document.getElementById('sgEndOverlay').classList.add('hidden');
-    backToHub(() => window.sg?.resetRound());
-  });
-
-  document.getElementById('sgResetRoundBtn').addEventListener('click', resetRound);
-  document.getElementById('sgResetScoresBtn').addEventListener('click', resetScores);
-  document.getElementById('sgSwapModeBtn').addEventListener('click', ()=>setMode(selectedMode==='pvp'?'ai':'pvp'));
-
-  function begin() {
-    setMode('ai');
-    currentPlayer='star';
-    roundOver=false;
-    aiThinking=false;
-    createBoard();
-    setStatusForTurn();
-    updateScores();
-    updateHistory();
-  }
-
-  begin();
-  return { begin, resetRound, resetScores, setMode };
-})();
-
-</script>
-
-<!-- ═══ VEIL PADDLE ═══ -->
-<script>
-
-window.vp = (() => {
-  const canvas = document.getElementById('vpCanvas');
-  const ctx = canvas.getContext('2d');
-  const W=canvas.width, H=canvas.height, PW=16, PH=112, BS=16, MAX_SCORE=5;
-
-  const els = {
-    status: document.getElementById('vpStatusText'),
-    turnOrb: document.getElementById('vpTurnOrb'),
-    turnLabel: document.getElementById('vpTurnLabel'),
-    scoreLeft: document.getElementById('vpScoreLeft'),
-    scoreRight: document.getElementById('vpScoreRight'),
-    bestRally: document.getElementById('vpBestRally'),
-    modeLabel: document.getElementById('vpActiveModeLabel'),
-    controlLabel: document.getElementById('vpControlLabel'),
-    labelLeft: document.getElementById('vpLabelLeft'),
-    labelRight: document.getElementById('vpLabelRight'),
-    history: document.getElementById('vpHistory'),
-    hud: document.getElementById('vpHudBanner'),
-    pauseBtn: document.getElementById('vpPauseBtn'),
-  };
-
-  // DIFFICULTY CONFIG
-  const DIFF = {
-    initiate: { ballSpeed:280, maxSpeed:680, accel:16, aiSpeed:240, aiReaction:.65, aiError:28 },
-    adept:    { ballSpeed:360, maxSpeed:860, accel:22, aiSpeed:360, aiReaction:.82, aiError:12 },
-    warden:   { ballSpeed:440, maxSpeed:1020,accel:28, aiSpeed:480, aiReaction:.96, aiError:3  },
-  };
-  let difficulty = 'initiate';
-  let diffCfg = DIFF.initiate;
-
-  document.querySelectorAll('[data-vp-diff]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      difficulty=btn.dataset.vpDiff; diffCfg=DIFF[difficulty];
-      document.querySelectorAll('[data-vp-diff]').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      resetMatch();
-    });
-  });
-
-  let selectedMode='solo', running=false, paused=false, animId=null, lastTime=0;
-  let currentRally=0, bestRally=0, matchHistory=[], currentTension=0;
-  const keys={w:false,s:false,ArrowUp:false,ArrowDown:false};
-  const paddleVel={left:0,right:0};
-
-  const left  = {x:34, y:H/2-PH/2, w:PW, h:PH, speed:500, color:'#9ad7ff'};
-  const right = {x:W-34-PW, y:H/2-PH/2, w:PW, h:PH, speed:430, color:'#ffb5e5'};
-  const ball  = {x:W/2, y:H/2, size:BS, vx:0, vy:0, trail:[]};
-  const score = {left:0, right:0};
-
-  // ── TOUCH CONTROLS ──────────────────────────────────────────────────
-  let touchId = null, touchStartY = 0, touchPaddleY = 0;
-
-  canvas.addEventListener('touchstart', e => {
-    e.preventDefault();
-    const touch = e.changedTouches[0];
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = W / rect.width;
-    const tx = (touch.clientX - rect.left) * scaleX;
-    // Only activate if touching left half of canvas
-    if (tx < W/2) {
-      touchId = touch.identifier;
-      touchStartY = touch.clientY;
-      touchPaddleY = left.y;
-    }
-  }, {passive:false});
-
-  canvas.addEventListener('touchmove', e => {
-    e.preventDefault();
-    for (let i=0;i<e.changedTouches.length;i++) {
-      const t = e.changedTouches[i];
-      if (t.identifier===touchId) {
-        const rect = canvas.getBoundingClientRect();
-        const scaleY = H / rect.height;
-        const dy = (t.clientY - touchStartY) * scaleY;
-        left.y = Math.max(18, Math.min(H-18-PH, touchPaddleY + dy));
-      }
-    }
-  }, {passive:false});
-
-  canvas.addEventListener('touchend', e => {
-    for (let i=0;i<e.changedTouches.length;i++) {
-      if (e.changedTouches[i].identifier===touchId) touchId=null;
-    }
-  });
-
-  // ── KEYBOARD ────────────────────────────────────────────────────────
-  document.addEventListener('keydown', e => { if(e.key in keys){ keys[e.key]=true; e.preventDefault(); } });
-  document.addEventListener('keyup',   e => { if(e.key in keys) keys[e.key]=false; });
-
-  // ── SOUNDS ──────────────────────────────────────────────────────────
-  function soundServe() { audio.tone(440,.08,'triangle',.03,520); window.ambient.swell(.002); }
-  function soundWall()  {
-    const t=currentTension||0;
-    const f=300+Math.round(t*180); // higher pitch when tension is high
-    const v=.018+t*.016;
-    audio.tone(f,.06,'sine',v,f*.8);
-  }
-  function soundPaddle(side,perfect=false) {
-    const f = side==='left' ? 180 : 150;
-    audio.tone(f, 0.12, 'triangle', 0.035, f*0.6);   // thud body
-    audio.tone(f*3, 0.06, 'sine', 0.018, f*4);        // click attack
-    if(perfect){
-      setTimeout(()=>audio.tone(880, 0.09, 'sine', 0.018, 1100), 30);
-      setTimeout(()=>audio.tone(1320, 0.07, 'sine', 0.010, 1760), 55);
-    }
-    window.ambient.swell(perfect?.004:.0018);
-  }
-  function soundScore(left) { if(left){audio.tone(540,.09,'sine',.035,640);setTimeout(()=>audio.tone(760,.12,'triangle',.03,880),90);}else{audio.tone(320,.12,'sawtooth',.02,260);} window.ambient.swell(.004); }
-
-  function setStatus(text, orb='stable', banner=text) {
-    els.status.textContent=text; const hudBanner=document.getElementById('vpHudBanner');if(hudBanner)hudBanner.textContent=banner;
-    const orbStyles = { player:'var(--blue)', warden:'var(--pink)', pulse:'var(--mint)', stable:'var(--accent)' };
-    const shadowStyles = { player:'rgba(154,215,255,.45)', warden:'rgba(255,181,229,.45)', pulse:'rgba(127,236,201,.45)', stable:'rgba(199,182,255,.4)' };
-    const labels = { player:selectedMode==='solo'?'You hold the line':'Left side engaged', warden:selectedMode==='solo'?'Warden responds':'Right side engaged', pulse:'Arena in motion', stable:'Arena is stable' };
-    els.turnOrb.style.background=orbStyles[orb]||orbStyles.stable;
-    els.turnOrb.style.boxShadow=`0 0 16px ${shadowStyles[orb]||shadowStyles.stable}`;
-    els.turnLabel.textContent=labels[orb]||labels.stable;
-  }
-
-  function updateScores() { els.scoreLeft.textContent=score.left; els.scoreRight.textContent=score.right; els.bestRally.textContent=bestRally; syncVpHud(score.left, score.right, els.status.textContent||''); document.getElementById('vpHudLeft')&&(document.getElementById('vpHudLeft').textContent='You: '+score.left); document.getElementById('vpHudRight')&&(document.getElementById('vpHudRight').textContent='Warden: '+score.right); }
-  function updateHistory() {
-    els.history.innerHTML='';
-    if (!matchHistory.length) { const p=document.createElement('div'); p.className='h-pill'; p.textContent='No matches yet'; els.history.appendChild(p); return; }
-    matchHistory.slice(-6).forEach((winner,index,arr) => {
-      const n=matchHistory.length-arr.length+index+1;
-      const p=document.createElement('div'); p.className=`h-pill ${winner}`;
-      const label=selectedMode==='solo'?(winner==='player'?'You':'Warden'):(winner==='player'?'Left':'Right');
-      p.textContent=`M${n}: ${label}`; els.history.appendChild(p);
-    });
-  }
-
-  function setMode(mode,reset=true) {
-    selectedMode=mode;
-    els.modeLabel.textContent=mode==='solo'?'Solo vs Warden':'Two Players';
-    els.controlLabel.textContent=mode==='solo'?'W/S or Touch':'W/S + Arrows';
-    els.labelLeft.textContent=mode==='solo'?'You':'Left';
-    els.labelRight.textContent=mode==='solo'?'Warden':'Right';
-    if(reset) resetMatch();
-  }
-
-  function clamp(p) { if(p.y<18) p.y=18; if(p.y+p.h>H-18) p.y=H-18-p.h; }
-
-  function resetBall(dir=1) {
-    ball.x=W/2; ball.y=H/2; ball.trail=[];
-    const spd=diffCfg.ballSpeed;
-    const aim=selectedMode==='solo'?(keys.w?-.35:keys.s?.35:Math.random()*.8-.4):Math.random()*.8-.4;
-    ball.vx=Math.cos(aim)*spd*dir; ball.vy=Math.sin(aim)*spd;
-    currentRally=0;
-  }
-
-  function resetPaddles() { left.y=H/2-PH/2; right.y=H/2-PH/2; paddleVel.left=0; paddleVel.right=0; }
-
-  function updateTension() {
-    if (!running) return;
-    const ballSpd = Math.hypot(ball.vx, ball.vy);
-    const maxSpd = diffCfg.maxSpeed;
-    const speedFactor = Math.min(1, (ballSpd - diffCfg.ballSpeed) / (maxSpd - diffCfg.ballSpeed + 1));
-    const scoreDiff = Math.abs(score.left - score.right);
-    const closeScore = (score.left + score.right >= 3 && scoreDiff <= 1) ? 0.4 : 0;
-    const rallyFactor = Math.min(1, currentRally / 12);
-    currentTension = Math.min(1, speedFactor * 0.5 + closeScore + rallyFactor * 0.3);
-    window.ambient.setPaddleTension(currentTension);
-  }
-
-  function startServe() {
-    audio.ensure(); window.ambient.ensure();
-    if (!running&&!paused) {
-      setStatus('Serve incoming…','pulse','Ready…');
-      audio.tone(360,.06,'triangle',.018,420);
-      setTimeout(()=>{
-        if(running)return; // guard against double-call
-        running=true; paused=false;
-        if (ball.vx===0&&ball.vy===0) resetBall(Math.random()>.5?1:-1);
-        setStatus('Arena live','pulse','Rally in motion'); soundServe();
-        if (!animId) { lastTime=performance.now(); animId=requestAnimationFrame(loop); }
-        window.archive?.inc?.('trialsPlayed');
-      },900);
-    } else if(paused){
-      // Resume
-      paused=false; setStatus('Arena live','pulse','Rally in motion');
-      els.pauseBtn.textContent='Pause';
-    }
-  }
-
-  function togglePause() {
-    if (!running) return; paused=!paused;
-    audio.tone(260,.06,'triangle',.02,220);
-    if (paused) { setStatus('Paused','stable','Paused'); els.pauseBtn.textContent='Resume'; }
-    else { setStatus('Arena live','pulse','Rally in motion'); els.pauseBtn.textContent='Pause'; }
-  }
-
-  function resetMatch() {
-    window.ambient.setPaddleTension(0);
-    running=false; paused=false; els.pauseBtn.textContent='Pause';
-    score.left=0; score.right=0; currentRally=0; bestRally=0;
-    resetPaddles(); resetBall(Math.random()>.5?1:-1);
-    updateScores(); draw();
-    setStatus('Ready — press Start','stable','Ready');
-    if (animId) { cancelAnimationFrame(animId); animId=null; }
-  }
-
-  function updatePaddles(dt) {
-    // Left paddle: keyboard + touch (touch sets position directly)
-    if (touchId===null) {
-      // Keyboard only when not touching
-      const prevL=left.y;
-      if (keys.w) left.y-=left.speed*dt;
-      if (keys.s) left.y+=left.speed*dt;
-      paddleVel.left=(left.y-prevL)/dt;
-    }
-    clamp(left);
-
-    // Right paddle: keyboard (2p) or AI
-    const prevR=right.y;
-    if (selectedMode==='pvp') {
-      if (keys.ArrowUp) right.y-=right.speed*dt;
-      if (keys.ArrowDown) right.y+=right.speed*dt;
-      paddleVel.right=(right.y-prevR)/dt;
-    } else {
-      // AI with difficulty-based reaction and error
-      const aiSpd = diffCfg.aiSpeed;
-      const reaction = diffCfg.aiReaction;
-      const error = diffCfg.aiError;
-      if (Math.random() < reaction) {
-        const target = ball.y + (Math.random()-.5)*error - right.h/2;
-        if (right.y + right.h/2 < target) right.y=Math.min(right.y+aiSpd*dt, target);
-        else right.y=Math.max(right.y-aiSpd*dt, target);
-      }
-      paddleVel.right=(right.y-prevR)/dt;
-    }
-    clamp(right);
-  }
-
-  function updateBall(dt) {
-    const spd=diffCfg.ballSpeed, maxSpd=diffCfg.maxSpeed, accel=diffCfg.accel;
-    ball.trail.push({x:ball.x,y:ball.y});
-    if(ball.trail.length>12) ball.trail.shift();
-    ball.x+=ball.vx*dt; ball.y+=ball.vy*dt;
-    // Wall bounce
-    if(ball.y-ball.size/2<0){ball.y=ball.size/2;ball.vy=Math.abs(ball.vy);soundWall();}
-    if(ball.y+ball.size/2>H){ball.y=H-ball.size/2;ball.vy=-Math.abs(ball.vy);soundWall();}
-    // Paddle collision helpers
-    function hitPaddle(paddle,side){
-      const relY=(ball.y-(paddle.y+paddle.h/2))/(paddle.h/2);
-      const angle=relY*(.28*Math.PI);
-      const curSpd=Math.min(Math.hypot(ball.vx,ball.vy)+accel, maxSpd);
-      ball.vx=(side==='left'?1:-1)*curSpd*Math.cos(angle);
-      ball.vy=curSpd*Math.sin(angle);
-      const perfect=Math.abs(relY)<.15;
-      soundPaddle(side,perfect); currentRally++;
-      if(currentRally>bestRally){bestRally=currentRally;updateScores();}
-      // Update paddle tension for music
-      updateTension();
-    }
-    // Left paddle
-    if(ball.vx<0&&ball.x-ball.size/2<left.x+left.w&&ball.x-ball.size/2>left.x&&ball.y>left.y&&ball.y<left.y+left.h){
-      ball.x=left.x+left.w+ball.size/2; hitPaddle(left,'left');
-    }
-    // Right paddle
-    if(ball.vx>0&&ball.x+ball.size/2>right.x&&ball.x+ball.size/2<right.x+right.w&&ball.y>right.y&&ball.y<right.y+right.h){
-      ball.x=right.x-ball.size/2; hitPaddle(right,'right');
-    }
-    // Score
-    if(ball.x<0){
-      score.right+=1; soundScore(false); updateScores();
-      const r=canvas.getBoundingClientRect(); burstParticles({x:r.left,y:r.top+r.height/2},'pink',20);
-      setStatus('Warden scores','warden','Warden scores');
-      if(score.right>=MAX_SCORE){endMatch('warden'); return;}
-      setTimeout(()=>resetBall(1),600);
-    }
-    if(ball.x>W){
-      score.left+=1; soundScore(true); updateScores();
-      const r=canvas.getBoundingClientRect(); burstParticles({x:r.left+r.width,y:r.top+r.height/2},'blue',20);
-      setStatus('You score','player','You score');
-      if(score.left>=MAX_SCORE){endMatch('player'); return;}
-      setTimeout(()=>resetBall(-1),600);
-    }
-  }
-
-  function endMatch(winner) {
-    running=false; matchHistory.push(winner); updateHistory();
-    window.archive?.inc?.('trialsCompleted'); window.progression?.increment?.();
-    if(winner==='player'){
-      setStatus('You prevail — rally ends','player','Victory');
-      audio.tone(540,.09,'sine',.035,680); setTimeout(()=>audio.tone(760,.12,'triangle',.03,920),90);
-    } else {
-      setStatus('The Warden holds — rally ends','warden','Defeated');
-      audio.tone(320,.14,'sawtooth',.025,240);
-    }
-    window.ambient.swell(.006);
-    hiscores.add('vpBestRally', bestRally);
-    setTimeout(() => showVpEnd(winner), 1600);
-    setTimeout(() => showLore('paddle', winner==='player'?'win':'lose'), 400);
-  }
-
-  function showVpEnd(winner) {
-    const overlay = document.getElementById('vpEndOverlay');
-    const card = document.getElementById('vpEndCard');
-    const sigil = document.getElementById('vpEndSigil');
-    const title = document.getElementById('vpEndTitle');
-    const sub = document.getElementById('vpEndSub');
-    document.getElementById('vpEndYours').textContent = score.left;
-    document.getElementById('vpEndRally').textContent = bestRally;
-    document.getElementById('vpEndMatches').textContent = matchHistory.length;
-    if (winner==='player') {
-      card.className='end-card win'; sigil.textContent='✦';
-      title.textContent='The Arena Yields'; title.className='end-title win';
-      sub.textContent='You held the line when the Warden could not. The orb remembers your timing.';
-    } else {
-      card.className='end-card lose'; sigil.textContent='☾';
-      title.textContent='The Warden Holds'; title.className='end-title lose';
-      sub.textContent='The orb passed through. The Warden does not gloat. It simply waits for the next serve.';
-    }
-    overlay.classList.remove('hidden');
-  }
-
-  function draw() {
-    ctx.clearRect(0,0,W,H);
-    // Background — pulses with tension
-    const t = currentTension;
-    const grd=ctx.createLinearGradient(0,0,0,H);
-    grd.addColorStop(0,`rgba(${11+Math.round(t*18)},${14+Math.round(t*8)},28,.97)`);
-    grd.addColorStop(1,`rgba(14,${19+Math.round(t*10)},${40+Math.round(t*12)},.99)`);
-    ctx.fillStyle=grd; ctx.fillRect(0,0,W,H);
-    // Tension glow — radial pulse centered on ball when tension is high
-    if(t>0.2 && (ball.vx!==0||ball.vy!==0)){
-      const glowR = 80 + t*180;
-      const glowAlpha = t*0.10;
-      const glow = ctx.createRadialGradient(ball.x,ball.y,0,ball.x,ball.y,glowR);
-      glow.addColorStop(0,`rgba(255,181,229,${glowAlpha})`);
-      glow.addColorStop(1,'rgba(255,181,229,0)');
-      ctx.fillStyle=glow; ctx.fillRect(0,0,W,H);
-    }
-    // Edge vignette intensifies with tension
-    if(t>0.3){
-      const vign=ctx.createRadialGradient(W/2,H/2,H*0.3,W/2,H/2,H*0.85);
-      vign.addColorStop(0,'rgba(199,182,255,0)');
-      vign.addColorStop(1,`rgba(199,182,255,${t*0.08})`);
-      ctx.fillStyle=vign; ctx.fillRect(0,0,W,H);
-    }
-    // Center line
-    ctx.setLineDash([12,18]); ctx.strokeStyle=`rgba(255,255,255,${0.04+t*0.06})`; ctx.lineWidth=2;
-    ctx.beginPath(); ctx.moveTo(W/2,0); ctx.lineTo(W/2,H); ctx.stroke(); ctx.setLineDash([]);
-    // Ball trail
-    ball.trail.forEach((p,i) => {
-      const a=(i/ball.trail.length)*.25;
-      ctx.beginPath(); ctx.arc(p.x,p.y,(ball.size/2)*(i/ball.trail.length)*.8,0,Math.PI*2);
-      ctx.fillStyle=`rgba(127,236,201,${a})`; ctx.fill();
-    });
-    // Ball — always render, pulse gently when stationary
-    {
-      const isMoving=ball.vx!==0||ball.vy!==0;
-      const ballAlpha=isMoving?0.92:(0.45+0.2*Math.sin(Date.now()*.003));
-      const glowColor=isMoving?'rgba(127,236,201,.7)':'rgba(187,168,255,.5)';
-      const bg=ctx.createRadialGradient(ball.x,ball.y,0,ball.x,ball.y,ball.size);
-      bg.addColorStop(0,`rgba(255,255,255,${ballAlpha})`); bg.addColorStop(.5,glowColor); bg.addColorStop(1,'rgba(0,0,0,0)');
-      ctx.beginPath(); ctx.arc(ball.x,ball.y,ball.size/2,0,Math.PI*2);
-      ctx.fillStyle=`rgba(255,255,255,${ballAlpha})`; ctx.fill();
-      ctx.beginPath(); ctx.arc(ball.x,ball.y,ball.size,0,Math.PI*2);
-      ctx.fillStyle=bg; ctx.fill();
-    }
-    // Paddles
-    function drawPaddle(p, hexColor, glowRgb) {
-      ctx.shadowColor=hexColor; ctx.shadowBlur=16+currentTension*12;
-      const grad=ctx.createLinearGradient(p.x,p.y,p.x,p.y+p.h);
-      grad.addColorStop(0,`rgba(${glowRgb},.7)`);
-      grad.addColorStop(.5,'rgba(255,255,255,.92)');
-      grad.addColorStop(1,`rgba(${glowRgb},.7)`);
-      ctx.fillStyle=grad;
-      ctx.beginPath();
-      if(ctx.roundRect) ctx.roundRect(p.x,p.y,p.w,p.h,8); else ctx.rect(p.x,p.y,p.w,p.h);
-      ctx.fill(); ctx.shadowBlur=0;
-    }
-    drawPaddle(left,'#7ec8ff','126,200,255'); drawPaddle(right,'#ff9ec8','255,158,200');
-    // Score overlay — readable but not distracting
-    ctx.font='700 52px Inter,system-ui,sans-serif'; ctx.textAlign='center';
-    ctx.fillStyle='rgba(126,200,255,.28)'; ctx.fillText(score.left, W/2-90, 66);
-    ctx.fillStyle='rgba(255,158,200,.28)'; ctx.fillText(score.right, W/2+90, 66);
-  }
-
-  function loop(ts) {
-    if (!running||paused) { animId=requestAnimationFrame(loop); return; }
-    const dt=Math.min((ts-lastTime)/1000,.05); lastTime=ts;
-    updatePaddles(dt); updateBall(dt); draw();
-    animId=requestAnimationFrame(loop);
-  }
-
-  document.getElementById('vpEndPlayAgain').addEventListener('click', () => {
-    document.getElementById('vpEndOverlay').classList.add('hidden'); resetMatch();
-  });
-  document.getElementById('vpEndHub').addEventListener('click', () => {
-    document.getElementById('vpEndOverlay').classList.add('hidden');
-    backToHub(() => window.vp?.resetMatch());
-  });
-  document.getElementById('vpStartRoundBtn').addEventListener('click', startServe);
-  document.getElementById('vpPauseBtn').addEventListener('click', togglePause);
-  document.getElementById('vpResetMatchBtn').addEventListener('click', resetMatch);
-  document.getElementById('vpSwapModeBtn').addEventListener('click', ()=>setMode(selectedMode==='solo'?'pvp':'solo'));
-
-  setMode('solo', true);
-  return { resetMatch, draw, setMode, startServe, togglePause, getTension:()=>currentTension };
-})();
-
 </script>
 
 <!-- ═══ ECHO DRIFT ═══ -->
@@ -3648,3 +2534,4 @@ window.vw = (() => {
 
 </body>
 </html>
+
