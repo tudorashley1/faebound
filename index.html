@@ -3119,6 +3119,8 @@ window.vw = (() => {
     const second = order.filter(k => k !== winner).reduce((best, k) => scores[k] > scores[best] ? k : best);
     const a = ARCHETYPES[winner];
     const b2 = ARCHETYPES[second];
+    // Previous result for shift detection
+    const prevResult = (() => { try { return JSON.parse(localStorage.getItem('faeboundLastVeilWithinResult')||'null'); } catch(e) { return null; } })();
     const total = Object.values(scores).reduce((s, v) => s + v, 0) || 1;
     const breakdown = order.map(k => ({
       key: k, name: ARCHETYPES[k].name, sigil: ARCHETYPES[k].sigil,
@@ -3396,7 +3398,7 @@ window.tb = (() => {
         'Practice staying with a transition long enough to let it teach you something.',
         'Notice when your speed protects you from something you might need to feel.'
       ],
-      research: 'Bonanno's (2004) research on resilience identifies rapid recovery as a genuine and healthy response to change — not denial. However, the distinction matters: resilience involves integration, while bypassing involves avoidance. Bridges' New Beginning phase requires some time in the Neutral Zone to be meaningful.',
+      research: `Bonanno's (2004) research on resilience identifies rapid recovery as a genuine and healthy response to change — not denial. However, the distinction matters: resilience involves integration, while bypassing involves avoidance. Bridges' New Beginning phase requires some time in the Neutral Zone to be meaningful.`,
       link: 'https://www.apa.org/topics/resilience',
       linkLabel: 'APA Resilience Resources'
     },
@@ -3416,7 +3418,7 @@ window.tb = (() => {
         'Notice when planning has become a way of not starting.',
         'Trust that some of what you need to know, you will only learn by going.'
       ],
-      research: 'Bridges describes the New Beginning as requiring a willingness to enter uncertain territory. Dweck's growth mindset research suggests that Cartographers thrive when they reframe the unknown as discoverable rather than dangerous — shifting from needing a complete map to trusting the capacity to navigate.',
+      research: `Bridges describes the New Beginning as requiring a willingness to enter uncertain territory. Dweck's growth mindset research suggests that Cartographers thrive when they reframe the unknown as discoverable rather than dangerous — shifting from needing a complete map to trusting the capacity to navigate.`,
       link: 'https://wmbridges.com/about/what-is-transition/',
       linkLabel: 'Bridges Transition Model'
     }
@@ -3635,7 +3637,7 @@ window.tb = (() => {
       },
       {
         eyebrow: 'Chamber III — The Current',
-        title: 'Moving before you're ready',
+        title: `Moving before you're ready`,
         prose: `Sometimes change requires you to move before you feel fully ready. You begin before the ending is complete. You enter the new chapter before you've made sense of the old one.<br><br><em>The Threshold is asking how you handle that.</em>`,
         question: 'You need to move into a new chapter before you feel ready. What do you do?',
         choices: [
