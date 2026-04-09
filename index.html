@@ -4899,39 +4899,48 @@ window.crossing = (() => {
   let stopped = false;
 
   const TOTAL_SCENES = 5;
+  let playerProfile = [];
 
   // ── PROMPTS ───────────────────────────────────────────────────────────────
 
-  const PREMISE_SYSTEM = `You are the voice of a liminal realm called Faebound.
-Generate a single sentence — the through-line premise of a Crossing.
-This sentence describes what the player has been carrying, or seeking, or avoiding, without being specific.
-It should feel true for almost anyone, but personal enough to land.
-It is the quiet question underneath the Crossing.
-Examples:
-"You have been carrying something you were not sure you were allowed to put down."
-"There is a version of yourself you have been moving toward for a long time without naming it."
-"Something has been asking for your attention, and you have been deciding whether to answer."
-Respond with only the sentence. No quotation marks. No preamble.`;
+  function PREMISE_SYSTEM(profile) {
+    let s = 'You are the voice of a liminal realm called Faebound.\n'
+      + 'Generate a single sentence — the through-line premise of a Crossing.\n'
+      + 'This sentence describes what the player has been carrying, or seeking, or avoiding.\n'
+      + 'It should feel personally true based on what you know about this player.\n'
+      + 'It is the quiet question underneath this particular Crossing.';
+    if (profile.length > 0) {
+      s += '\n\nWhat the realm already knows about this player:\n'
+        + profile.map(function(p) { return '- ' + p; }).join('\n');
+      s += '\n\nUse the profile to make the premise specific. If you know their doubt pattern, care style, emotional style — let that shape what they are carrying.';
+    }
+    s += '\nRespond with only the sentence. No quotation marks. No preamble.';
+    return s;
+  }
 
-  const SCENE_SYSTEM = `You write short atmospheric scenes for a narrative experience called The Crossing inside a realm called Faebound.
-
-RULES:
-- Exactly 2-3 sentences. No more.
-- Second person, present tense.
-- Name the strange thing simply. Do not explain or describe it elaborately. Trust the reader.
-- The strangeness is matter-of-fact, not dramatic.
-- End with a moment that implies two genuinely different ways to respond.
-- Both choices reveal different things. Neither is correct.
-- Each scene should feel like it deepens the journey, not restarts it.
-- The world is liminal: forests that remember, creatures that are more feeling than form, objects with weight, thresholds, voices without bodies, doors in wrong places.
-
-WHAT WORKS: Short. Simple. Strange. Emotionally resonant.
-WHAT DOESN'T: Long descriptions, explained magic, purple prose.
-
-FORMAT (exactly this, nothing else):
-SCENE: [2-3 sentences]
-CHOICE_A: [one way through, 1 sentence]
-CHOICE_B: [a different way, 1 sentence]`;
+  function SCENE_SYSTEM(profile) {
+    let s = 'You write short atmospheric scenes for a narrative experience called The Crossing inside Faebound.';
+    if (profile.length > 0) {
+      s += '\n\nPlayer profile — shape choices to resonate with this specific person:\n'
+        + profile.map(function(p) { return '- ' + p; }).join('\n');
+      s += '\nFor example: a Watcher gets choices about observing vs inhabiting.'
+        + ' A Stone gets choices about staying vs stepping back. A Seer notices differently than a Root.';
+    }
+    s += '\n\nRULES:\n'
+      + '- Exactly 2-3 sentences. No more.\n'
+      + '- Second person, present tense.\n'
+      + '- Name the strange thing simply. Trust the reader.\n'
+      + '- The strangeness is matter-of-fact, not dramatic.\n'
+      + '- Both choices reveal different things about a person. Neither is correct.\n'
+      + '- Each scene deepens the journey.\n'
+      + '\nWORLD: Liminal. Forests that remember. Creatures that are more feeling than form.'
+      + ' Objects with weight. Thresholds. Voices without bodies. Doors in wrong places.\n'
+      + '\nFORMAT (exactly this, nothing else):\n'
+      + 'SCENE: [2-3 sentences]\n'
+      + 'CHOICE_A: [one way through, 1 sentence]\n'
+      + 'CHOICE_B: [a different way, 1 sentence]';
+    return s;
+  }
 
   const OBSERVATION_SYSTEM = `You are the Veil — the witnessing presence of a liminal realm called Faebound.
 The player just made a choice in The Crossing. Write one sentence that names what the choice revealed about how they move.
@@ -4944,20 +4953,26 @@ Examples:
 "When offered what you wanted, you let it go."
 Respond with only the sentence.`;
 
-  const REFLECTION_SYSTEM = `You are the voice of a liminal realm called Faebound. You have just witnessed a player move through five scenes of The Crossing — a narrative experience where their choices reveal how they move through the world.
-
-Write a single paragraph (5-7 sentences) reflecting on what their journey revealed.
-You have been given the through-line premise, all five scenes, their choices, and the observations the Veil made along the way.
-
-TONE:
-- Speak as the realm itself, directly to the player
-- Present tense, second person
-- Not analytical — observational, poetic, true
-- Find the pattern in the five choices. Name it.
-- Do not tell them what to do. Do not be prescriptive.
-- End with something that opens rather than closes — a question, or a door left ajar.
-
-Respond with only the paragraph. No headers, no preamble.`;
+  function REFLECTION_SYSTEM(profile) {
+    let s = 'You are the voice of a liminal realm called Faebound.'
+      + ' You have just witnessed a player move through five scenes of The Crossing.';
+    if (profile.length > 0) {
+      s += '\n\nWhat the realm already knows about this player:\n'
+        + profile.map(function(p) { return '- ' + p; }).join('\n');
+    }
+    s += '\n\nWrite a single paragraph (5-7 sentences) reflecting on what their journey revealed.'
+      + ' You have the through-line premise, all five scenes, their choices, and the Veil observations.'
+      + '\n\nTONE:\n'
+      + '- Speak as the realm, directly to the player\n'
+      + '- Present tense, second person\n'
+      + '- Not analytical — observational, poetic, true\n'
+      + '- Find the pattern in the five choices. Name it.\n'
+      + '- Connect what you saw in this Crossing to the broader picture of who this player has shown themselves to be across the realm.\n'
+      + '- If you know their archetype patterns, name the resonances gently, not clinically.\n'
+      + '- End with something that opens rather than closes.\n'
+      + '\nRespond with only the paragraph. No headers, no preamble.';
+    return s;
+  }
 
   // ── PREMISE OPENERS ───────────────────────────────────────────────────────
   const PREMISE_PROMPTS = [
@@ -4979,6 +4994,35 @@ Respond with only the paragraph. No headers, no preamble.`;
     `There is a voice with no body. It says one thing.`,
     `The player stands at the edge of something. On the other side, something waits.`,
   ];
+
+  // ── PLAYER PROFILE ──────────────────────────────────────────────────────
+  function buildPlayerProfile() {
+    const parts = [];
+    try {
+      const depth = parseInt(localStorage.getItem('faeboundVeilDepth')||'0')||0;
+      if (depth > 0) parts.push('Veil Depth: ' + depth);
+    } catch(e) {}
+    try {
+      const vw = JSON.parse(localStorage.getItem('faeboundLastVeilWithinResult')||'null');
+      if (vw && vw.name) parts.push('Emotional style: ' + vw.name + (vw.tagline ? ' — ' + vw.tagline : ''));
+    } catch(e) {}
+    try {
+      const tb = JSON.parse(localStorage.getItem('faeboundLastTBResult')||'null');
+      const tbGifts = { harbinger:'senses change before it arrives', anchor:'honors endings and carries continuity', current:'moves through change naturally', cartographer:'needs to understand the territory before moving forward' };
+      if (tb && tb.name) parts.push('Transition pattern: ' + tb.name + (tbGifts[tb.winner] ? ' — ' + tbGifts[tb.winner] : ''));
+    } catch(e) {}
+    try {
+      const wyho = JSON.parse(localStorage.getItem('faeboundLastWYHOResult')||'null');
+      const wyhoGifts = { lantern:'makes others feel seen and held', tide:'feels what others feel, genuinely permeable', stone:'stays when things are difficult', thread:'shows love through action and doing' };
+      if (wyho && wyho.name) parts.push('Care style: ' + wyho.name + (wyhoGifts[wyho.winner] ? ' — ' + wyhoGifts[wyho.winner] : ''));
+    } catch(e) {}
+    try {
+      const soyd = JSON.parse(localStorage.getItem('faeboundLastSOYDResult')||'null');
+      const soydGifts = { spiral:'holds high standards but struggles to rest in enough', disappearing:'makes themselves smaller to avoid scrutiny', translator:'edits their real voice before sharing it', watcher:'observes themselves from outside, monitors the gap' };
+      if (soyd && soyd.name) parts.push('Doubt pattern: ' + soyd.name + (soydGifts[soyd.winner] ? ' — ' + soydGifts[soyd.winner] : ''));
+    } catch(e) {}
+    return parts;
+  }
 
   // ── API CALL ──────────────────────────────────────────────────────────────
   async function generate(userPrompt, systemPrompt) {
@@ -5094,6 +5138,7 @@ Write one sentence naming what this reveals about how they move.`;
               <div style="font-style:italic;font-size:.88rem;
                    color:rgba(187,168,255,.6)">${lastReflection}</div>
             </div>` : ''}
+          ${buildPlayerProfile().length >= 2 ? '<div style="padding:10px 14px;border-radius:10px;border:1px solid rgba(187,168,255,.1);background:rgba(187,168,255,.04);margin-bottom:14px;font-size:.8rem;color:rgba(187,168,255,.5);font-style:italic">The Veil already knows something about you. This Crossing will be shaped by what the realm has seen.</div>' : ''}
           <p style="margin:0 0 12px">Five scenes. Each one generated fresh — yours alone, each time.</p>
           <p style="margin:0 0 12px">The Crossing begins with a through-line — something you have been carrying. The scenes unfold from there. The Veil watches how you move through each one.</p>
           <p style="margin:0">At the end, it tells you what it saw.</p>
@@ -5318,8 +5363,9 @@ Write one sentence naming what this reveals about how they move.`;
 
     try {
       generating = true;
+      playerProfile = buildPlayerProfile();
       const premisePrompt = PREMISE_PROMPTS[Math.floor(Math.random() * PREMISE_PROMPTS.length)];
-      premise = await generate(premisePrompt, PREMISE_SYSTEM);
+      premise = await generate(premisePrompt, PREMISE_SYSTEM(playerProfile));
       generating = false;
       if (stopped) return;
       renderPremise(premise);
@@ -5335,7 +5381,7 @@ Write one sentence naming what this reveals about how they move.`;
     try {
       generating = true;
       const prompt = sceneNum === 1 ? buildScene1Prompt() : buildNextScenePrompt(sceneNum);
-      const raw = await generate(prompt, SCENE_SYSTEM);
+      const raw = await generate(prompt, SCENE_SYSTEM(playerProfile));
       generating = false;
       if (stopped) return;
       const sceneData = parseScene(raw);
@@ -5396,7 +5442,7 @@ Write one sentence naming what this reveals about how they move.`;
     try {
       generating = true;
       const reflPrompt = buildReflectionPrompt();
-      const reflection = await generate(reflPrompt, REFLECTION_SYSTEM);
+      const reflection = await generate(reflPrompt, REFLECTION_SYSTEM(playerProfile));
       generating = false;
       if (stopped) return;
       renderReflection(reflection || 'The Veil was silent this crossing. Something was seen that cannot be named.');
