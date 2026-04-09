@@ -4889,104 +4889,195 @@ window.crossing = (() => {
   const wrap = document.getElementById('crossingWrap');
   if (!wrap) return { enter(){}, stop(){} };
 
-  // ── STATE ────────────────────────────────────────────────────────────────
-  let sceneIndex = 0;        // 0, 1, 2
-  let scenes = [];           // generated scene objects
-  let choices = [];          // player choice texts for each scene
+  // ── STATE ─────────────────────────────────────────────────────────────────
+  let sceneIndex = 0;
+  let premise = null;        // the through-line generated at start
+  let scenes = [];           // [{scene, choiceA, choiceB}]
+  let choices = [];          // player choice text per scene
+  let observations = [];     // Veil one-liners after each choice
   let generating = false;
   let stopped = false;
-  let nextScenePromise = null;
 
-  // ── SYSTEM PROMPT ─────────────────────────────────────────────────────────
-  // This is the creative instruction Claude receives for each scene.
-  // It establishes the tone, the world, and the rules.
-  const SYSTEM_PROMPT = `You write short, atmospheric scenes for a narrative experience called The Crossing inside a realm called Faebound.
+  const TOTAL_SCENES = 5;
+
+  // ── PROMPTS ───────────────────────────────────────────────────────────────
+
+  const PREMISE_SYSTEM = `You are the voice of a liminal realm called Faebound.
+Generate a single sentence — the through-line premise of a Crossing.
+This sentence describes what the player has been carrying, or seeking, or avoiding, without being specific.
+It should feel true for almost anyone, but personal enough to land.
+It is the quiet question underneath the Crossing.
+Examples:
+"You have been carrying something you were not sure you were allowed to put down."
+"There is a version of yourself you have been moving toward for a long time without naming it."
+"Something has been asking for your attention, and you have been deciding whether to answer."
+Respond with only the sentence. No quotation marks. No preamble.`;
+
+  const SCENE_SYSTEM = `You write short atmospheric scenes for a narrative experience called The Crossing inside a realm called Faebound.
 
 RULES:
-- Scenes are exactly 2-3 sentences. No more.
+- Exactly 2-3 sentences. No more.
 - Second person, present tense.
-- Name the strange thing simply. Do not explain it or describe it elaborately. Trust the reader.
+- Name the strange thing simply. Do not explain or describe it elaborately. Trust the reader.
 - The strangeness is matter-of-fact, not dramatic.
-- End with a situation that implies two genuinely different ways to respond.
-- Both choices should feel valid. Neither is correct. They reveal different things about a person.
+- End with a moment that implies two genuinely different ways to respond.
+- Both choices reveal different things. Neither is correct.
+- Each scene should feel like it deepens the journey, not restarts it.
+- The world is liminal: forests that remember, creatures that are more feeling than form, objects with weight, thresholds, voices without bodies, doors in wrong places.
 
-WHAT WORKS: "A door stands where the path ends. It is already open. Beyond it, something is waiting — you can feel it before you can see it."
-WHAT DOESN'T: Long atmospheric descriptions, over-explained magic, purple prose, anything that feels like a fantasy novel.
-
-THE WORLD: Liminal, quiet, strange. Forests that remember. Creatures that are more feeling than form. Objects with weight. Thresholds. The emotional rather than the spectacular.
+WHAT WORKS: Short. Simple. Strange. Emotionally resonant.
+WHAT DOESN'T: Long descriptions, explained magic, purple prose.
 
 FORMAT (exactly this, nothing else):
 SCENE: [2-3 sentences]
-CHOICE_A: [one way to move through it, 1 sentence]
-CHOICE_B: [a different way, 1 sentence]`
+CHOICE_A: [one way through, 1 sentence]
+CHOICE_B: [a different way, 1 sentence]`;
 
-  const REFLECTION_SYSTEM = `You are the voice of a liminal realm called Faebound. You have just witnessed a player move through three scenes of The Crossing — a narrative experience where their choices reveal something about how they move through the world.
+  const OBSERVATION_SYSTEM = `You are the Veil — the witnessing presence of a liminal realm called Faebound.
+The player just made a choice in The Crossing. Write one sentence that names what the choice revealed about how they move.
+Not a judgment. Not advice. An observation — quiet, precise, honest.
+Present tense. Second person.
+Do not repeat the choice back to them. Name what it reveals.
+Examples:
+"You moved toward the thing that asked something of you."
+"You chose the slower road. The one that would cost more to walk."
+"When offered what you wanted, you let it go."
+Respond with only the sentence.`;
 
-Write a single paragraph (4-6 sentences) reflecting on what their choices revealed. You have been given the three scenes and the choice they made in each.
+  const REFLECTION_SYSTEM = `You are the voice of a liminal realm called Faebound. You have just witnessed a player move through five scenes of The Crossing — a narrative experience where their choices reveal how they move through the world.
+
+Write a single paragraph (5-7 sentences) reflecting on what their journey revealed.
+You have been given the through-line premise, all five scenes, their choices, and the observations the Veil made along the way.
 
 TONE:
-- Speak as the realm itself, witnessing the player
-- Present tense, second person ("you")
-- Not analytical — observational, poetic, grounded
-- Do not be prescriptive or tell them what to do
-- Notice patterns without labeling them as good or bad
-- End with something that opens rather than closes
-
-STYLE:
-Something like: "You were given a way out twice. Both times you stayed with the difficulty rather than moving around it. The Crossing notices this — not as a virtue, but as a pattern. You tend to move toward what asks something of you, even when the asking is uncomfortable. The Veil does not know yet what that means for the road ahead, but it is paying attention."
+- Speak as the realm itself, directly to the player
+- Present tense, second person
+- Not analytical — observational, poetic, true
+- Find the pattern in the five choices. Name it.
+- Do not tell them what to do. Do not be prescriptive.
+- End with something that opens rather than closes — a question, or a door left ajar.
 
 Respond with only the paragraph. No headers, no preamble.`;
 
-  // ── SCENE PROMPTS ─────────────────────────────────────────────────────────
-  // Scene 1 prompts — generated fresh, no prior context
-  const SCENE_1_PROMPTS = [
-    `First scene. The player arrives somewhere. Include one strange, simple thing — a creature, an object, a presence. Keep it to 2-3 sentences.`,
-    `First scene. The player finds a door that shouldn't be where it is. 2-3 sentences.`,
-    `First scene. There is a figure waiting. It knows something. 2-3 sentences.`,
-    `First scene. The player finds an object that belongs to them in a place they've never been. 2-3 sentences.`,
-    `First scene. The player is at a threshold — a bridge, an edge, a border between two places. Something on the other side. 2-3 sentences.`,
-    `First scene. A creature approaches. It is not threatening. It is asking something. 2-3 sentences.`,
-    `First scene. The player is in a forest at night. Something has been following them with purpose, not menace. 2-3 sentences.`,
-    `First scene. There is a voice with no body. It says one thing. 2-3 sentences.`,
+  // ── PREMISE OPENERS ───────────────────────────────────────────────────────
+  const PREMISE_PROMPTS = [
+    `Generate the through-line premise for a Crossing. The player has been carrying something.`,
+    `Generate the through-line premise. The player has been moving toward something they haven't named yet.`,
+    `Generate the through-line premise. Something has been asking for the player's attention.`,
+    `Generate the through-line premise. The player has been deciding something without knowing they were deciding it.`,
+    `Generate the through-line premise. There is a version of the player that is closer than they think.`,
   ];
 
-  // ── API CALL ───────────────────────────────────────────────────────────────
-  async function generateScene(userPrompt, systemOverride) {
+  // ── SCENE 1 SETUPS ────────────────────────────────────────────────────────
+  const SCENE_1_SETUPS = [
+    `The player arrives at a threshold. There is one strange, simple thing present. Begin here.`,
+    `The player finds a door in a place there should be no door. It is already slightly open.`,
+    `A figure is waiting. It knows something. It is not threatening.`,
+    `The player finds an object that belongs to them in a place they have never been.`,
+    `A creature approaches. It is asking something without speaking.`,
+    `The player is in a forest at night. Something has been following them with purpose, not menace.`,
+    `There is a voice with no body. It says one thing.`,
+    `The player stands at the edge of something. On the other side, something waits.`,
+  ];
+
+  // ── API CALL ──────────────────────────────────────────────────────────────
+  async function generate(userPrompt, systemPrompt) {
     const response = await fetch('/.netlify/functions/claude', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        system: systemOverride || SYSTEM_PROMPT,
+        system: systemPrompt,
         messages: [{ role: 'user', content: userPrompt }],
         max_tokens: 400,
       }),
     });
     const data = await response.json();
-    return data.response || '';
+    return (data.response || '').trim();
   }
 
-  // ── PARSE SCENE RESPONSE ──────────────────────────────────────────────────
+  // ── PARSE ─────────────────────────────────────────────────────────────────
   function parseScene(raw) {
     const sceneMatch = raw.match(/SCENE:\s*([\s\S]*?)(?=CHOICE_A:|$)/i);
-    const choiceAMatch = raw.match(/CHOICE_A:\s*([\s\S]*?)(?=CHOICE_B:|$)/i);
-    const choiceBMatch = raw.match(/CHOICE_B:\s*([\s\S]*?)$/i);
+    const aMatch = raw.match(/CHOICE_A:\s*([\s\S]*?)(?=CHOICE_B:|$)/i);
+    const bMatch = raw.match(/CHOICE_B:\s*([\s\S]*?)$/i);
     return {
       scene: sceneMatch ? sceneMatch[1].trim() : raw.trim(),
-      choiceA: choiceAMatch ? choiceAMatch[1].trim() : 'Move forward.',
-      choiceB: choiceBMatch ? choiceBMatch[1].trim() : 'Wait and observe.',
+      choiceA: aMatch ? aMatch[1].trim() : 'Move forward.',
+      choiceB: bMatch ? bMatch[1].trim() : 'Wait and observe.',
     };
   }
 
-  // ── RENDER ─────────────────────────────────────────────────────────────────
+  // ── BUILD PROMPTS ─────────────────────────────────────────────────────────
+  function buildScene1Prompt() {
+    const setup = SCENE_1_SETUPS[Math.floor(Math.random() * SCENE_1_SETUPS.length)];
+    return `Through-line for this Crossing: "${premise}"
+
+${setup}
+
+Generate Scene 1 of 5.`;
+  }
+
+  function buildNextScenePrompt(sceneNum) {
+    let history = `Through-line: "${premise}"
+
+`;
+    for (let i = 0; i < sceneNum - 1; i++) {
+      history += `Scene ${i+1}: ${scenes[i].scene}
+`;
+      history += `Choice made: "${choices[i]}"
+`;
+      if (observations[i]) history += `Veil observed: "${observations[i]}"
+`;
+      history += `\n`;
+    }
+    const isLast = sceneNum === TOTAL_SCENES;
+    history += `Generate Scene ${sceneNum} of ${TOTAL_SCENES}. `;
+    history += `The player is deeper in the Crossing now. `;
+    if (isLast) {
+      history += `This is the final scene. Make it feel like an arrival — something is being asked of the player that draws together everything that came before.`;
+    } else {
+      history += `Carry the emotional logic forward. The strangeness should deepen.`;
+    }
+    return history;
+  }
+
+  function buildObservationPrompt(sceneNum) {
+    const s = scenes[sceneNum - 1];
+    const choice = choices[sceneNum - 1];
+    return `Scene: ${s.scene}
+Choice A was: "${s.choiceA}"
+Choice B was: "${s.choiceB}"
+The player chose: "${choice}"
+
+Write one sentence naming what this reveals about how they move.`;
+  }
+
+  function buildReflectionPrompt() {
+    let prompt = `Through-line: "${premise}"
+
+`;
+    scenes.forEach((s, i) => {
+      prompt += `Scene ${i+1}: ${s.scene}
+`;
+      prompt += `Choice: "${choices[i]}"
+`;
+      if (observations[i]) prompt += `Veil observed: "${observations[i]}"
+`;
+      prompt += `\n`;
+    });
+    prompt += `Write the reflection paragraph.`;
+    return prompt;
+  }
+
+  // ── RENDER FUNCTIONS ──────────────────────────────────────────────────────
   function renderIntro() {
     const lastReflection = (() => {
       try { return localStorage.getItem('faeboundLastCrossingReflection') || ''; } catch(e) { return ''; }
     })();
-
     wrap.innerHTML = `
       <div style="text-align:center;animation:rise .6s ease forwards">
-        <div style="font-size:3rem;margin-bottom:18px;animation:breathe 5s ease-in-out infinite;
-             color:var(--accent)">⟡</div>
+        <div style="font-size:3rem;margin-bottom:18px;
+             animation:breathe 5s ease-in-out infinite;color:var(--accent)">⟡</div>
         <p class="crossing-eyebrow">AI Narrative Trial</p>
         <h1 style="font-family:'Cinzel',serif;font-size:clamp(2rem,5vw,3rem);
             font-weight:700;color:var(--accent);margin-bottom:16px;letter-spacing:.04em">
@@ -4994,16 +5085,18 @@ Respond with only the paragraph. No headers, no preamble.`;
         </h1>
         <div style="max-width:520px;margin:0 auto 28px;color:var(--muted);
             font-size:.97rem;line-height:1.82;text-align:center">
-          ${lastReflection
-            ? `<div style="padding:16px;border-radius:14px;border:1px solid rgba(187,168,255,.12);
-                 background:rgba(187,168,255,.04);margin-bottom:20px;font-style:italic;
-                 font-size:.88rem;color:rgba(187,168,255,.6)">
-                 <div style="font-size:.62rem;text-transform:uppercase;letter-spacing:.18em;
-                      color:rgba(187,168,255,.35);margin-bottom:8px">Last crossing</div>
-                 ${lastReflection}
-               </div>` : ''}
-          <p style="margin:0 0 12px">Three scenes. Each one generated fresh — yours alone.</p>
-          <p style="margin:0">The Veil watches how you move through what it shows you, and tells you what it saw.</p>
+          ${lastReflection ? `
+            <div style="padding:16px;border-radius:14px;
+                 border:1px solid rgba(187,168,255,.12);
+                 background:rgba(187,168,255,.04);margin-bottom:20px">
+              <div style="font-size:.62rem;text-transform:uppercase;letter-spacing:.18em;
+                   color:rgba(187,168,255,.35);margin-bottom:8px">Last crossing</div>
+              <div style="font-style:italic;font-size:.88rem;
+                   color:rgba(187,168,255,.6)">${lastReflection}</div>
+            </div>` : ''}
+          <p style="margin:0 0 12px">Five scenes. Each one generated fresh — yours alone, each time.</p>
+          <p style="margin:0 0 12px">The Crossing begins with a through-line — something you have been carrying. The scenes unfold from there. The Veil watches how you move through each one.</p>
+          <p style="margin:0">At the end, it tells you what it saw.</p>
         </div>
         <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
           <button class="btn" id="crossingBeginBtn"
@@ -5014,221 +5107,185 @@ Respond with only the paragraph. No headers, no preamble.`;
           <button class="btn btn-ghost" id="crossingBackIntroBtn">Return to Realm</button>
         </div>
         <p style="font-size:.7rem;color:rgba(187,168,255,.3);margin-top:20px;font-style:italic">
-          Each crossing takes 2-4 minutes. The scenes are generated by AI and will never repeat.
+          Takes 5-8 minutes. Scenes are generated by AI and never repeat.
         </p>
       </div>`;
-
     document.getElementById('crossingBeginBtn')?.addEventListener('click', startCrossing);
     document.getElementById('crossingBackIntroBtn')?.addEventListener('click', () => {
       if (typeof backToHub === 'function') backToHub(()=>{});
     });
   }
 
-  function renderVeil(message) {
+  function renderVeil(msg) {
     wrap.innerHTML = `
       <div class="crossing-veil">
-        <div style="font-size:2rem;color:rgba(187,168,255,.3);margin-bottom:20px;
+        <div style="font-size:2rem;color:rgba(187,168,255,.25);margin-bottom:20px;
              animation:breathe 4s ease-in-out infinite">⟡</div>
-        <p class="crossing-veil-text">${message}</p>
+        <p class="crossing-veil-text">${msg}</p>
       </div>`;
+  }
+
+  function renderPremise(text) {
+    if (stopped) return;
+    wrap.innerHTML = `
+      <div style="text-align:center;animation:rise .8s ease forwards;padding:20px 0">
+        <p style="font-size:.62rem;text-transform:uppercase;letter-spacing:.26em;
+           color:rgba(187,168,255,.35);margin-bottom:24px">This crossing begins with</p>
+        <div style="max-width:480px;margin:0 auto 32px;padding:24px;
+             border-radius:18px;border:1px solid rgba(187,168,255,.16);
+             background:rgba(187,168,255,.05)">
+          <p style="font-size:1.08rem;color:var(--text);line-height:1.82;
+             font-style:italic;margin:0" id="premiseText"></p>
+        </div>
+        <button class="btn" id="crossingEnterBtn"
+          style="background:rgba(187,168,255,.12);border-color:rgba(187,168,255,.4);
+          color:var(--accent);padding:14px 36px">
+          Enter the first scene →
+        </button>
+      </div>`;
+    // Typewriter for premise
+    const el = document.getElementById('premiseText');
+    let i = 0;
+    const iv = setInterval(() => {
+      if (stopped) { clearInterval(iv); return; }
+      if (i < text.length) { el.textContent += text[i]; i++; }
+      else {
+        clearInterval(iv);
+        const btn = document.getElementById('crossingEnterBtn');
+        if (btn) {
+          btn.style.opacity = '0';
+          btn.style.transition = 'opacity .5s ease';
+          setTimeout(() => { btn.style.opacity = '1'; }, 100);
+          btn.addEventListener('click', () => {
+            renderVeil('The first scene unfolds...');
+            generateAndShowScene(1);
+          });
+        }
+      }
+    }, 22);
+  }
+
+  function renderObservation(text, sceneNum) {
+    if (stopped) return;
+    // Brief interstitial — observation then auto-advance to next scene
+    wrap.innerHTML = `
+      <div style="text-align:center;animation:rise .6s ease forwards;padding:40px 0">
+        <div style="font-size:1.4rem;color:rgba(187,168,255,.3);margin-bottom:20px">⟡</div>
+        <div style="max-width:440px;margin:0 auto;padding:20px 24px;
+             border-radius:14px;border:1px solid rgba(187,168,255,.1);
+             background:rgba(187,168,255,.03)">
+          <p style="font-size:.96rem;color:rgba(187,168,255,.75);
+             line-height:1.72;font-style:italic;margin:0" id="obsText"></p>
+        </div>
+        <p style="font-size:.7rem;color:rgba(187,168,255,.2);
+           margin-top:20px;font-style:italic">The path continues...</p>
+      </div>`;
+    const el = document.getElementById('obsText');
+    let i = 0;
+    const iv = setInterval(() => {
+      if (stopped) { clearInterval(iv); return; }
+      if (i < text.length) { el.textContent += text[i]; i++; }
+      else {
+        clearInterval(iv);
+        // Auto-advance after reading time
+        setTimeout(() => {
+          if (stopped) return;
+          if (sceneNum < TOTAL_SCENES) {
+            renderVeil(sceneNum < 3 ? 'The path deepens...' : sceneNum < 5 ? 'You are almost through...' : 'The Veil gathers what it has seen...');
+            generateAndShowScene(sceneNum + 1);
+          } else {
+            renderVeil('The Veil is gathering what it witnessed...');
+            generateReflection();
+          }
+        }, 2400);
+      }
+    }, 28);
   }
 
   function renderScene(sceneData, sceneNum) {
     if (stopped) return;
-    const pip = (n) => `<div class="crossing-pip ${n < sceneNum ? 'done' : n === sceneNum ? 'active' : ''}"></div>`;
-
+    const pips = Array.from({length: TOTAL_SCENES}, (_, i) =>
+      `<div class="crossing-pip ${i < sceneNum-1 ? 'done' : i === sceneNum-1 ? 'active' : ''}"></div>`
+    ).join('');
     wrap.innerHTML = `
       <div style="animation:rise .7s ease forwards">
-        <div class="crossing-pips">
-          ${pip(1)}${pip(2)}${pip(3)}
-        </div>
-        <p class="crossing-eyebrow">Scene ${sceneNum} of 3</p>
+        <div class="crossing-pips">${pips}</div>
+        <p class="crossing-eyebrow">Scene ${sceneNum} of ${TOTAL_SCENES}</p>
         <div class="crossing-scene" id="crossingSceneText"></div>
-        <div class="crossing-choices" id="crossingChoices" style="opacity:0;transition:opacity .4s ease">
-          <button class="crossing-choice" id="crossingChoiceA" data-choice="a">
+        <div class="crossing-choices" id="crossingChoices"
+             style="opacity:0;transition:opacity .5s ease">
+          <button class="crossing-choice" id="crossingChoiceA">
             ${sceneData.choiceA}
           </button>
-          <button class="crossing-choice" id="crossingChoiceB" data-choice="b">
+          <button class="crossing-choice" id="crossingChoiceB">
             ${sceneData.choiceB}
           </button>
         </div>
       </div>`;
-
-    // Typewriter effect for scene text
+    // Typewriter for scene
     const sceneEl = document.getElementById('crossingSceneText');
-    const text = sceneData.scene;
     let i = 0;
-    const typeInterval = setInterval(() => {
-      if (stopped) { clearInterval(typeInterval); return; }
-      if (i < text.length) {
-        sceneEl.textContent += text[i];
-        i++;
+    const iv = setInterval(() => {
+      if (stopped) { clearInterval(iv); return; }
+      if (i < sceneData.scene.length) {
+        sceneEl.textContent += sceneData.scene[i]; i++;
       } else {
-        clearInterval(typeInterval);
-        // Fade in choices
+        clearInterval(iv);
         const choicesEl = document.getElementById('crossingChoices');
-        if (choicesEl) {
-          setTimeout(() => { choicesEl.style.opacity = '1'; }, 200);
-        }
-        // Wire choice buttons
+        if (choicesEl) setTimeout(() => { choicesEl.style.opacity = '1'; }, 250);
+        try { window.audio?.tone(440, .1, 'sine', .016, 520); } catch(e) {}
         document.getElementById('crossingChoiceA')?.addEventListener('click', () =>
           handleChoice(sceneData.choiceA, sceneNum));
         document.getElementById('crossingChoiceB')?.addEventListener('click', () =>
           handleChoice(sceneData.choiceB, sceneNum));
-        try { window.audio?.tone(440, .1, 'sine', .018, 520); } catch(e) {}
       }
     }, 18);
   }
 
   function renderReflection(text) {
     if (stopped) return;
-
-    // Save reflection
     try { localStorage.setItem('faeboundLastCrossingReflection', text); } catch(e) {}
-
     wrap.innerHTML = `
       <div style="animation:rise .7s ease forwards">
         <div style="font-size:2.2rem;text-align:center;margin-bottom:20px;
              animation:breathe 5s ease-in-out infinite;color:var(--accent)">⟡</div>
         <p class="crossing-eyebrow" style="text-align:center">The Veil reflects</p>
-        <div class="crossing-reflection" id="crossingReflectionText"></div>
+        <div class="crossing-reflection" id="crossingReflText"></div>
         <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px">
           <button class="btn" id="crossingAgainBtn"
-            style="background:rgba(187,168,255,.1);border-color:rgba(187,168,255,.35);color:var(--accent)">
-            Cross Again
-          </button>
+            style="background:rgba(187,168,255,.1);border-color:rgba(187,168,255,.35);
+            color:var(--accent)">Cross Again</button>
           <button class="btn btn-ghost" id="crossingHubBtn">Return to Realm</button>
         </div>
       </div>`;
-
-    // Typewriter for reflection
-    const reflEl = document.getElementById('crossingReflectionText');
+    const el = document.getElementById('crossingReflText');
     const words = text.split(' ');
     let i = 0;
-    const wordInterval = setInterval(() => {
-      if (stopped) { clearInterval(wordInterval); return; }
-      if (i < words.length) {
-        reflEl.textContent += (i > 0 ? ' ' : '') + words[i];
-        i++;
-      } else {
-        clearInterval(wordInterval);
+    const iv = setInterval(() => {
+      if (stopped) { clearInterval(iv); return; }
+      if (i < words.length) { el.textContent += (i > 0 ? ' ' : '') + words[i]; i++; }
+      else {
+        clearInterval(iv);
         try {
           window.audio?.tone(380, .14, 'sine', .022, 480);
-          setTimeout(() => window.audio?.tone(480, .12, 'sine', .018, 580), 200);
-          setTimeout(() => window.audio?.tone(580, .16, 'sine', .014, 680), 420);
+          setTimeout(() => window.audio?.tone(480, .12, 'sine', .016, 580), 220);
+          setTimeout(() => window.audio?.tone(580, .14, 'sine', .012, 680), 460);
         } catch(e) {}
       }
-    }, 60);
-
+    }, 55);
     // Track completion
     try {
       window.archive?.inc?.('trialsCompleted');
       window.progression?.increment?.();
       trackCompletion('the-crossing');
     } catch(e) {}
-
     document.getElementById('crossingAgainBtn')?.addEventListener('click', () => {
-      sceneIndex = 0; scenes = []; choices = [];
+      premise = null; scenes = []; choices = []; observations = []; sceneIndex = 0;
       startCrossing();
     });
     document.getElementById('crossingHubBtn')?.addEventListener('click', () => {
       if (typeof backToHub === 'function') backToHub(()=>{});
     });
-  }
-
-  // ── GAME FLOW ──────────────────────────────────────────────────────────────
-  async function startCrossing() {
-    if (generating) return;
-    sceneIndex = 0; scenes = []; choices = [];
-    stopped = false;
-
-    // Show loading veil while generating scene 1
-    renderVeil('The Veil is opening a path...');
-    if (window.ambient?.swell) window.ambient.swell(0.006);
-
-    try {
-      generating = true;
-      const prompt1 = SCENE_1_PROMPTS[Math.floor(Math.random() * SCENE_1_PROMPTS.length)];
-      const raw1 = await generateScene(prompt1);
-      generating = false;
-      if (stopped) return;
-
-      const scene1 = parseScene(raw1);
-      scenes.push(scene1);
-
-      // Start pre-generating scene 2 in background (no choice context yet — will regenerate after choice)
-      sceneIndex = 1;
-      renderScene(scene1, 1);
-    } catch(e) {
-      generating = false;
-      if (!stopped) renderError();
-    }
-  }
-
-  async function handleChoice(choiceText, sceneNum) {
-    if (stopped) return;
-    choices.push(choiceText);
-
-    if (sceneNum < 3) {
-      // Generate next scene using the choice as context
-      renderVeil(sceneNum === 1
-        ? 'The path shifts...'
-        : 'The Veil watches where you go...');
-
-      try {
-        generating = true;
-        const context = buildSceneContext(sceneNum);
-        const raw = await generateScene(context);
-        generating = false;
-        if (stopped) return;
-
-        const nextScene = parseScene(raw);
-        scenes.push(nextScene);
-        sceneIndex = sceneNum + 1;
-        renderScene(nextScene, sceneNum + 1);
-      } catch(e) {
-        generating = false;
-        if (!stopped) renderError();
-      }
-    } else {
-      // All three scenes done — generate reflection
-      renderVeil('The Veil is gathering what it witnessed...');
-      try {
-        generating = true;
-        const reflPrompt = buildReflectionPrompt();
-        const reflection = await generateScene(reflPrompt, REFLECTION_SYSTEM);
-        generating = false;
-        if (stopped) return;
-        renderReflection(reflection || 'The Veil was silent this crossing. Return when you are ready.');
-      } catch(e) {
-        generating = false;
-        if (!stopped) renderReflection('The Veil witnessed this crossing in silence. Something was seen.');
-      }
-    }
-  }
-
-  function buildSceneContext(completedSceneNum) {
-    const s = scenes[completedSceneNum - 1];
-    const choice = choices[completedSceneNum - 1];
-    return `Continue The Crossing. The player just completed scene ${completedSceneNum} of 3 and made a choice.
-
-Previous scene: ${s.scene}
-Their choice: "${choice}"
-
-Generate scene ${completedSceneNum + 1} of 3. It should feel connected to the previous scene and the choice made — not literally continuing the same plot, but carrying the emotional logic forward. The player is moving deeper into the Crossing. ${completedSceneNum === 2 ? 'This is the final scene before the Veil reflects — make it count.' : ''}`;
-  }
-
-  function buildReflectionPrompt() {
-    let prompt = `The player has completed The Crossing. Here are their three scenes and choices:\n\n`;
-    scenes.forEach((s, i) => {
-      prompt += `Scene ${i+1}: ${s.scene}
-`;
-      if (choices[i]) prompt += `Their choice: "${choices[i]}"
-
-`;
-    });
-    prompt += 'Write the reflection paragraph as instructed.';
-    return prompt;
   }
 
   function renderError() {
@@ -5239,9 +5296,8 @@ Generate scene ${completedSceneNum + 1} of 3. It should feel connected to the pr
         </p>
         <div style="display:flex;gap:10px;justify-content:center">
           <button class="btn" id="crossingRetryBtn"
-            style="background:rgba(187,168,255,.1);border-color:rgba(187,168,255,.3);color:var(--accent)">
-            Try Again
-          </button>
+            style="background:rgba(187,168,255,.1);border-color:rgba(187,168,255,.3);
+            color:var(--accent)">Try Again</button>
           <button class="btn btn-ghost" id="crossingErrHubBtn">Return to Realm</button>
         </div>
       </div>`;
@@ -5251,10 +5307,109 @@ Generate scene ${completedSceneNum + 1} of 3. It should feel connected to the pr
     });
   }
 
+  // ── GAME FLOW ──────────────────────────────────────────────────────────────
+  async function startCrossing() {
+    if (generating) return;
+    premise = null; scenes = []; choices = []; observations = [];
+    sceneIndex = 0; stopped = false;
+
+    renderVeil('The Veil is finding the thread...');
+    if (window.ambient?.swell) window.ambient.swell(0.006);
+
+    try {
+      generating = true;
+      const premisePrompt = PREMISE_PROMPTS[Math.floor(Math.random() * PREMISE_PROMPTS.length)];
+      premise = await generate(premisePrompt, PREMISE_SYSTEM);
+      generating = false;
+      if (stopped) return;
+      renderPremise(premise);
+    } catch(e) {
+      generating = false;
+      premise = 'You have been carrying something you were not sure you were allowed to put down.';
+      if (!stopped) renderPremise(premise);
+    }
+  }
+
+  async function generateAndShowScene(sceneNum) {
+    if (stopped) return;
+    try {
+      generating = true;
+      const prompt = sceneNum === 1 ? buildScene1Prompt() : buildNextScenePrompt(sceneNum);
+      const raw = await generate(prompt, SCENE_SYSTEM);
+      generating = false;
+      if (stopped) return;
+      const sceneData = parseScene(raw);
+      scenes.push(sceneData);
+      sceneIndex = sceneNum;
+      renderScene(sceneData, sceneNum);
+    } catch(e) {
+      generating = false;
+      if (!stopped) renderError();
+    }
+  }
+
+  async function handleChoice(choiceText, sceneNum) {
+    if (stopped) return;
+    choices.push(choiceText);
+
+    // Disable choice buttons immediately
+    document.querySelectorAll('.crossing-choice').forEach(b => {
+      b.disabled = true;
+      b.style.opacity = '0.5';
+      b.style.cursor = 'default';
+    });
+
+    // Highlight chosen
+    document.querySelectorAll('.crossing-choice').forEach(b => {
+      if (b.textContent.trim() === choiceText.trim()) {
+        b.classList.add('selected');
+      }
+    });
+
+    renderVeil('The Veil notices...');
+
+    try {
+      generating = true;
+      const obsPrompt = buildObservationPrompt(sceneNum);
+      const obs = await generate(obsPrompt, OBSERVATION_SYSTEM);
+      generating = false;
+      if (stopped) return;
+      observations.push(obs);
+      renderObservation(obs, sceneNum);
+    } catch(e) {
+      generating = false;
+      observations.push('');
+      if (stopped) return;
+      // Skip observation, go straight to next
+      if (sceneNum < TOTAL_SCENES) {
+        renderVeil('The path continues...');
+        generateAndShowScene(sceneNum + 1);
+      } else {
+        renderVeil('The Veil is gathering what it witnessed...');
+        generateReflection();
+      }
+    }
+  }
+
+  async function generateReflection() {
+    if (stopped) return;
+    try {
+      generating = true;
+      const reflPrompt = buildReflectionPrompt();
+      const reflection = await generate(reflPrompt, REFLECTION_SYSTEM);
+      generating = false;
+      if (stopped) return;
+      renderReflection(reflection || 'The Veil was silent this crossing. Something was seen that cannot be named.');
+    } catch(e) {
+      generating = false;
+      if (!stopped) renderReflection('The Veil witnessed this crossing in silence. It will carry what it saw.');
+    }
+  }
+
   // ── PUBLIC ─────────────────────────────────────────────────────────────────
   function enter() {
     stopped = false; generating = false;
-    sceneIndex = 0; scenes = []; choices = [];
+    premise = null; scenes = []; choices = []; observations = []; sceneIndex = 0;
     renderIntro();
   }
 
@@ -5263,9 +5418,7 @@ Generate scene ${completedSceneNum + 1} of 3. It should feel connected to the pr
   }
 
   return { enter, stop };
-})();
-
-</script>
+})();</script>
 
 <!-- ═══ THE SHAPE OF YOUR DOUBT ═══ -->
 <script>
