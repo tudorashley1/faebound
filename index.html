@@ -5087,6 +5087,7 @@ window.crossing = (() => {
   // and the Socratic questioning tradition — asking rather than telling.
 
   const TOTAL_EXCHANGES = 5;
+  const ROUND2_EXCHANGES = 3;
 
   // ── STATE ─────────────────────────────────────────────────────────────
   let stopped = false;
@@ -5095,6 +5096,9 @@ window.crossing = (() => {
   let history = [];          // [{role:'user'|'assistant', content}]
   let exchangeCount = 0;
   let playerProfile = [];
+  let round = 1;             // 1 or 2
+  let round2History = [];    // separate history for round 2
+  let closingQuestion = '';  // the question from round 1 reflection
 
   // ── EMOTIONAL TERRITORIES ─────────────────────────────────────────────
   const TERRITORIES = [
@@ -5224,6 +5228,38 @@ window.crossing = (() => {
     return s;
   }
 
+  function buildRound2System() {
+    const lines = [
+      'You are the voice of a liminal realm called Faebound, continuing a guided emotional reflection called The Crossing.',
+      'The player has completed one round of five exchanges. You have witnessed their first round.',
+      'They chose to continue.',
+      '',
+      'YOUR ROLE: Same as before — ask one thoughtful question at a time.',
+      'The player is warmed up. Go deeper. Ask about what is underneath what they said in round one.',
+      'You may gently reference themes from the first round, but do not repeat questions.',
+      '',
+      'QUESTION STYLE: One question. Open-ended. Follows from what they just said. Short. No preamble.',
+      '',
+      'FORMAT: Respond with only the question.',
+    ];
+    let s = lines.join('\n');
+    if (playerProfile.length > 0) {
+      s += '\n\nWhat the realm knows about this player:\n'
+        + playerProfile.map(function(p) { return '- ' + p; }).join('\n');
+    }
+    return s;
+  }
+
+  function buildClosingThoughtSystem() {
+    return [
+      'You are the voice of a liminal realm called Faebound.',
+      'A player has completed a second round of The Crossing.',
+      'Write 2-3 sentences only — a closing thought, not a full paragraph.',
+      'Something quiet and true that acknowledges what moved through the full conversation.',
+      'Present tense. Second person. End with something settled, not a question.',
+      'Respond with only the closing thought.',
+    ].join('\n');
+  }
   // ── OPENING QUESTION ──────────────────────────────────────────────────
   const OPENING_QUESTIONS = {
     grief:       'What are you missing most right now?',
@@ -5423,8 +5459,9 @@ window.crossing = (() => {
       + '<div style="font-size:2rem;text-align:center;margin-bottom:18px;animation:breathe 5s ease-in-out infinite;color:var(--accent)">⟡</div>'
       + '<p class="crossing-eyebrow" style="text-align:center">The Veil reflects</p>'
       + '<div class="crossing-reflection" id="crossingReflText"></div>'
-      + '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px">'
-      + '<button class="btn" id="crossingAgainBtn" style="background:rgba(187,168,255,.1);border-color:rgba(187,168,255,.35);color:var(--accent)">Cross Again</button>'
+      + '<div style="display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:16px">'
+      + '<button class="btn" id="crossingContinueBtn" style="background:rgba(187,168,255,.14);border-color:rgba(187,168,255,.45);color:var(--accent)">Continue the Crossing →</button>'
+      + '<button class="btn btn-ghost" id="crossingAgainBtn">Cross Again</button>'
       + '<button class="btn btn-ghost" id="crossingHubBtn">Return to Realm</button>'
       + '</div>'
       + '</div>';
@@ -5441,6 +5478,10 @@ window.crossing = (() => {
           chime(380, .02);
           setTimeout(function() { chime(480, .016); }, 200);
           setTimeout(function() { chime(580, .012); }, 420);
+          // Extract closing question for round 2 seed
+          const sentences = text.split(/(?<=[.!?])\s+/);
+          const lastQ = sentences.filter(function(s) { return s.trim().endsWith('?'); }).pop();
+          closingQuestion = lastQ || sentences[sentences.length - 1] || text;
         }
       }, 55);
     }
@@ -5456,6 +5497,104 @@ window.crossing = (() => {
       renderIntro();
     });
     document.getElementById('crossingHubBtn')?.addEventListener('click', function() {
+      if (typeof backToHub === 'function') backToHub(function(){});
+    });
+    document.getElementById('crossingContinueBtn')?.addEventListener('click', function() {
+      beginRound2();
+    });
+  }
+
+  // ── ROUND 2 RENDER ────────────────────────────────────────────────────
+  function renderRound2Question(question) {
+    if (stopped) return;
+    const r2count = round2History.filter(function(m) { return m.role === 'user'; }).length;
+    const pips = Array.from({length: ROUND2_EXCHANGES}, function(_, i) {
+      return '<div class="crossing-pip ' + (i < r2count ? 'done' : i === r2count ? 'active' : '') + '"></div>';
+    }).join('');
+
+    wrap.innerHTML = '<div style="animation:rise .6s ease forwards">'
+      + '<div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:6px">'
+      + '<div class="crossing-pips" style="margin-bottom:0">' + pips + '</div>'
+      + '</div>'
+      + '<p class="crossing-eyebrow" style="text-align:center;margin-bottom:20px">Continuing · Exchange ' + (r2count + 1) + ' of ' + ROUND2_EXCHANGES + '</p>'
+      + '<div style="margin-bottom:28px">'
+      + '<p id="crossingQuestion" style="font-size:1.08rem;color:var(--accent);line-height:1.72;font-style:italic;min-height:3em"></p>'
+      + '</div>'
+      + '<textarea id="crossingAnswer" placeholder="Write what is true for you..." rows="4"'
+      + ' style="width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(187,168,255,.18);'
+      + 'border-radius:14px;padding:16px;color:var(--text);font-size:.95rem;resize:none;'
+      + 'font-family:inherit;line-height:1.6;margin-bottom:12px"></textarea>'
+      + '<div style="display:flex;gap:9px;flex-wrap:wrap">'
+      + '<button class="btn" id="crossingSubmitBtn" disabled'
+      + ' style="background:rgba(187,168,255,.08);border-color:rgba(187,168,255,.2);color:rgba(187,168,255,.35)">'
+      + (r2count < ROUND2_EXCHANGES - 1 ? 'Continue →' : 'Complete →')
+      + '</button>'
+      + '<button class="btn btn-ghost" id="crossingLeaveBtn">Return to Realm</button>'
+      + '</div></div>';
+
+    const qEl = document.getElementById('crossingQuestion');
+    if (qEl) typewrite(qEl, question, 22, function() { chime(420, .014); });
+
+    const textarea = document.getElementById('crossingAnswer');
+    const submitBtn = document.getElementById('crossingSubmitBtn');
+    if (textarea && submitBtn) {
+      textarea.addEventListener('input', function() {
+        const hasText = textarea.value.trim().length > 3;
+        submitBtn.disabled = !hasText;
+        submitBtn.style.background = hasText ? 'rgba(187,168,255,.12)' : 'rgba(187,168,255,.08)';
+        submitBtn.style.borderColor = hasText ? 'rgba(187,168,255,.4)' : 'rgba(187,168,255,.2)';
+        submitBtn.style.color = hasText ? 'var(--accent)' : 'rgba(187,168,255,.35)';
+        if (detectDistress(textarea.value)) {
+          if (!wrap.querySelector('[data-crisis]')) {
+            const div = document.createElement('div');
+            div.setAttribute('data-crisis', '1');
+            div.innerHTML = crisisResourcesHTML();
+            wrap.appendChild(div);
+          }
+        }
+      });
+    }
+    document.getElementById('crossingSubmitBtn')?.addEventListener('click', function() {
+      const answer = (document.getElementById('crossingAnswer')?.value || '').trim();
+      if (answer) submitRound2Answer(answer);
+    });
+    document.getElementById('crossingLeaveBtn')?.addEventListener('click', function() {
+      if (typeof backToHub === 'function') { stop(); backToHub(function(){}); }
+    });
+  }
+
+  function renderClosingThought(text) {
+    if (stopped) return;
+    wrap.innerHTML = '<div style="animation:rise .7s ease forwards">'
+      + '<div style="font-size:1.8rem;text-align:center;margin-bottom:16px;animation:breathe 5s ease-in-out infinite;color:rgba(187,168,255,.6)">⟡</div>'
+      + '<p class="crossing-eyebrow" style="text-align:center">The Veil closes</p>'
+      + '<div class="crossing-reflection" id="crossingClosingText" style="border-color:rgba(187,168,255,.1);background:rgba(187,168,255,.03)"></div>'
+      + '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px">'
+      + '<button class="btn" id="crossingAgainFinalBtn" style="background:rgba(187,168,255,.1);border-color:rgba(187,168,255,.35);color:var(--accent)">Cross Again</button>'
+      + '<button class="btn btn-ghost" id="crossingHubFinalBtn">Return to Realm</button>'
+      + '</div></div>';
+
+    const el = document.getElementById('crossingClosingText');
+    if (el) {
+      const words = text.split(' ');
+      let i = 0;
+      const iv = setInterval(function() {
+        if (stopped) { clearInterval(iv); return; }
+        if (i < words.length) { el.textContent += (i > 0 ? ' ' : '') + words[i]; i++; }
+        else {
+          clearInterval(iv);
+          chime(360, .018);
+          setTimeout(function() { chime(440, .012); }, 250);
+        }
+      }, 60);
+    }
+
+    document.getElementById('crossingAgainFinalBtn')?.addEventListener('click', function() {
+      territory = ''; history = []; exchangeCount = 0; round = 1;
+      round2History = []; closingQuestion = '';
+      renderIntro();
+    });
+    document.getElementById('crossingHubFinalBtn')?.addEventListener('click', function() {
       if (typeof backToHub === 'function') backToHub(function(){});
     });
   }
@@ -5547,11 +5686,94 @@ window.crossing = (() => {
     }
   }
 
+  // ── ROUND 2 FLOW ─────────────────────────────────────────────────────
+  async function beginRound2() {
+    if (stopped || generating) return;
+    round = 2;
+    round2History = [];
+    generating = true;
+    renderVeil('The Veil reopens...');
+
+    const r1summary = history.map(function(m) {
+      return (m.role === 'assistant' ? 'Veil asked: ' : 'Player said: ') + m.content;
+    }).join(' | ');
+
+    const seedPrompt = 'The player continues The Crossing. They carried: ' + territory + '.'
+      + ' Round one: ' + r1summary
+      + ' The reflection closed with: "' + closingQuestion + '"'
+      + ' Begin round two with one opening question — deeper, following from that closing question.';
+
+    try {
+      const q = await callClaude(
+        [{ role: 'user', content: seedPrompt }],
+        buildRound2System()
+      );
+      generating = false;
+      if (stopped) return;
+      round2History.push({ role: 'assistant', content: q });
+      renderRound2Question(q);
+    } catch(e) {
+      generating = false;
+      if (!stopped) renderError();
+    }
+  }
+  async function submitRound2Answer(answer) {
+    if (stopped || generating) return;
+    generating = true;
+    round2History.push({ role: 'user', content: answer });
+
+    if (detectDistress(answer)) {
+      if (!wrap.querySelector('[data-crisis]')) {
+        const div = document.createElement('div');
+        div.setAttribute('data-crisis', '1');
+        div.innerHTML = crisisResourcesHTML();
+        wrap.appendChild(div);
+      }
+    }
+
+    const r2answered = round2History.filter(function(m) { return m.role === 'user'; }).length;
+
+    if (r2answered >= ROUND2_EXCHANGES) {
+      renderVeil('The Veil settles...');
+      try {
+        const r1 = history.map(function(m) {
+          return (m.role === 'assistant' ? 'Veil: ' : 'Player: ') + m.content;
+        }).join(' | ');
+        const r2 = round2History.map(function(m) {
+          return (m.role === 'assistant' ? 'Veil: ' : 'Player: ') + m.content;
+        }).join(' | ');
+        const ctPrompt = 'Player carried: ' + territory + '. Round 1: ' + r1 + ' Round 2: ' + r2
+          + ' Write the closing thought — 2-3 sentences only.';
+        const closing = await callClaude(
+          [{ role: 'user', content: ctPrompt }],
+          buildClosingThoughtSystem()
+        );
+        generating = false;
+        if (!stopped) renderClosingThought(closing || 'The Veil has heard everything you brought here.');
+      } catch(e) {
+        generating = false;
+        if (!stopped) renderClosingThought('The Veil has held this carefully. You can set it down now.');
+      }
+    } else {
+      renderVeil('The Veil listens...');
+      try {
+        const nextQ = await callClaude(round2History, buildRound2System());
+        generating = false;
+        if (stopped) return;
+        round2History.push({ role: 'assistant', content: nextQ });
+        renderRound2Question(nextQ);
+      } catch(e) {
+        generating = false;
+        if (!stopped) renderError();
+      }
+    }
+  }
   // ── PUBLIC ────────────────────────────────────────────────────────────
   function enter() {
     stopped = false; generating = false;
     territory = ''; history = []; exchangeCount = 0;
-    playerProfile = [];
+    playerProfile = []; round = 1;
+    round2History = []; closingQuestion = '';
     renderIntro();
   }
 
