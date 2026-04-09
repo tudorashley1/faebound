@@ -422,6 +422,42 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
 .vw-disclaimer a{color:rgba(154,164,204,.45);text-decoration:underline}
 
 
+/* ── SIGIL TRACE ──────────────────────────────────────────────── */
+#sigilScreen{padding:0;align-items:stretch;position:relative;
+  background:linear-gradient(180deg,#04030e,#080616)}
+.sigil-wrap{width:100%;max-width:600px;margin:0 auto;
+  padding:20px 16px 32px;min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:16px}
+.sigil-header{text-align:center;width:100%}
+.sigil-eyebrow{font-size:.62rem;text-transform:uppercase;letter-spacing:.24em;
+  color:rgba(187,168,255,.5);margin-bottom:6px}
+.sigil-title{font-size:1.4rem;font-weight:900;color:var(--accent);margin-bottom:4px}
+.sigil-status{font-size:.82rem;color:var(--muted);line-height:1.5;
+  min-height:2.4em;transition:opacity .3s ease;text-align:center}
+.sigil-canvas-wrap{position:relative;width:100%;max-width:480px;aspect-ratio:1;
+  border-radius:20px;overflow:hidden;
+  border:1px solid rgba(187,168,255,.12);
+  background:radial-gradient(circle at 50% 50%,rgba(187,168,255,.05),transparent 70%),
+  rgba(4,3,14,.9)}
+#sigilCanvas{width:100%;height:100%;display:block;cursor:crosshair;
+  touch-action:none}
+.sigil-footer{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%}
+.sigil-diff-row{display:flex;gap:8px;justify-content:center}
+.sigil-diff-btn{padding:6px 14px;border-radius:999px;font-size:.72rem;
+  text-transform:uppercase;letter-spacing:.14em;cursor:pointer;
+  border:1px solid rgba(187,168,255,.2);background:transparent;
+  color:rgba(187,168,255,.5);transition:all .18s ease}
+.sigil-diff-btn.active{border-color:rgba(187,168,255,.5);
+  background:rgba(187,168,255,.1);color:var(--accent)}
+.sigil-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.sigil-streak-row{display:flex;gap:20px;font-size:.75rem;
+  color:rgba(187,168,255,.45);text-align:center}
+.sigil-streak-row strong{display:block;font-size:1.1rem;
+  color:var(--accent);font-weight:700}
+.portal-sigil:hover{border-color:rgba(187,168,255,.28);
+  box-shadow:0 22px 52px rgba(0,0,0,.4),0 0 44px rgba(187,168,255,.1)}
+
 /* THRESHOLD BETWEEN */
 #thresholdScreen{padding:0;align-items:stretch;position:relative;
   background:radial-gradient(circle at 50% 30%,rgba(255,170,51,.07),transparent 54%),
@@ -472,6 +508,166 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
 .portal-threshold .portal-glow{background:var(--ember)}
 .portal-threshold:hover{border-color:rgba(255,170,51,.28);
   box-shadow:0 22px 52px rgba(0,0,0,.4),0 0 44px rgba(255,170,51,.1)}
+
+/* ── THE SHAPE OF YOUR DOUBT ──────────────────────────────────── */
+#soydScreen{padding:0;align-items:stretch;position:relative;
+  background:radial-gradient(circle at 50% 30%,rgba(255,85,119,.06),transparent 54%),
+  linear-gradient(180deg,#080408,#120610)}
+.soyd-back{position:fixed;top:14px;right:14px;z-index:40;
+  opacity:.55;transition:opacity .2s}
+.soyd-back:hover{opacity:1}
+.soyd-wrap{width:min(720px,100%);margin:0 auto;padding:36px 22px 72px;
+  min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+.soyd-pips{display:flex;gap:9px;justify-content:center;margin-bottom:28px}
+.soyd-pip{width:8px;height:8px;border-radius:50%;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.08);transition:all .38s ease}
+.soyd-pip.active{background:var(--ruby);border-color:rgba(255,85,119,.5);
+  box-shadow:0 0 9px rgba(255,85,119,.4)}
+.soyd-pip.done{background:rgba(255,85,119,.26);border-color:rgba(255,85,119,.18)}
+.soyd-eyebrow{font-size:.65rem;text-transform:uppercase;letter-spacing:.24em;
+  color:rgba(255,85,119,.55);margin-bottom:12px}
+.soyd-title{font-size:clamp(1.65rem,4.5vw,2.5rem);font-weight:900;margin:0 0 9px;line-height:1.04}
+.soyd-prose{color:var(--muted);line-height:1.88;font-size:.97rem;margin:0 0 24px}
+.soyd-prose em{color:rgba(255,85,119,.72);font-style:normal}
+.soyd-question{font-size:1.03rem;color:var(--text);line-height:1.65;
+  margin:0 0 22px;font-weight:500}
+.soyd-choices{display:flex;flex-direction:column;gap:9px;margin-bottom:26px}
+.soyd-choice{padding:16px 19px;border-radius:15px;cursor:pointer;
+  border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);
+  color:var(--muted);line-height:1.58;font-size:.92rem;
+  text-align:left;transition:all .19s ease;position:relative;overflow:hidden}
+.soyd-choice::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,85,119,.05),transparent);
+  opacity:0;transition:opacity .19s ease}
+.soyd-choice:hover{border-color:rgba(255,85,119,.28);color:var(--text);transform:translateY(-2px)}
+.soyd-choice:hover::before{opacity:1}
+.soyd-choice.selected{border-color:rgba(255,85,119,.45);
+  background:rgba(255,85,119,.065);color:var(--text)}
+.soyd-choice.selected::before{opacity:1}
+.soyd-choice-num{font-size:.62rem;text-transform:uppercase;letter-spacing:.16em;
+  color:rgba(255,85,119,.42);margin-bottom:4px;display:block}
+.soyd-nav{display:flex;gap:9px;flex-wrap:wrap}
+.soyd-result{text-align:center;padding:6px 0;animation:rise .6s ease forwards}
+.portal-soyd:hover{border-color:rgba(255,85,119,.28);
+  box-shadow:0 22px 52px rgba(0,0,0,.4),0 0 44px rgba(255,85,119,.1)}
+
+/* ── THE WAY YOU HOLD OTHERS ─────────────────────────────────── */
+#wyhoScreen{padding:0;align-items:stretch;position:relative;
+  background:radial-gradient(circle at 50% 30%,rgba(255,158,200,.07),transparent 54%),
+  linear-gradient(180deg,#080510,#100816)}
+.wyho-back{position:fixed;top:14px;right:14px;z-index:40;
+  opacity:.55;transition:opacity .2s}
+.wyho-back:hover{opacity:1}
+.wyho-wrap{width:min(720px,100%);margin:0 auto;padding:36px 22px 72px;
+  min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+.wyho-pips{display:flex;gap:9px;justify-content:center;margin-bottom:28px}
+.wyho-pip{width:8px;height:8px;border-radius:50%;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.08);transition:all .38s ease}
+.wyho-pip.active{background:var(--pink);border-color:rgba(255,158,200,.5);
+  box-shadow:0 0 9px rgba(255,158,200,.4)}
+.wyho-pip.done{background:rgba(255,158,200,.26);border-color:rgba(255,158,200,.18)}
+.wyho-eyebrow{font-size:.65rem;text-transform:uppercase;letter-spacing:.24em;
+  color:rgba(255,158,200,.55);margin-bottom:12px}
+.wyho-title{font-size:clamp(1.65rem,4.5vw,2.5rem);font-weight:900;margin:0 0 9px;line-height:1.04}
+.wyho-prose{color:var(--muted);line-height:1.88;font-size:.97rem;margin:0 0 24px}
+.wyho-prose em{color:rgba(255,158,200,.72);font-style:normal}
+.wyho-question{font-size:1.03rem;color:var(--text);line-height:1.65;
+  margin:0 0 22px;font-weight:500}
+.wyho-choices{display:flex;flex-direction:column;gap:9px;margin-bottom:26px}
+.wyho-choice{padding:16px 19px;border-radius:15px;cursor:pointer;
+  border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);
+  color:var(--muted);line-height:1.58;font-size:.92rem;
+  text-align:left;transition:all .19s ease;position:relative;overflow:hidden}
+.wyho-choice::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,158,200,.055),transparent);
+  opacity:0;transition:opacity .19s ease}
+.wyho-choice:hover{border-color:rgba(255,158,200,.28);color:var(--text);transform:translateY(-2px)}
+.wyho-choice:hover::before{opacity:1}
+.wyho-choice.selected{border-color:rgba(255,158,200,.45);
+  background:rgba(255,158,200,.065);color:var(--text)}
+.wyho-choice.selected::before{opacity:1}
+.wyho-choice-num{font-size:.62rem;text-transform:uppercase;letter-spacing:.16em;
+  color:rgba(255,158,200,.42);margin-bottom:4px;display:block}
+.wyho-nav{display:flex;gap:9px;flex-wrap:wrap}
+.wyho-result{text-align:center;padding:6px 0;animation:rise .6s ease forwards}
+.portal-wyho:hover{border-color:rgba(255,158,200,.28);
+  box-shadow:0 22px 52px rgba(0,0,0,.4),0 0 44px rgba(255,158,200,.1)}
+
+/* ── THE TIDE ────────────────────────────────────────────────── */
+#tideScreen{padding:0;align-items:stretch;position:relative;
+  background:radial-gradient(circle at 50% 40%,rgba(94,221,168,.07),transparent 55%),
+  linear-gradient(180deg,#040b0a,#060e0c)}
+.tide-back{position:fixed;top:14px;right:14px;z-index:40;
+  opacity:.55;transition:opacity .2s}
+.tide-back:hover{opacity:1}
+.tide-wrap{width:min(640px,100%);margin:0 auto;padding:36px 22px 72px;
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center}
+/* Breathing circle */
+.tide-circle-wrap{position:relative;width:220px;height:220px;
+  margin:0 auto 36px;flex-shrink:0}
+.tide-circle-bg{position:absolute;inset:0;border-radius:50%;
+  border:1px solid rgba(94,221,168,.12)}
+.tide-circle-ring{position:absolute;inset:0;border-radius:50%;
+  border:2px solid rgba(94,221,168,.3);
+  transition:transform 0s linear,opacity .3s ease}
+.tide-circle-inner{position:absolute;inset:22px;border-radius:50%;
+  background:radial-gradient(circle,rgba(94,221,168,.18) 0%,rgba(94,221,168,.04) 60%,transparent 100%);
+  transition:transform 0s linear,opacity .3s ease}
+.tide-circle-label{position:absolute;inset:0;display:flex;
+  flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.tide-phase-text{font-size:.72rem;text-transform:uppercase;letter-spacing:.22em;
+  color:rgba(94,221,168,.55);transition:opacity .4s ease}
+.tide-count-text{font-size:2.4rem;font-weight:700;color:rgba(94,221,168,.9);
+  line-height:1;transition:opacity .4s ease;font-variant-numeric:tabular-nums}
+/* Mode cards */
+.tide-modes{display:flex;flex-direction:column;gap:10px;
+  width:100%;margin-bottom:28px}
+.tide-mode-card{padding:16px 18px;border-radius:16px;cursor:pointer;
+  border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);
+  text-align:left;transition:all .18s ease;position:relative;overflow:hidden}
+.tide-mode-card::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(94,221,168,.05),transparent);
+  opacity:0;transition:opacity .18s}
+.tide-mode-card:hover{border-color:rgba(94,221,168,.22);transform:translateY(-2px)}
+.tide-mode-card:hover::before{opacity:1}
+.tide-mode-card.active{border-color:rgba(94,221,168,.4);
+  background:rgba(94,221,168,.06)}
+.tide-mode-card.active::before{opacity:1}
+.tide-mode-title{font-size:.95rem;font-weight:700;
+  color:var(--mint);margin-bottom:3px}
+.tide-mode-desc{font-size:.82rem;color:var(--muted);line-height:1.55}
+.tide-mode-pattern{font-size:.7rem;text-transform:uppercase;
+  letter-spacing:.14em;color:rgba(94,221,168,.45);margin-top:5px}
+/* Controls */
+.tide-controls{display:flex;gap:10px;justify-content:center;
+  flex-wrap:wrap;margin-bottom:24px}
+.tide-status{font-size:.88rem;color:var(--muted);
+  min-height:1.6em;margin-bottom:20px;line-height:1.6;
+  transition:opacity .4s ease}
+/* Affect label prompt */
+.tide-affect-wrap{width:100%;padding:18px;border-radius:16px;
+  border:1px solid rgba(94,221,168,.12);
+  background:rgba(94,221,168,.04);margin-bottom:20px}
+.tide-affect-label{font-size:.68rem;text-transform:uppercase;
+  letter-spacing:.18em;color:rgba(94,221,168,.5);margin-bottom:10px}
+.tide-affect-chips{display:flex;flex-wrap:wrap;gap:7px;justify-content:center}
+.tide-chip{padding:6px 14px;border-radius:999px;font-size:.8rem;
+  cursor:pointer;border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.04);color:var(--muted);
+  transition:all .15s ease}
+.tide-chip:hover{border-color:rgba(94,221,168,.3);color:var(--mint)}
+.tide-chip.selected{border-color:rgba(94,221,168,.5);
+  background:rgba(94,221,168,.1);color:var(--mint)}
+/* Result */
+.tide-result{animation:rise .5s ease forwards}
+.tide-result-title{font-family:'Cinzel',serif;font-size:1.8rem;
+  font-weight:700;color:var(--mint);margin-bottom:12px}
+.tide-result-body{color:var(--muted);line-height:1.88;
+  font-size:.95rem;margin-bottom:20px;text-align:left}
+.tide-result-body em{color:rgba(94,221,168,.72);font-style:normal}
+.portal-tide:hover{border-color:rgba(94,221,168,.28);
+  box-shadow:0 22px 52px rgba(0,0,0,.4),0 0 44px rgba(94,221,168,.1)}
 
 /* ── THE ARCHIVE ─────────────────────────────────────────────── */
 #archiveScreen{padding:0;align-items:stretch;position:relative;
@@ -825,6 +1021,16 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
         <button class="btn btn-primary btn-sm portal-enter" data-launch-btn="echo-drift">Enter Trial</button>
       </article>
 
+      <article class="portal portal-sigil" data-launch="sigil-trace">
+        <div class="portal-glow" style="background:var(--accent)"></div>
+        <div class="portal-icon" style="color:var(--accent);filter:drop-shadow(0 0 10px rgba(187,168,255,.4))">✦</div>
+        <span class="portal-kicker">Constellation Trial</span>
+        <h3 class="portal-name" style="color:var(--accent)">Sigil Trace</h3>
+        <p class="portal-desc">A constellation appears in the dark, briefly, and then dissolves. Retrace it from memory — star by star, in the order it was shown.</p>
+        <p class="portal-promise"><strong>What this crossing offers:</strong> sharper sequential memory and comfort with patterns that vanish before you finish seeing them.</p>
+        <button class="btn btn-sm portal-enter" style="background:rgba(187,168,255,.12);border-color:rgba(187,168,255,.35);color:var(--accent)" data-launch-btn="sigil-trace">Enter the Constellation</button>
+      </article>
+
       <article class="portal portal-threshold" data-launch="threshold-between">
         <div class="portal-glow"></div>
         <div class="portal-icon" style="color:var(--ember);filter:drop-shadow(0 0 10px rgba(255,170,51,.4))">⟳</div>
@@ -835,7 +1041,38 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
         <button class="btn btn-sm portal-enter" style="background:rgba(255,170,51,.15);border-color:rgba(255,170,51,.4);color:var(--ember)" data-launch-btn="threshold-between">Enter the Threshold</button>
       </article>
 
-      <article class="portal portal-archive" data-launch="archive" style="border-color:rgba(238,216,122,.18)">
+      <article class="portal portal-tide" data-launch="the-tide">
+        <div class="portal-glow" style="background:var(--mint)"></div>
+        <div class="portal-icon" style="color:var(--mint);filter:drop-shadow(0 0 10px rgba(94,221,168,.4))">🌊</div>
+        <span class="portal-kicker">Somatic Practice</span>
+        <h3 class="portal-name" style="color:var(--mint)">The Tide</h3>
+        <p class="portal-desc">The Veil breathes. For a few minutes, you breathe with it. Three practices drawn from breath science — for when you need to return to yourself.</p>
+        <p class="portal-promise"><strong>What this crossing offers:</strong> a quieter nervous system and a body that feels like yours again.</p>
+        <button class="btn btn-sm portal-enter" style="background:rgba(94,221,168,.12);border-color:rgba(94,221,168,.35);color:var(--mint)" data-launch-btn="the-tide">Enter the Tide</button>
+      </article>
+
+      <article class="portal portal-soyd" data-launch="shape-of-doubt">
+        <div class="portal-glow" style="background:var(--ruby)"></div>
+        <div class="portal-icon" style="color:var(--ruby);filter:drop-shadow(0 0 10px rgba(255,85,119,.4))">🜁</div>
+        <span class="portal-kicker">Self-Compassion Trial</span>
+        <h3 class="portal-name" style="color:var(--ruby)">The Shape of Your Doubt</h3>
+        <p class="portal-desc">Five chambers about the particular way you doubt yourself — the story you tell yourself when you feel like you are not enough, or too much, or not quite real.</p>
+        <p class="portal-promise"><strong>What this crossing offers:</strong> a name for what lives underneath the doubt, and a gentler way to hold it.</p>
+        <button class="btn btn-sm portal-enter" style="background:rgba(255,85,119,.12);border-color:rgba(255,85,119,.35);color:var(--ruby)" data-launch-btn="shape-of-doubt">Enter the Doubt</button>
+      </article>
+
+      <article class="portal portal-wyho" data-launch="way-you-hold">
+        <div class="portal-glow" style="background:var(--pink)"></div>
+        <div class="portal-icon" style="color:var(--pink);filter:drop-shadow(0 0 10px rgba(255,158,200,.4))">🕯</div>
+        <span class="portal-kicker">Connection Trial</span>
+        <h3 class="portal-name" style="color:var(--pink)">The Way You Hold Others</h3>
+        <p class="portal-desc">Five chambers about how you show up for the people you care about. Not what you intend — what you actually do when someone needs you.</p>
+        <p class="portal-promise"><strong>What this crossing offers:</strong> language for how you love, and what that costs and gives you.</p>
+        <button class="btn btn-sm portal-enter" style="background:rgba(255,158,200,.12);border-color:rgba(255,158,200,.35);color:var(--pink)" data-launch-btn="way-you-hold">Enter the Crossing</button>
+      </article>
+
+      <article class="portal portal-archive" data-launch="archive"
+ style="border-color:rgba(238,216,122,.18)">
         <div class="portal-glow" style="background:var(--gold)"></div>
         <div class="portal-icon" style="color:var(--gold);filter:drop-shadow(0 0 10px rgba(238,216,122,.4))">📖</div>
         <span class="portal-kicker">Reflection Space</span>
@@ -1046,6 +1283,43 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
 <section class="game-screen-wrap hidden" id="thresholdScreen" style="padding:0;align-items:stretch">
   <button class="btn btn-ghost btn-sm tb-back" id="backFromThresholdBtn">Return to Realm</button>
   <div class="tb-wrap" id="tbWrap">
+    <!-- Injected by JS -->
+  </div>
+</section>
+
+
+<!-- SIGIL TRACE SCREEN -->
+<section class="game-screen-wrap hidden" id="sigilScreen" style="padding:0;align-items:stretch">
+  <button class="btn btn-ghost btn-sm" id="backFromSigilBtn"
+    style="position:fixed;top:14px;right:14px;z-index:40;opacity:.55">Return to Realm</button>
+  <div class="sigil-wrap" id="sigilWrap">
+    <!-- Injected by JS -->
+  </div>
+</section>
+
+
+<!-- THE SHAPE OF YOUR DOUBT SCREEN -->
+<section class="game-screen-wrap hidden" id="soydScreen" style="padding:0;align-items:stretch">
+  <button class="btn btn-ghost btn-sm soyd-back" id="backFromSoydBtn">Return to Realm</button>
+  <div class="soyd-wrap" id="soydWrap">
+    <!-- Injected by JS -->
+  </div>
+</section>
+
+
+<!-- THE WAY YOU HOLD OTHERS SCREEN -->
+<section class="game-screen-wrap hidden" id="wyhoScreen" style="padding:0;align-items:stretch">
+  <button class="btn btn-ghost btn-sm wyho-back" id="backFromWyhoBtn">Return to Realm</button>
+  <div class="wyho-wrap" id="wyhoWrap">
+    <!-- Injected by JS -->
+  </div>
+</section>
+
+
+<!-- THE TIDE SCREEN -->
+<section class="game-screen-wrap hidden" id="tideScreen" style="padding:0;align-items:stretch">
+  <button class="btn btn-ghost btn-sm tide-back" id="backFromTideBtn">Return to Realm</button>
+  <div class="tide-wrap" id="tideWrap">
     <!-- Injected by JS -->
   </div>
 </section>
@@ -1607,6 +1881,10 @@ const screens = {
   echo: document.getElementById('echoDriftScreen'),
   veilWithin: document.getElementById('veilWithinScreen'),
   threshold: document.getElementById('thresholdScreen'),
+  soyd: document.getElementById('soydScreen'),
+  sigil: document.getElementById('sigilScreen'),
+  wyho: document.getElementById('wyhoScreen'),
+  tide: document.getElementById('tideScreen'),
   archive: document.getElementById('archiveScreen'),
 };
 const veilTrans = document.getElementById('veilTrans');
@@ -1704,6 +1982,26 @@ function launchGame(game){
     window.tb?.begin();
     showOnly('threshold');
   }
+  if(game==='shape-of-doubt'){
+    window.ambient.setIntensity('echo');
+    window.soyd?.begin();
+    showOnly('soyd');
+  }
+  if(game==='sigil-trace'){
+    window.ambient.setIntensity('echo');
+    window.sigilTrace?.enter();
+    showOnly('sigil');
+  }
+  if(game==='way-you-hold'){
+    window.ambient.setIntensity('echo');
+    window.wyho?.begin();
+    showOnly('wyho');
+  }
+  if(game==='the-tide'){
+    window.ambient.setIntensity('echo');
+    window.tide?.enter();
+    showOnly('tide');
+  }
   if(game==='archive'){
     window.ambient.setIntensity('echo');
     window.arc?.enter();
@@ -1722,6 +2020,10 @@ document.querySelectorAll('[data-launch],[data-launch-btn]').forEach(el=>{
 // Court theme buttons removed
 
 document.getElementById('backFromEchoBtn')?.addEventListener('click',()=>backToHub(()=>window.ed?.resetAll()));
+document.getElementById('backFromSoydBtn')?.addEventListener('click',()=>backToHub(()=>{}));
+document.getElementById('backFromSigilBtn')?.addEventListener('click',()=>{ window.sigilTrace?.stop(); backToHub(()=>{}); });
+document.getElementById('backFromWyhoBtn')?.addEventListener('click',()=>backToHub(()=>{}));
+document.getElementById('backFromTideBtn')?.addEventListener('click',()=>{ window.tide?.stop(); backToHub(()=>{}); });
 document.getElementById('backFromArchiveBtn')?.addEventListener('click',()=>backToHub(()=>{}));
 document.getElementById('backFromVeilWithinBtn')?.addEventListener('click',()=>backToHub(()=>{}));
 document.getElementById('backFromThresholdBtn')?.addEventListener('click',()=>backToHub(()=>{}));
@@ -1790,7 +2092,7 @@ function updateRecentCrossing(){
   try{
     const last=localStorage.getItem('faeboundLastGame')||'';
     const result=JSON.parse(localStorage.getItem('faeboundLastVeilWithinResult')||'null');
-    const labels={'echo-drift':'Echo Drift','veil-within':'The Veil Within','threshold-between':'The Threshold Between','archive':'The Archive'};
+    const labels={'echo-drift':'Echo Drift','veil-within':'The Veil Within','threshold-between':'The Threshold Between','shape-of-doubt':'The Shape of Your Doubt','sigil-trace':'Sigil Trace','way-you-hold':'The Way You Hold Others','the-tide':'The Tide','archive':'The Archive'};
     const glyphs={'echo-drift':'◇','veil-within':'✶','archive':'📖'};
     if(last&&labels[last]){
       let txt=labels[last];
@@ -2016,6 +2318,439 @@ initStars();
 // No court system — realm identity is fixed
 loadSettings();
 updateRecentCrossing();
+</script>
+
+<!-- ═══ SIGIL TRACE ═══ -->
+<script>
+
+window.sigilTrace = (() => {
+
+  // ── CONFIG ──────────────────────────────────────────────────────────────
+  const DIFF = {
+    glimpse: { stars:4, revealMs:3000, decoys:2, label:'Glimpse' },
+    trace:   { stars:6, revealMs:4000, decoys:2, label:'Trace'   },
+    warden:  { stars:8, revealMs:5000, decoys:3, label:'Warden'  },
+  };
+  const ACCENT = 'rgba(187,168,255,1)';
+  const GOLD   = 'rgba(238,216,122,1)';
+  const DIM    = 'rgba(187,168,255,.18)';
+  const STAR_R = 14;   // star radius px (canvas coords)
+  const DECOY_R = 11;
+
+  // ── STATE ────────────────────────────────────────────────────────────────
+  let difficulty  = 'glimpse';
+  let phase       = 'idle';   // idle | reveal | recall | success | fail
+  let patternStars = [];      // [{x,y,order}] — the stars to remember
+  let decoyStars   = [];      // [{x,y}] — false stars shown during recall
+  let playerTrace  = [];      // indices into patternStars in order tapped
+  let streak       = 0;
+  let bestStreak   = 0;
+  let revealTimer  = null;
+  let animId       = null;
+  let canvas, ctx, W, H;
+  let fadeOpacity  = 1;       // for reveal fade-out animation
+  let trailPoints  = [];      // {x,y,t} for player trace trail
+
+  // ── HELPERS ──────────────────────────────────────────────────────────────
+  function tone(freq, dur=.1, vol=.02) {
+    try { window.audio?.tone(freq, dur, 'sine', vol, freq*1.5); } catch(e) {}
+  }
+  function setStatus(msg) {
+    const el = document.getElementById('stStatus');
+    if (el) el.textContent = msg;
+  }
+  function setStreaks() {
+    const s = document.getElementById('stStreak');
+    const b = document.getElementById('stBest');
+    if (s) s.textContent = streak;
+    if (b) b.textContent = bestStreak;
+  }
+
+  // ── CANVAS UTILS ─────────────────────────────────────────────────────────
+  function resizeCanvas() {
+    const wrap = document.querySelector('.sigil-canvas-wrap');
+    if (!wrap || !canvas) return;
+    const r = wrap.getBoundingClientRect();
+    canvas.width  = r.width;
+    canvas.height = r.height;
+    W = canvas.width;
+    H = canvas.height;
+  }
+
+  function drawStarField() {
+    // Subtle fixed star field — purely decorative
+    ctx.save();
+    for (let i = 0; i < 80; i++) {
+      const x = (Math.sin(i * 137.5) * 0.5 + 0.5) * W;
+      const y = (Math.cos(i * 97.3)  * 0.5 + 0.5) * H;
+      const r = (i % 3 === 0) ? 1.2 : 0.7;
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(187,168,255,${0.06 + (i%5)*0.018})`;
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function drawLines(stars, alpha=1) {
+    if (stars.length < 2) return;
+    ctx.save();
+    ctx.strokeStyle = `rgba(187,168,255,${0.35 * alpha})`;
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 6]);
+    ctx.beginPath();
+    const sorted = [...stars].sort((a,b) => a.order - b.order);
+    ctx.moveTo(sorted[0].x, sorted[0].y);
+    for (let i = 1; i < sorted.length; i++) ctx.lineTo(sorted[i].x, sorted[i].y);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+  }
+
+  function drawStar(x, y, radius, color, alpha=1, label=null) {
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    // Glow
+    const g = ctx.createRadialGradient(x,y,0,x,y,radius*2.5);
+    g.addColorStop(0, color.replace('1)', '0.35)').replace(',1)', ',0.35)'));
+    g.addColorStop(1, 'transparent');
+    ctx.beginPath(); ctx.arc(x,y,radius*2.5,0,Math.PI*2);
+    ctx.fillStyle = g; ctx.fill();
+    // Core
+    ctx.beginPath(); ctx.arc(x,y,radius,0,Math.PI*2);
+    ctx.fillStyle = color; ctx.fill();
+    // Order label
+    if (label !== null) {
+      ctx.fillStyle = '#060812';
+      ctx.font = `bold ${Math.round(radius*0.85)}px sans-serif`;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(label, x, y);
+    }
+    ctx.globalAlpha = 1;
+    ctx.restore();
+  }
+
+  function drawPlayerTrace() {
+    if (playerTrace.length === 0) return;
+    ctx.save();
+    // Lines between tapped stars
+    ctx.strokeStyle = `rgba(238,216,122,0.45)`;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    playerTrace.forEach((idx, i) => {
+      const s = patternStars[idx];
+      if (i === 0) ctx.moveTo(s.x, s.y);
+      else ctx.lineTo(s.x, s.y);
+    });
+    ctx.stroke();
+    // Tapped stars
+    playerTrace.forEach((idx, i) => {
+      const s = patternStars[idx];
+      drawStar(s.x, s.y, STAR_R * 0.85, GOLD, 1, i+1);
+    });
+    ctx.restore();
+  }
+
+  function drawDecoys(alpha=1) {
+    decoyStars.forEach(d => {
+      drawStar(d.x, d.y, DECOY_R, DIM, alpha * 0.7);
+    });
+  }
+
+  // ── PATTERN GENERATION ────────────────────────────────────────────────────
+  function generatePositions(count, padding=0.18) {
+    const positions = [];
+    const minDist = Math.min(W, H) * 0.22;
+    let attempts = 0;
+    while (positions.length < count && attempts < 500) {
+      attempts++;
+      const x = padding * W + Math.random() * W * (1 - 2*padding);
+      const y = padding * H + Math.random() * H * (1 - 2*padding);
+      const ok = positions.every(p => Math.hypot(p.x-x, p.y-y) >= minDist);
+      if (ok) positions.push({x, y});
+    }
+    return positions;
+  }
+
+  function buildRound() {
+    const cfg = DIFF[difficulty];
+    const allPositions = generatePositions(cfg.stars + cfg.decoys);
+    patternStars = allPositions.slice(0, cfg.stars).map((p, i) => ({...p, order: i}));
+    decoyStars   = allPositions.slice(cfg.stars).map(p => ({...p}));
+    playerTrace  = [];
+    fadeOpacity  = 1;
+    trailPoints  = [];
+  }
+
+  // ── DRAW LOOP ─────────────────────────────────────────────────────────────
+  function draw() {
+    if (!ctx) return;
+    ctx.clearRect(0, 0, W, H);
+    drawStarField();
+
+    if (phase === 'reveal') {
+      drawLines(patternStars, fadeOpacity);
+      patternStars.forEach((s,i) => drawStar(s.x, s.y, STAR_R, ACCENT, fadeOpacity, i+1));
+
+    } else if (phase === 'recall') {
+      // Show all stars unmarked — pattern + decoys mixed, no numbers, no lines
+      const allStars = [...patternStars, ...decoyStars];
+      allStars.forEach(s => drawStar(s.x, s.y, STAR_R, DIM, 0.9));
+      drawPlayerTrace();
+
+    } else if (phase === 'success') {
+      drawLines(patternStars, 1);
+      patternStars.forEach((s,i) => drawStar(s.x, s.y, STAR_R, GOLD, 1, i+1));
+
+    } else if (phase === 'fail') {
+      // Show correct pattern in accent, player trace in red
+      drawLines(patternStars, 0.6);
+      patternStars.forEach((s,i) => drawStar(s.x, s.y, STAR_R, ACCENT, 0.55, i+1));
+      playerTrace.forEach((idx, i) => {
+        const s = patternStars[idx];
+        if (s) drawStar(s.x, s.y, STAR_R * 0.8, 'rgba(255,85,119,1)', 1, i+1);
+      });
+    }
+  }
+
+  // ── REVEAL PHASE ─────────────────────────────────────────────────────────
+  function startReveal() {
+    phase = 'reveal';
+    fadeOpacity = 1;
+    setStatus(`Watch the constellation. ${DIFF[difficulty].stars} stars, in order.`);
+    tone(560, .12, .024);
+    if (window.ambient?.swell) window.ambient.swell(0.004);
+    draw();
+
+    // Fade out over revealMs
+    const cfg = DIFF[difficulty];
+    const holdMs  = cfg.revealMs * 0.6;
+    const fadeMs  = cfg.revealMs * 0.4;
+    let fadeStart = null;
+
+    setTimeout(() => {
+      // Start fade
+      function fadeTick(ts) {
+        if (!fadeStart) fadeStart = ts;
+        const p = Math.min((ts - fadeStart) / fadeMs, 1);
+        fadeOpacity = 1 - p;
+        draw();
+        if (p < 1) {
+          animId = requestAnimationFrame(fadeTick);
+        } else {
+          fadeOpacity = 0;
+          startRecall();
+        }
+      }
+      animId = requestAnimationFrame(fadeTick);
+    }, holdMs);
+  }
+
+  // ── RECALL PHASE ─────────────────────────────────────────────────────────
+  function startRecall() {
+    phase = 'recall';
+    playerTrace = [];
+    const decoyNote = decoyStars.length > 0 ? ` ${decoyStars.length} false stars are present.` : '';
+    setStatus(`Retrace it — tap the stars in order.${decoyNote}`);
+    tone(440, .1, .018);
+    draw();
+  }
+
+  // ── INPUT HANDLING ────────────────────────────────────────────────────────
+  function getCanvasPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width  / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top)  * scaleY
+    };
+  }
+
+  function handleTap(e) {
+    if (phase !== 'recall') return;
+    e.preventDefault();
+    const {x, y} = getCanvasPos(e);
+    const expectedIdx = playerTrace.length;
+
+    // Find nearest pattern star within tap radius
+    let nearest = -1, nearestDist = Infinity;
+    patternStars.forEach((s, i) => {
+      if (playerTrace.includes(i)) return; // already tapped
+      const d = Math.hypot(s.x - x, s.y - y);
+      if (d < nearestDist) { nearestDist = d; nearest = i; }
+    });
+
+    const tapRadius = STAR_R * 2.2;
+    if (nearest === -1 || nearestDist > tapRadius) {
+      // Check if tapped a decoy
+      const hitDecoy = decoyStars.some(d => Math.hypot(d.x-x, d.y-y) < tapRadius);
+      if (hitDecoy || nearestDist > tapRadius * 1.5) {
+        // Wrong tap — fail
+        resolveRound(false);
+        return;
+      }
+      return; // tapped empty space — ignore
+    }
+
+    // Check order
+    if (nearest !== expectedIdx) {
+      resolveRound(false);
+      return;
+    }
+
+    // Correct star
+    playerTrace.push(nearest);
+    tone(400 + nearest * 60, .08, .02);
+    draw();
+
+    if (playerTrace.length === patternStars.length) {
+      resolveRound(true);
+    }
+  }
+
+  // ── RESOLUTION ────────────────────────────────────────────────────────────
+  function resolveRound(success) {
+    if (success) {
+      phase = 'success';
+      streak++;
+      if (streak > bestStreak) bestStreak = streak;
+      setStreaks();
+      tone(660, .14, .032);
+      setTimeout(() => tone(780, .12, .024), 160);
+      setTimeout(() => tone(880, .16, .018), 340);
+      setStatus(`The sigil holds. ${streak > 1 ? 'Streak: ' + streak + '.' : ''} Well traced.`);
+      if (window.ambient?.swell) window.ambient.swell(0.005);
+      if (window.progression?.increment) window.progression.increment();
+      if (window.archive?.inc) window.archive.inc('trialsCompleted');
+      trackCompletion('sigil-trace');
+      draw();
+      // Auto-advance after a beat
+      setTimeout(() => {
+        if (phase === 'success') {
+          setStatus(`Constellation held. Begin next when ready.`);
+          phase = 'idle';
+          draw();
+        }
+      }, 2200);
+    } else {
+      phase = 'fail';
+      streak = 0;
+      setStreaks();
+      tone(220, .22, .032);
+      setStatus(`The sigil breaks. The correct order is shown.`);
+      draw();
+      setTimeout(() => {
+        if (phase === 'fail') {
+          setStatus(`Pattern lost. Begin again when ready.`);
+          phase = 'idle';
+          draw();
+        }
+      }, 2800);
+    }
+  }
+
+  // ── RENDER UI ──────────────────────────────────────────────────────────────
+  function renderUI() {
+    const wrap = document.getElementById('sigilWrap');
+    if (!wrap) return;
+    wrap.innerHTML = `
+      <div class="sigil-header">
+        <p class="sigil-eyebrow">Constellation Trial</p>
+        <h2 class="sigil-title">Sigil Trace</h2>
+      </div>
+
+      <div class="sigil-streak-row">
+        <div><strong id="stStreak">0</strong>Streak</div>
+        <div><strong id="stBest" style="color:var(--gold)">0</strong>Best</div>
+      </div>
+
+      <div class="sigil-status" id="stStatus">
+        A constellation will appear briefly. Retrace it from memory — star by star, in the order shown.
+      </div>
+
+      <div class="sigil-canvas-wrap">
+        <canvas id="sigilCanvas"></canvas>
+      </div>
+
+      <div class="sigil-footer">
+        <div class="sigil-diff-row">
+          <button class="sigil-diff-btn ${difficulty==='glimpse'?'active':''}" data-diff="glimpse">Glimpse · 4 stars</button>
+          <button class="sigil-diff-btn ${difficulty==='trace'?'active':''}" data-diff="trace">Trace · 6 stars</button>
+          <button class="sigil-diff-btn ${difficulty==='warden'?'active':''}" data-diff="warden">Warden · 8 stars</button>
+        </div>
+        <div class="sigil-btns">
+          <button class="btn" id="stBeginBtn"
+            style="background:rgba(187,168,255,.12);border-color:rgba(187,168,255,.35);color:var(--accent)">
+            Reveal Sigil
+          </button>
+          <button class="btn btn-ghost btn-sm" id="stHubBtn">Return to Realm</button>
+        </div>
+        <div style="max-width:420px;text-align:center;padding:10px 0">
+          <p style="font-size:.7rem;color:rgba(187,168,255,.3);line-height:1.6">
+            Tap stars in the order they were numbered. Tapping a false star or wrong order breaks the sigil.
+          </p>
+        </div>
+      </div>`;
+
+    // Wire canvas
+    canvas = document.getElementById('sigilCanvas');
+    ctx = canvas.getContext('2d');
+    resizeCanvas();
+    draw();
+
+    // Wire begin button
+    document.getElementById('stBeginBtn')?.addEventListener('click', () => {
+      if (phase === 'reveal' || phase === 'recall') return;
+      buildRound();
+      startReveal();
+    });
+
+    // Wire hub button
+    document.getElementById('stHubBtn')?.addEventListener('click', () => {
+      if (typeof backToHub === 'function') { stop(); backToHub(()=>{}); }
+    });
+
+    // Wire difficulty buttons
+    wrap.querySelectorAll('[data-diff]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        difficulty = btn.dataset.diff;
+        wrap.querySelectorAll('[data-diff]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if (phase === 'idle' || phase === 'success' || phase === 'fail') {
+          phase = 'idle'; draw();
+        }
+      });
+    });
+
+    // Wire canvas tap/click
+    canvas.addEventListener('click', handleTap);
+    canvas.addEventListener('touchstart', handleTap, {passive:false});
+
+    // Resize observer
+    const ro = new ResizeObserver(() => { resizeCanvas(); draw(); });
+    ro.observe(document.querySelector('.sigil-canvas-wrap'));
+  }
+
+  // ── PUBLIC ────────────────────────────────────────────────────────────────
+  function enter() {
+    phase = 'idle'; streak = 0; bestStreak = 0;
+    patternStars = []; decoyStars = []; playerTrace = [];
+    if (animId) { cancelAnimationFrame(animId); animId = null; }
+    renderUI();
+  }
+
+  function stop() {
+    phase = 'idle';
+    if (animId) { cancelAnimationFrame(animId); animId = null; }
+    if (revealTimer) { clearTimeout(revealTimer); revealTimer = null; }
+  }
+
+  return { enter, stop };
+})();
+
 </script>
 
 <!-- ═══ ECHO DRIFT ═══ -->
@@ -4072,6 +4807,2119 @@ window.tb = (() => {
   }
 
   return { begin };
+})();
+
+</script>
+
+<!-- ═══ THE SHAPE OF YOUR DOUBT ═══ -->
+<script>
+
+window.soyd = (() => {
+  const wrap = document.getElementById('soydWrap');
+  if (!wrap) return { begin(){ console.warn('soydWrap not found'); } };
+
+  // ── RESEARCH FOUNDATION ────────────────────────────────────────────────
+  // Kristin Neff — Self-Compassion (2011, 2021):
+  // Three components: self-kindness (vs self-judgment), common humanity
+  // (vs isolation), mindfulness (vs over-identification). Research shows
+  // self-compassion is a stronger predictor of wellbeing than self-esteem,
+  // and does not reduce motivation or accountability.
+  //
+  // Brené Brown — The Gifts of Imperfection (2010), Daring Greatly (2012):
+  // Shame is the fear of disconnection — the belief that if people see
+  // who we really are, they will not want to be close to us. Vulnerability
+  // is not weakness but the birthplace of connection and belonging.
+  //
+  // Pauline Clance & Suzanne Imes — Imposter Phenomenon (1978):
+  // High-achieving people who cannot internalize their accomplishments.
+  // Persistent fear of being exposed as fraud despite objective evidence
+  // of competence. More common in people who care deeply about their work.
+  //
+  // Links: self-compassion.org | brenebrown.com/research
+
+  const ARCHETYPES = {
+    spiral: {
+      name: `The Perfectionist's Spiral`,
+      sigil: '⟳',
+      color: 'rgba(255,85,119,1)',
+      colorSoft: 'rgba(255,85,119,.7)',
+      branch: 'The Standard-Bearer',
+      desc: `<p>The Perfectionist's Spiral holds themselves to standards that shift upward every time they are met. Not because they are never satisfied — but because satisfaction feels dangerous. Resting in what was accomplished feels like permission to stop caring, and caring is what keeps everything from falling apart.</p>
+<p>This shape of doubt is not about perfectionism for its own sake. It is about a belief, usually quiet and unexamined, that worth is contingent on performance. That you are only as good as your last thing. That the moment you stop striving, you will be revealed as someone who was never quite enough to begin with.</p>
+<p>The research is clear on this: self-compassion is not the opposite of high standards. People who hold themselves with more kindness are not less motivated — they are more able to learn from failure, more willing to try difficult things, and more likely to reach the standards they actually care about.</p>`,
+      gift: `You care deeply about your work and hold yourself accountable in ways others admire.`,
+      edge: `Worth tied to performance is borrowed worth. It runs out. You are enough before the doing.`,
+      practices: [
+        `Notice when you move the standard. Ask: was the previous goal met? Then let it be met.`,
+        `Practice saying "that was enough" about one thing each day — and meaning it.`,
+        `Kristin Neff's research: treat yourself with the same care you would offer a close friend who had just done what you did.`
+      ],
+      research: `Neff's research (2021) found that self-compassion — treating yourself with kindness when you fail or fall short — is associated with greater motivation, not less. People who are self-compassionate after failure are more likely to try again, because failure stops feeling like evidence of fundamental unworthiness.`,
+      link: 'https://self-compassion.org/the-three-elements-of-self-compassion-2/',
+      linkLabel: `Kristin Neff: The Three Elements of Self-Compassion`
+    },
+    disappearing: {
+      name: 'The Disappearing Act',
+      sigil: '◌',
+      color: 'rgba(154,164,204,1)',
+      colorSoft: 'rgba(154,164,204,.7)',
+      branch: 'The Shrinker',
+      desc: `<p>The Disappearing Act makes themselves smaller than they are. Not out of modesty — out of a deep belief that taking up too much space is dangerous, that visibility invites scrutiny, that if people look closely enough they will find something that confirms the worst.</p>
+<p>The strategy is intelligent: if you don't claim much, you can't have much taken away. If you don't put yourself forward, you can't be rejected. If you stay in the background, you can observe without being observed, and observing feels safer than being seen.</p>
+<p>The cost is real. The Disappearing Act often has a great deal to offer — perspectives, capabilities, presence — that others don't receive because it is kept hidden. Brené Brown's research names this: the story we tell ourselves when we make ourselves small is that we are protecting ourselves. But the thing we are protecting ourselves from is also the thing we most want: to be known.</p>`,
+      gift: `You are attuned to others and rarely impose. People feel safe around you.`,
+      edge: `You cannot be known if you are invisible. The smallness that protects you also isolates you.`,
+      practices: [
+        `Take up one more unit of space than feels comfortable today. Say the thing you were going to not say.`,
+        `Notice when you are editing yourself before speaking. Ask: what am I afraid will happen if I say the real thing?`,
+        `Visibility is not the same as vulnerability. You can be seen without being exposed.`
+      ],
+      research: `Brené Brown's research on shame and belonging found that the antidote to the Disappearing Act is not courage in the heroic sense — it is the small daily practice of letting yourself be seen in ordinary moments. Connection, her research shows, is built on authenticity rather than on impression management.`,
+      link: 'https://brenebrown.com/articles/2013/01/14/shame-v-guilt/',
+      linkLabel: `Brené Brown: Shame vs. Guilt`
+    },
+    translator: {
+      name: 'The Translator',
+      sigil: '⇌',
+      color: 'rgba(126,200,255,1)',
+      colorSoft: 'rgba(126,200,255,.7)',
+      branch: 'The Interpreter',
+      desc: `<p>The Translator converts their inner experience into something more acceptable before sharing it. Raw feeling becomes processed feeling. Real opinion becomes a hedged one. The actual thing they want to say passes through several rounds of editing before it leaves their mouth — and by the time it does, something essential has been lost.</p>
+<p>This is not dishonesty. It is a survival strategy developed in environments where the unedited version was not safe, or not welcome, or was met with responses that made it not worth the cost. The Translator learned to translate early, and they are very good at it.</p>
+<p>The cost: the people who love the Translator are often loving a curated version of them. The Translator receives connection, but it lands a little hollow — because the version being connected with is not quite the full one. The thing that is actually longed for — to be known as you actually are — cannot happen while the translation is always running.</p>`,
+      gift: `You communicate with precision and care. You rarely cause unnecessary harm with your words.`,
+      edge: `Translated feelings are safer but lonelier. The real version of you deserves to be known.`,
+      practices: [
+        `Practice saying one unedited thing to a person you trust. Not something harmful — something real.`,
+        `Notice the translation happening in real time. Ask: what was the first version, before I changed it?`,
+        `The people who deserve to know you can handle the real version. Finding out who those people are requires letting them try.`
+      ],
+      research: `Neff's self-compassion research identifies "common humanity" — the recognition that suffering and imperfection are part of the shared human experience — as one of the three pillars of self-compassion. The Translator often believes their real experience is uniquely unacceptable. Common humanity says: the unedited version of you is not as unusual as you believe.`,
+      link: 'https://self-compassion.org/the-three-elements-of-self-compassion-2/',
+      linkLabel: `Kristin Neff: Common Humanity & Self-Compassion`
+    },
+    watcher: {
+      name: 'The Watcher',
+      sigil: '◎',
+      color: 'rgba(238,216,122,1)',
+      colorSoft: 'rgba(238,216,122,.7)',
+      branch: 'The Observer',
+      desc: `<p>The Watcher observes themselves from outside. There is almost always a part of them watching how they are coming across, tracking how they are being received, monitoring the gap between how they appear and how they actually are. This hyperawareness is exhausting in a way that is hard to explain to people who don't experience it.</p>
+<p>The Watcher's doubt is not that they are incompetent — it is that they know too much about themselves to fully trust their own performance. They see the effort behind the ease, the rehearsal behind the spontaneity, the uncertainty behind the confidence. And they are always a little afraid that others will see it too.</p>
+<p>Pauline Clance's imposter phenomenon research found that this is most common in people who care deeply about their work, who set high standards, and who have the self-awareness to see their own limitations clearly. The Watcher is not wrong to see what they see. The problem is the weight they assign to it.</p>`,
+      gift: `You are extraordinarily self-aware. You know yourself in ways that most people do not.`,
+      edge: `Self-awareness is a gift. Chronic self-surveillance is a cost. You are allowed to just be, without watching.`,
+      practices: [
+        `Notice when the Observer is running. Try, for one moment, to be in the experience rather than watching it.`,
+        `Your awareness of the gap between appearance and reality is not evidence of fraud. Everyone has that gap.`,
+        `Clance's research: the feeling of being an imposter is most common in people who are actually competent. The doubt is not evidence.`
+      ],
+      research: `Pauline Clance and Suzanne Imes (1978) found that imposter phenomenon is most prevalent among high achievers — people who care deeply and hold themselves to real standards. The Watcher's doubt is not a sign of inadequacy. It is a sign that they understand what good work requires, and take it seriously.`,
+      link: 'https://paulineroseclance.com/impostor_phenomenon.html',
+      linkLabel: `Pauline Clance: The Imposter Phenomenon`
+    }
+  };
+
+  // ── QUESTION POOLS ─────────────────────────────────────────────────────
+  const SOYD_POOLS = {
+
+    standard: [
+      {
+        eyebrow: 'Chamber I — The Standard',
+        title: 'What you tell yourself when something goes wrong',
+        prose: `Something has gone wrong. Not a catastrophe — a mistake, a failure, a thing that didn't go the way you worked for it to go.<br><br><em>The Veil is asking what happens in you before you can stop it.</em>`,
+        question: `When something you worked hard on doesn't go well, what is your first internal response?`,
+        choices: [
+          { text: `I immediately look for what I did wrong and how I could have done it better. I can't not do this.`, scores: { spiral:3, watcher:1 } },
+          { text: `Something in me wants to disappear — to not have tried so publicly, to not have been seen failing.`, scores: { disappearing:3, translator:1 } },
+          { text: `I find myself wondering if I oversold my ability to do it — if people expected too much based on what I claimed.`, scores: { watcher:3, spiral:1 } },
+          { text: `I start managing how I talk about it — figuring out how to frame it so it doesn't look as bad as it feels.`, scores: { translator:3, disappearing:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber I — The Standard',
+        title: 'The voice that is never satisfied',
+        prose: `Most people who doubt themselves have a voice — not external, not audible, but present. It comments on what they do, measures it against something, and usually finds it wanting.<br><br><em>The Veil is asking about yours.</em>`,
+        question: `When you finish something you worked hard on, what does the voice say?`,
+        choices: [
+          { text: `It immediately moves to what could have been better, what was left undone, what fell short.`, scores: { spiral:3, watcher:1 } },
+          { text: `It wonders whether people will notice the gaps — whether the effort shows in a way that's embarrassing.`, scores: { watcher:3, spiral:1 } },
+          { text: `It tells me I probably should have stayed quieter about it, claimed less, made myself less visible.`, scores: { disappearing:3, translator:1 } },
+          { text: `It starts editing the story before I share it — deciding what to leave out, what to soften.`, scores: { translator:3, disappearing:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber I — The Standard',
+        title: 'What enough would feel like',
+        prose: `Somewhere in the distance, there is a version of you who is enough. Who has done enough, is enough, knows enough, has proven enough.<br><br><em>The Veil is asking what that version feels like from here.</em>`,
+        question: `When you imagine a version of yourself who has finally done enough, what happens?`,
+        choices: [
+          { text: `The image shifts as I approach it — what was enough yesterday is not enough today, and I don't know how to close the distance.`, scores: { spiral:3, translator:1 } },
+          { text: `It's hard to imagine — there is always something I haven't done yet that would make the claim feel legitimate.`, scores: { watcher:3, spiral:1 } },
+          { text: `The image is a little uncomfortable — I'm not sure I want to be that visible, that claimed.`, scores: { disappearing:3, watcher:1 } },
+          { text: `I can imagine it, but I'd have to explain it carefully — make sure people understood why it was okay to call it enough.`, scores: { translator:3, disappearing:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber I — The Standard',
+        title: 'What you do with a compliment',
+        prose: `Someone tells you that something you did was good. Really good. They mean it — you can see they mean it.<br><br><em>The Veil is asking what happens between hearing it and believing it.</em>`,
+        question: `When someone genuinely praises something you made or did, what happens inside you?`,
+        choices: [
+          { text: `I immediately start listing the things that were not good — the gaps I know about that they probably didn't notice.`, scores: { spiral:3, watcher:1 } },
+          { text: `I wonder if they are being kind rather than honest — if they would say the same thing to anyone.`, scores: { watcher:3, spiral:1 } },
+          { text: `I feel pleased but quickly try to deflect — I don't want to seem like I need it or believe it too easily.`, scores: { disappearing:3, translator:1 } },
+          { text: `I accept it graciously but translate it — find the version that feels safer to hold than the full thing they said.`, scores: { translator:3, disappearing:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber I — The Standard',
+        title: `The thing you hold yourself to that others don't notice`,
+        prose: `There is a standard you hold yourself to that most people around you cannot see. It is not visible in your work — it lives in the gap between what you produce and what you know you were reaching for.<br><br><em>The Veil is asking about that gap.</em>`,
+        question: `What is the private standard you hold yourself to that others rarely see?`,
+        choices: [
+          { text: `The standard between what I actually did and what I know it could have been — a gap that is always visible to me.`, scores: { spiral:3, watcher:1 } },
+          { text: `Whether the effort behind the outcome is proportionate — whether I worked hard enough to deserve what came from it.`, scores: { watcher:3, spiral:1 } },
+          { text: `Whether I claimed more credit or competence than I had any right to in getting here.`, scores: { disappearing:2, watcher:2 } },
+          { text: `Whether I represented myself accurately — whether the version of me that produced this matches what people think I am.`, scores: { translator:3, watcher:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber I — The Standard',
+        title: 'Rest and what it costs you',
+        prose: `Rest — genuine rest, not recovery with an eye on what comes next — is something some people are very bad at. Not because they are lazy. Because stopping feels like something.<br><br><em>The Veil is asking what rest costs you.</em>`,
+        question: `When you stop working on something — genuinely stop, not pause — what do you feel?`,
+        choices: [
+          { text: `Uneasy — like something is slipping or falling behind while I am standing still.`, scores: { spiral:3, watcher:1 } },
+          { text: `Relieved, then guilty — relieved because I needed it, guilty because I believe I shouldn't need it this much.`, scores: { spiral:2, translator:2 } },
+          { text: `Relatively okay — rest is when I get to stop being observed, and that feels like relief.`, scores: { disappearing:3, watcher:1 } },
+          { text: `Uncertain — I don't know who I am when I'm not producing something, and that discomfort is real.`, scores: { watcher:3, spiral:1 } }
+        ]
+      }
+    ],
+
+    exposure: [
+      {
+        eyebrow: 'Chamber II — Exposure',
+        title: 'What visibility feels like',
+        prose: `Being seen — really seen, in work or in life — is not neutral. It carries something. Not always fear, but something adjacent to it.<br><br><em>The Veil is asking what being visible feels like in your body.</em>`,
+        question: `When you are about to be seen — to share work, to speak up, to be evaluated — what do you feel?`,
+        choices: [
+          { text: `A heightened awareness of everything that could be found lacking — the gaps become more visible right before exposure.`, scores: { spiral:3, watcher:1 } },
+          { text: `A strong pull to retreat — to qualify what I'm sharing before it lands, to make myself smaller before they can.`, scores: { disappearing:3, translator:1 } },
+          { text: `A monitoring of how I am coming across — am I as capable as I appear? Will they see through the appearance?`, scores: { watcher:3, spiral:1 } },
+          { text: `A rehearsal — I find myself editing what I'll say or show before it leaves me.`, scores: { translator:3, disappearing:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber II — Exposure',
+        title: 'The fear underneath the doubt',
+        prose: `Doubt is rarely about the surface thing it appears to be about. Underneath the specific worry — about the work, about the opinion, about the result — there is usually something older and quieter.<br><br><em>The Veil is asking what lives underneath yours.</em>`,
+        question: `If the doubt were fully honest about what it was afraid of, what would it say?`,
+        choices: [
+          { text: `That I will reach the end of my ability, be asked for more than I have, and be seen not having it.`, scores: { spiral:2, watcher:2 } },
+          { text: `That if people see too much, they will find the thing that proves what I have always suspected about myself.`, scores: { disappearing:3, watcher:1 } },
+          { text: `That the real version of me — the unedited one — is not as acceptable as the version I present.`, scores: { translator:3, disappearing:1 } },
+          { text: `That everything I have been given credit for is more luck and less me than people believe, and that eventually the math will become visible.`, scores: { watcher:3, spiral:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber II — Exposure',
+        title: 'What you hide',
+        prose: `Everyone hides something. Not from dishonesty, but from the reasonable calculation that some things cost more to share than they are worth.<br><br><em>The Veil is asking about what you choose not to share, and what that costs you.</em>`,
+        question: `What do you most often hide, and why?`,
+        choices: [
+          { text: `The amount of effort something cost — I don't want people to know how hard I am working to appear competent.`, scores: { watcher:3, spiral:1 } },
+          { text: `How uncertain I am — I present more confidence than I feel because uncertainty feels like a liability.`, scores: { spiral:2, watcher:2 } },
+          { text: `How much I want — to be seen, acknowledged, known — because wanting it feels like a weakness.`, scores: { disappearing:3, translator:1 } },
+          { text: `The real version of my thoughts before they have been made acceptable — the first draft, not the final.`, scores: { translator:3, disappearing:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber II — Exposure',
+        title: 'Being caught not knowing',
+        prose: `There is a particular flavor of fear around being caught not knowing something — not in a moment of ignorance, but in a way that implies you should have known, or that knowing was expected.<br><br><em>The Veil is asking how you relate to that fear.</em>`,
+        question: `When you are caught not knowing something you feel you should know, what happens?`,
+        choices: [
+          { text: `A flash of shame — not just about not knowing, but about having let someone see that I don't know.`, scores: { watcher:3, disappearing:1 } },
+          { text: `A quick recalibration — I immediately start adjusting what I have claimed or implied about myself.`, scores: { translator:3, watcher:1 } },
+          { text: `An urge to become invisible — to undo having been present, to exit the visibility.`, scores: { disappearing:3, translator:1 } },
+          { text: `An internal catalog of all the other things I also don't know — the not-knowing expands briefly before it contracts.`, scores: { spiral:3, watcher:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber II — Exposure',
+        title: 'What success does to the doubt',
+        prose: `You might expect that success would quiet the doubt. That doing the thing well would, over time, reduce the fear of being found out.<br><br><em>The Veil is asking whether that is actually what happens.</em>`,
+        question: `When you succeed at something you were afraid to attempt, what does the doubt do?`,
+        choices: [
+          { text: `It moves the goalpost — the success is acknowledged but the next thing is already more demanding.`, scores: { spiral:3, watcher:1 } },
+          { text: `It says: this time you got away with it. Next time they will see more clearly.`, scores: { watcher:3, spiral:1 } },
+          { text: `It says: you were lucky. You were in the right place. Don't claim this as yours.`, scores: { disappearing:2, watcher:2 } },
+          { text: `It says: now they will expect this from you again, and you will have to translate yourself into something that can deliver it again.`, scores: { translator:3, spiral:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber II — Exposure',
+        title: 'Asking for what you need',
+        prose: `Asking for something — help, recognition, time, space, acknowledgment — requires making yourself visible as a person who needs something. For many people, this is its own distinct difficulty.<br><br><em>The Veil is asking about your relationship with asking.</em>`,
+        question: `When you need something from someone — support, recognition, help — what makes it hard to ask?`,
+        choices: [
+          { text: `The fear that what I need reveals something about my limitations — that needing it means I should be further along.`, scores: { spiral:3, watcher:1 } },
+          { text: `The discomfort of being seen as someone who needs — of taking up that much space in someone else's attention.`, scores: { disappearing:3, translator:1 } },
+          { text: `The uncertainty about whether my need is legitimate — whether I have earned the right to ask for this.`, scores: { watcher:3, spiral:1 } },
+          { text: `The work of framing it correctly — finding the version of the ask that doesn't reveal too much of the real reason I need it.`, scores: { translator:3, disappearing:1 } }
+        ]
+      }
+    ],
+
+    voice: [
+      {
+        eyebrow: 'Chamber III — Voice',
+        title: 'What happens before you speak',
+        prose: `Before you say something that matters — in a group, in a conflict, in a high-stakes conversation — something happens. The words that arrive first are rarely the words that leave your mouth.<br><br><em>The Veil is asking what happens in between.</em>`,
+        question: `Before you say something important, what do you do with it first?`,
+        choices: [
+          { text: `I check it for gaps — run it through a kind of quality check before it leaves me.`, scores: { spiral:3, watcher:1 } },
+          { text: `I edit it — find the version that is true but smaller, that makes the claim I mean to make without overreaching.`, scores: { disappearing:3, translator:1 } },
+          { text: `I translate it — the real version goes through a process that makes it more acceptable before I share it.`, scores: { translator:3, disappearing:1 } },
+          { text: `I watch it — observe myself about to say it, notice how it sounds, decide if it matches what I want to appear to be.`, scores: { watcher:3, spiral:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber III — Voice',
+        title: `What you don't say`,
+        prose: `There are things you know that you don't say. Not because they are wrong — because something makes saying them feel too costly, too visible, too much.<br><br><em>The Veil is asking about the things that stay unsaid.</em>`,
+        question: `What kind of thing do you most often choose not to say, and why?`,
+        choices: [
+          { text: `Opinions I hold strongly but know are not yet fully formed — I don't want to be caught halfway through a thought.`, scores: { spiral:3, watcher:1 } },
+          { text: `Things that would draw attention to me — observations, achievements, desires — because visibility feels risky.`, scores: { disappearing:3, translator:1 } },
+          { text: `The full version of my experience — the part that hasn't been made acceptable yet, that might land wrong.`, scores: { translator:3, disappearing:1 } },
+          { text: `Things that would reveal the gap between how I appear and how I actually am — between the performance and what runs it.`, scores: { watcher:3, spiral:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber III — Voice',
+        title: 'When your voice feels most like yours',
+        prose: `There are moments when what you say feels completely true — when the voice that comes out is the one that lives closest to the actual you, not the managed version.<br><br><em>The Veil is asking when that happens, and what it requires.</em>`,
+        question: `When does your voice feel most fully yours?`,
+        choices: [
+          { text: `When I have prepared enough that I trust what I'm saying — when the standard has been met enough to speak from.`, scores: { spiral:3, watcher:1 } },
+          { text: `When the stakes are low enough that being wrong doesn't feel like exposure — when I can speak without consequence.`, scores: { disappearing:3, translator:1 } },
+          { text: `In writing — where I can revise until the version that comes out is the one I actually mean.`, scores: { translator:3, spiral:1 } },
+          { text: `When I forget to watch myself — in moments of genuine absorption where the observer goes quiet.`, scores: { watcher:3, disappearing:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber III — Voice',
+        title: 'What disagreement costs you',
+        prose: `Saying something that contradicts the people around you — holding a different view, pushing back, declining to agree — has a texture to it that varies enormously between people.<br><br><em>The Veil is asking what it costs you.</em>`,
+        question: `When you disagree with someone whose opinion matters to you, what do you do?`,
+        choices: [
+          { text: `I make sure I am certain before I say it — I need to have done the work before I'm willing to hold the position.`, scores: { spiral:3, watcher:1 } },
+          { text: `I often go quiet — I'd rather not take up the space of a disagreement unless I'm sure the cost is worth it.`, scores: { disappearing:3, translator:1 } },
+          { text: `I say it, but carefully — I translate it into a version that is easier to hear than the real shape of the disagreement.`, scores: { translator:3, disappearing:1 } },
+          { text: `I am aware of disagreeing in real time, and I monitor how the disagreement is landing as I express it.`, scores: { watcher:3, spiral:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber III — Voice',
+        title: 'The relationship between knowing and saying',
+        prose: `There is often a gap between what you know and what you are willing to claim out loud. Not because you doubt the knowing — but because claiming it makes it visible, available to be tested, available to be wrong.<br><br><em>The Veil is asking about that gap.</em>`,
+        question: `When you know something — have a genuine understanding or expertise — how do you hold that in relation to others?`,
+        choices: [
+          { text: `Carefully — I tend to qualify my knowledge before sharing it, even when I am fairly certain.`, scores: { spiral:2, watcher:2 } },
+          { text: `Quietly — I often don't claim it unless someone specifically asks, because claiming feels like taking up too much room.`, scores: { disappearing:3, translator:1 } },
+          { text: `With editing — I share a version of what I know that feels appropriately sized, not the full thing.`, scores: { translator:3, disappearing:1 } },
+          { text: `With awareness — I know what I know, and I also know what I don't know, and the second list is always louder.`, scores: { watcher:3, spiral:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber III — Voice',
+        title: `What you would say if you weren't afraid`,
+        prose: `There is something you would say — to a specific person, in a specific situation, or just in general — if the cost of saying it were lower. You know what it is. You have probably thought about it more than once.<br><br><em>The Veil is not asking what it is. Only what is standing between you and it.</em>`,
+        question: `What stands between you and saying the thing you don't say?`,
+        choices: [
+          { text: `The fear that saying it will reveal I am less than the version of me that has been believed in.`, scores: { spiral:2, watcher:2 } },
+          { text: `The cost of being seen wanting it, or needing it, or caring that much.`, scores: { disappearing:3, translator:1 } },
+          { text: `The gap between the real version and the acceptable one — and uncertainty about whether the real version will land.`, scores: { translator:3, disappearing:1 } },
+          { text: `The watching — the part of me that would observe myself saying it and report back on whether it was the right call.`, scores: { watcher:3, spiral:1 } }
+        ]
+      }
+    ],
+
+    witness: [
+      {
+        eyebrow: 'Chamber IV — The Witness',
+        title: 'How you see yourself',
+        prose: `The way you see yourself when you are being honest — not in the performance version, not in the worst-case version, but in the quiet middle — tells a great deal about the shape of your doubt.<br><br><em>The Veil is asking how you actually see yourself when no one is watching.</em>`,
+        question: `When you are completely alone and not performing for anyone, how do you tend to see yourself?`,
+        choices: [
+          { text: `As someone who is always reaching toward something they haven't quite arrived at yet.`, scores: { spiral:3, watcher:1 } },
+          { text: `As someone who is probably less than they appear to the people who believe in them.`, scores: { watcher:3, disappearing:1 } },
+          { text: `As smaller than I am in rooms where other people are present — quieter, less visible.`, scores: { disappearing:3, translator:1 } },
+          { text: `As someone who has a real inner life that the outer version of them has difficulty transmitting accurately.`, scores: { translator:3, watcher:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber IV — The Witness',
+        title: 'What you would want someone to know',
+        prose: `There is something you would want someone who loves you to know — about the doubt, about the effort, about what it is like to be you in the parts they don't see.<br><br><em>The Veil is asking what that thing is.</em>`,
+        question: `If someone who loves you could understand one thing about your doubt that they don't currently see, what would it be?`,
+        choices: [
+          { text: `How loud the standard is. How rarely it goes quiet, even when I appear to be fine.`, scores: { spiral:3, watcher:1 } },
+          { text: `That the smallness is not modesty — it is a strategy, and it is costing me something I would rather not keep paying.`, scores: { disappearing:3, translator:1 } },
+          { text: `That the version of me they know has been edited for safety — and that somewhere underneath it is a fuller one.`, scores: { translator:3, disappearing:1 } },
+          { text: `How much energy goes into the watching — into monitoring the gap between how I appear and what is actually running underneath.`, scores: { watcher:3, spiral:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber IV — The Witness',
+        title: 'What you wish were easier',
+        prose: `Everyone has something they wish were easier. Not a grand wish — a specific, personal one about the particular way their doubt makes ordinary things harder than they should be.<br><br><em>The Veil is asking about yours.</em>`,
+        question: `What do you most wish were easier for you?`,
+        choices: [
+          { text: `Finishing. Deciding it is done. Letting go of the standard long enough to call it complete.`, scores: { spiral:3, watcher:1 } },
+          { text: `Taking up space without apologizing for it — being present without qualifying the presence.`, scores: { disappearing:3, translator:1 } },
+          { text: `Saying the real thing on the first try, without the translation pass.`, scores: { translator:3, disappearing:1 } },
+          { text: `Being in the experience instead of watching it — inhabiting the moment without the running commentary.`, scores: { watcher:3, spiral:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber IV — The Witness',
+        title: 'What the doubt is protecting',
+        prose: `Doubt is not purely destructive. It usually grew to protect something — a hope, a sense of self, a relationship, a standard that mattered. It became a strategy before it became a burden.<br><br><em>The Veil is asking what yours is protecting.</em>`,
+        question: `If the doubt were a strategy rather than an affliction, what would it be protecting you from?`,
+        choices: [
+          { text: `The catastrophic disappointment of having tried as hard as I can and still not being enough.`, scores: { spiral:3, watcher:1 } },
+          { text: `The rejection that would come if I were fully seen and found wanting.`, scores: { disappearing:3, translator:1 } },
+          { text: `The exposure of the gap between who I am and who I have allowed people to believe I am.`, scores: { translator:3, watcher:1 } },
+          { text: `The humiliation of having believed in myself too much, and been wrong.`, scores: { watcher:3, spiral:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber IV — The Witness',
+        title: 'What you would tell a younger version of yourself',
+        prose: `The doubt you carry now was learned somewhere. It had a beginning. There was a version of you that didn't yet have it — who moved through the world with a different relationship to their own worth.<br><br><em>The Veil is asking what you would tell that version now.</em>`,
+        question: `If you could tell a younger version of yourself one thing about the doubt you carry, what would it be?`,
+        choices: [
+          { text: `That the standard you are building is not the only measure of whether you are worth anything.`, scores: { spiral:3, watcher:1 } },
+          { text: `That making yourself smaller does not protect you from rejection — it only delays the connection you are actually looking for.`, scores: { disappearing:3, translator:1 } },
+          { text: `That the real version of you is not going to destroy the people who love you. It is what they are actually looking for.`, scores: { translator:3, disappearing:1 } },
+          { text: `That being observed and being known are not the same thing. You are allowed to stop watching yourself and start living.`, scores: { watcher:3, spiral:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber IV — The Witness',
+        title: `How you relate to other people's doubt`,
+        prose: `Most people are more generous with others than they are with themselves. The same failure that would spiral into self-criticism in their own work would be met with warmth and perspective when a friend experienced it.<br><br><em>The Veil is asking about the gap between how you hold others and how you hold yourself.</em>`,
+        question: `When a friend comes to you with the same doubt you carry about yourself, what do you say?`,
+        choices: [
+          { text: `I tell them the work they did was real, that the standard they're holding themselves to is unreasonable.`, scores: { spiral:3, watcher:1 } },
+          { text: `I tell them they are seen, that they do not need to make themselves smaller for my sake or anyone else's.`, scores: { disappearing:3, translator:1 } },
+          { text: `I tell them the real version is what I want to hear — that I can handle it, that they don't need to edit for me.`, scores: { translator:3, disappearing:1 } },
+          { text: `I tell them that the doubt they feel is not evidence — that the watching is not the same as what's actually true.`, scores: { watcher:3, spiral:1 } }
+        ]
+      }
+    ],
+
+    soften: [
+      {
+        eyebrow: 'Chamber V — The Softening',
+        title: 'What self-compassion looks like for you',
+        prose: `Self-compassion is not self-pity. It is not lowering the standard or pretending the difficulty is not real. It is meeting yourself in the difficulty with the same warmth you would offer someone you love.<br><br><em>The Veil is asking what that looks like for you — not in theory, but in practice.</em>`,
+        question: `When you are struggling, what does treating yourself with kindness actually look like?`,
+        choices: [
+          { text: `Hard. I know the words — I would say them to anyone else — but saying them to myself feels hollow or like lying.`, scores: { spiral:3, watcher:1 } },
+          { text: `Quiet. I can offer it to myself, but only when I am alone — witnessed self-compassion feels performative.`, scores: { disappearing:3, translator:1 } },
+          { text: `Edited. I can access something like it, but the version I allow myself is smaller than what I would offer a friend.`, scores: { translator:3, disappearing:1 } },
+          { text: `Complicated. I can see myself needing it clearly, but stepping inside the need rather than observing it is difficult.`, scores: { watcher:3, spiral:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber V — The Softening',
+        title: 'The thing the doubt forgets',
+        prose: `Kristin Neff calls it common humanity: the recognition that suffering, inadequacy, and imperfection are not evidence that something is wrong with you — they are part of what every person carries.<br><br><em>The Veil is asking what your doubt forgets.</em>`,
+        question: `What does your doubt most consistently forget?`,
+        choices: [
+          { text: `That not finishing perfectly is not the same as failing. That enough is a real destination, not a moving line.`, scores: { spiral:3, watcher:1 } },
+          { text: `That being seen does not mean being found wanting. That visibility is not the same as exposure.`, scores: { disappearing:3, translator:1 } },
+          { text: `That the real version of me is not more likely to be rejected than the edited one — and is more likely to be loved.`, scores: { translator:3, disappearing:1 } },
+          { text: `That everyone has a gap between appearance and interior. That noticing mine does not mean mine is larger.`, scores: { watcher:3, spiral:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber V — The Softening',
+        title: `The Veil's final question`,
+        prose: `This is the last chamber. The Veil has been listening — to what the doubt says, to what it protects, to what it forgets. Something has been reflected here.<br><br><em>It asks one final question.</em>`,
+        question: `If you could offer yourself what you most needed to hear right now, what would it be?`,
+        choices: [
+          { text: `That what you have already done is real. That you are allowed to rest in it before reaching for the next thing.`, scores: { spiral:3, watcher:1 } },
+          { text: `That taking up space is not an imposition. That you are allowed to be fully present without apologizing for it.`, scores: { disappearing:3, translator:1 } },
+          { text: `That the real version of you is not a liability. The people who deserve you can hold all of it.`, scores: { translator:3, disappearing:1 } },
+          { text: `That you are allowed to stop watching and start being. The gap between appearance and interior is not evidence of fraud.`, scores: { watcher:3, spiral:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber V — The Softening',
+        title: 'What you are learning',
+        prose: `Whatever shape your doubt takes, it has probably been with you long enough that it feels like part of who you are. But the research is clear: the relationship with doubt can change. Not by eliminating it — by changing how you hold it.<br><br><em>The Veil is asking what you are learning about how to hold yours.</em>`,
+        question: `What are you slowly learning about how to live with the doubt you carry?`,
+        choices: [
+          { text: `That the standard can be a companion rather than a judge — that I can hold it without being held hostage by it.`, scores: { spiral:3, watcher:1 } },
+          { text: `That being seen is survivable — and that the smallness costs more than the visibility would.`, scores: { disappearing:3, translator:1 } },
+          { text: `That the real version does not need to be earned. It is already the version I am.`, scores: { translator:3, disappearing:1 } },
+          { text: `That inhabiting life is different from observing it — and that the latter was always a choice, not a necessity.`, scores: { watcher:3, spiral:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber V — The Softening',
+        title: 'What you carry that is not doubt',
+        prose: `The doubt is real. But it is not the whole of you. Underneath the spiral, the smallness, the translation, the watching — there is something that was present before the doubt learned to be loud.<br><br><em>The Veil is asking about that something.</em>`,
+        question: `What is most reliably present in you underneath the doubt?`,
+        choices: [
+          { text: `The care — the part that holds high standards because it genuinely cares about the quality of what it does.`, scores: { spiral:3, watcher:1 } },
+          { text: `The attentiveness — the part that watches carefully and notices things others miss.`, scores: { disappearing:2, watcher:2 } },
+          { text: `The real voice — the one that knows what it thinks before the translation begins.`, scores: { translator:3, disappearing:1 } },
+          { text: `A genuine self — one that exists independent of how it is received, even when the watching makes it hard to access.`, scores: { watcher:3, spiral:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber V — The Softening',
+        title: 'A note from the Veil',
+        prose: `This is the last question. The Veil does not offer advice, and it does not have all the answers about who you are. But it has been here, across these five chambers, and it has been paying attention.<br><br>Before the final question, it wants to say this:<br><br><em>The doubt you carry is not evidence of what you fear it is evidence of. The people who hold themselves to the highest standards are usually not the most capable — they are the most honest about the distance between where they are and where they want to be. That honesty is a form of integrity, not a confession of inadequacy.</em>`,
+        question: `What would change for you if you believed that the doubt was not evidence of what it claims to be evidence of?`,
+        choices: [
+          { text: `I could rest in what I have done before reaching for the next thing. The gap would stop being a verdict.`, scores: { spiral:3, watcher:1 } },
+          { text: `I could take up more space — speak more fully, claim more accurately, make myself less invisible.`, scores: { disappearing:3, translator:1 } },
+          { text: `I could let the real version out without the translation — trust that what I actually think is worth saying as it is.`, scores: { translator:3, disappearing:1 } },
+          { text: `I could stop watching long enough to be in the experience — to live it rather than observe it.`, scores: { watcher:3, spiral:1 } }
+        ]
+      }
+    ]
+  };
+
+  // ── SESSION SELECTION ───────────────────────────────────────────────────
+  function soydSelectChambers() {
+    const BRANCHES = ['standard','exposure','voice','witness','soften'];
+    let lastUsed = {};
+    try { lastUsed = JSON.parse(localStorage.getItem('faeboundSOYDLastUsed') || '{}'); } catch(e) {}
+    const selected = BRANCHES.map((branch, idx) => {
+      const pool = SOYD_POOLS[branch];
+      const fresh = pool.filter((_, i) => i !== lastUsed[branch]);
+      const source = fresh.length > 0 ? fresh : pool;
+      const question = source[Math.floor(Math.random() * source.length)];
+      return { ...question, _branch: branch, _poolIndex: pool.indexOf(question),
+        eyebrow: `Chamber ${['I','II','III','IV','V'][idx]} — ${question.eyebrow.split('— ')[1] || question.eyebrow}` };
+    });
+    const used = {};
+    BRANCHES.forEach((b,i) => { used[b] = selected[i]._poolIndex; });
+    try { localStorage.setItem('faeboundSOYDLastUsed', JSON.stringify(used)); } catch(e) {}
+    return selected;
+  }
+
+  // ── STATE ───────────────────────────────────────────────────────────────
+  let soydChambers = [];
+  let soydChamberIndex = 0;
+  let soydSelected = null;
+  let soydPhase = 'intro';
+  let soydScores = { spiral:0, disappearing:0, translator:0, watcher:0 };
+
+  // ── HELPERS ─────────────────────────────────────────────────────────────
+  function soydChime(freq=440, vol=.02) {
+    try { if (window.audio?.tone) window.audio.tone(freq, .18, 'sine', vol, freq*1.5); } catch(e) {}
+  }
+  function soydSlideIn(el) {
+    if (!el) return;
+    el.style.opacity='0'; el.style.transform='translateY(18px)';
+    requestAnimationFrame(() => {
+      el.style.transition='opacity .55s ease, transform .55s ease';
+      el.style.opacity='1'; el.style.transform='none';
+    });
+  }
+  function soydPips() {
+    if (soydPhase !== 'chamber') return '';
+    return `<div class="soyd-pips">${soydChambers.map((_,i) => {
+      const cls = i===soydChamberIndex?'active':i<soydChamberIndex?'done':'';
+      return `<div class="soyd-pip ${cls}"></div>`;
+    }).join('')}</div>`;
+  }
+
+  // ── RENDER INTRO ────────────────────────────────────────────────────────
+  function soydRenderIntro() {
+    const crossings = (() => {
+      try { return parseInt(localStorage.getItem('faeboundSOYDCrossings')||'0')||0; } catch(e) { return 0; }
+    })();
+    const lastResult = (() => {
+      try { return JSON.parse(localStorage.getItem('faeboundLastSOYDResult')||'null'); } catch(e) { return null; }
+    })();
+    const returningText = (() => {
+      if (!lastResult?.name) return '';
+      try { localStorage.setItem('faeboundSOYDCrossings', crossings+1); } catch(e) {}
+      if (crossings === 0)
+        return '<p style="margin:0 0 14px;font-size:.88rem;color:rgba(255,160,180,.65);font-style:italic">You have been here before. Last time, the Veil saw <em style="color:rgba(255,85,119,.8)">' + lastResult.name + '</em>.<br><span style="font-size:.82rem;opacity:.75">The questions will be different this time.</span></p>';
+      return '<p style="margin:0 0 14px;font-size:.88rem;color:rgba(255,160,180,.7);font-style:italic">The Veil knows the shape of your doubt. <em style="color:rgba(255,85,119,.85)">' + lastResult.name + '</em> has been here before.<br><span style="font-size:.82rem;opacity:.8">Come as honestly as you did last time.</span></p>';
+    })();
+    wrap.innerHTML = `
+      <div class="soyd-chamber" style="text-align:center">
+        <div style="font-size:3rem;margin:0 auto 20px;animation:breathe 4s ease-in-out infinite;color:var(--ruby)">🜁</div>
+        <p class="soyd-eyebrow" style="justify-content:center">Self-Compassion Trial</p>
+        <h1 class="soyd-title" style="color:var(--ruby);text-align:center">The Shape of Your Doubt</h1>
+        <div class="soyd-prose" style="max-width:560px;margin:0 auto 24px;text-align:center">
+          ${returningText}
+          <p style="margin:0 0 14px">Five chambers about the particular way you doubt yourself.</p>
+          <p style="margin:0 0 14px">Not whether you doubt — everyone does. The shape it takes. The story it tells. What it is protecting, and what it is costing you.</p>
+          <p style="margin:0"><em>Choose what is true. Not what is flattering, not what is worst-case. What is actually true.</em></p>
+        </div>
+        <div style="max-width:520px;margin:0 auto 28px;padding:16px;border-radius:14px;
+             border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025)">
+          <p style="font-size:.81rem;color:rgba(255,190,210,.82);line-height:1.72;margin:0 0 8px">
+            This experience draws on Kristin Neff's self-compassion research, Brené Brown's work on shame and vulnerability, and Pauline Clance's imposter phenomenon research. It is not a diagnostic tool. It is a mirror — and mirrors are most useful when you look at them honestly.
+          </p>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px">
+            <a href="https://self-compassion.org/the-three-elements-of-self-compassion-2/" target="_blank" rel="noopener"
+               style="font-size:.72rem;color:rgba(255,85,119,.5);text-decoration:underline">Kristin Neff: Self-Compassion →</a>
+            <a href="https://brenebrown.com/articles/2013/01/14/shame-v-guilt/" target="_blank" rel="noopener"
+               style="font-size:.72rem;color:rgba(255,85,119,.5);text-decoration:underline">Brené Brown: Shame Research →</a>
+          </div>
+        </div>
+        <div class="soyd-nav" style="justify-content:center">
+          <button id="soydBeginBtn" class="btn" style="background:rgba(255,85,119,.12);border-color:rgba(255,85,119,.35);color:var(--ruby);padding:17px 38px;font-size:.97rem">Enter the First Chamber</button>
+          <button id="soydBackFromIntroBtn" class="btn btn-ghost">Return to Realm</button>
+        </div>
+      </div>`;
+    soydSlideIn(wrap.querySelector('.soyd-chamber'));
+    document.getElementById('soydBeginBtn').addEventListener('click', () => {
+      soydPhase='chamber'; soydChamberIndex=0;
+      soydScores={spiral:0,disappearing:0,translator:0,watcher:0};
+      soydChime(440,.022); setTimeout(soydRenderChamber,60);
+    });
+    document.getElementById('soydBackFromIntroBtn').addEventListener('click', () => {
+      if (typeof backToHub==='function') backToHub(()=>{});
+    });
+  }
+
+  // ── RENDER CHAMBER ──────────────────────────────────────────────────────
+  function soydRenderChamber() {
+    const ch = soydChambers[soydChamberIndex];
+    soydSelected = null;
+    wrap.innerHTML = `
+      ${soydPips()}
+      <div class="soyd-chamber">
+        <p class="soyd-eyebrow">${ch.eyebrow}</p>
+        <h2 class="soyd-title">${ch.title}</h2>
+        <div class="soyd-prose">${ch.prose}</div>
+        <p class="soyd-question">${ch.question}</p>
+        <div class="soyd-choices" id="soydChoices">
+          ${ch.choices.map((choice,i) => `
+            <button class="soyd-choice" data-idx="${i}" type="button">
+              <span class="soyd-choice-num">${['I','II','III','IV'][i]}</span>
+              ${choice.text}
+            </button>`).join('')}
+        </div>
+        <div class="soyd-nav" id="soydNav">
+          <button class="btn" id="soydNextBtn" disabled
+            style="background:rgba(255,85,119,.08);border-color:rgba(255,85,119,.2);color:rgba(255,85,119,.4)">
+            ${soydChamberIndex < soydChambers.length-1 ? 'Continue →' : 'The Veil reflects →'}
+          </button>
+          <button class="btn btn-ghost" id="soydBackBtn">← Back</button>
+        </div>
+      </div>`;
+    soydSlideIn(wrap.querySelector('.soyd-chamber'));
+    document.querySelectorAll('.soyd-choice').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.soyd-choice').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        soydSelected = parseInt(btn.dataset.idx);
+        const next = document.getElementById('soydNextBtn');
+        if (next) {
+          next.disabled=false;
+          next.style.background='rgba(255,85,119,.12)';
+          next.style.borderColor='rgba(255,85,119,.35)';
+          next.style.color='var(--ruby)';
+        }
+        soydChime(460+soydSelected*40,.018);
+        if (typeof window.ambient?.swell==='function') window.ambient.swell(0.002);
+      });
+    });
+    document.getElementById('soydNextBtn')?.addEventListener('click', () => {
+      if (soydSelected===null) return;
+      const scores = soydChambers[soydChamberIndex].choices[soydSelected].scores;
+      Object.entries(scores).forEach(([k,v]) => { soydScores[k]=(soydScores[k]||0)+v; });
+      soydChamberIndex++;
+      if (soydChamberIndex >= soydChambers.length) {
+        soydPhase='result'; setTimeout(soydRenderResult,180);
+      } else {
+        soydChime(440,.022); setTimeout(soydRenderChamber,60);
+      }
+    });
+    document.getElementById('soydBackBtn')?.addEventListener('click', () => {
+      if (soydChamberIndex > 0) {
+        soydChamberIndex--;
+        const prevScores = soydChambers[soydChamberIndex].choices[soydSelected??0]?.scores||{};
+        Object.entries(prevScores).forEach(([k,v]) => { soydScores[k]=Math.max(0,(soydScores[k]||0)-v); });
+        soydSelected=null; soydRenderChamber();
+      } else { soydPhase='intro'; soydRenderIntro(); }
+    });
+  }
+
+  // ── RENDER RESULT ───────────────────────────────────────────────────────
+  function soydRenderResult() {
+    const order = ['spiral','disappearing','translator','watcher'];
+    const winner = order.reduce((best,k) => soydScores[k]>soydScores[best]?k:best, order[0]);
+    const second = order.filter(k=>k!==winner).reduce((best,k) => soydScores[k]>soydScores[best]?k:best);
+    const a = ARCHETYPES[winner];
+    const b2 = ARCHETYPES[second];
+    const total = Object.values(soydScores).reduce((s,v)=>s+v,0)||1;
+    const lastResult = (() => {
+      try { return JSON.parse(localStorage.getItem('faeboundLastSOYDResult')||'null'); } catch(e) { return null; }
+    })();
+    const shiftNote = lastResult?.winner && lastResult.winner!==winner
+      ? '<p style="font-size:.84rem;color:rgba(255,190,210,.6);font-style:italic;margin-bottom:16px">Last time, the Veil saw <em style="color:rgba(255,85,119,.7)">' + lastResult.name + '</em>. This time it sees ' + a.name + '. The shape can shift.</p>'
+      : '';
+    try { localStorage.setItem('faeboundLastSOYDResult', JSON.stringify({winner, name:a.name})); } catch(e) {}
+    const chimeMap = { spiral:[480,600,720], disappearing:[360,440,520], translator:[520,640,760], watcher:[440,560,680] };
+    const notes = chimeMap[winner]||[440,560,680];
+    soydChime(notes[0],.038);
+    setTimeout(()=>soydChime(notes[1],.028),180);
+    setTimeout(()=>soydChime(notes[2],.018),380);
+    const breakdown = order.map(k => ({
+      key:k, name:ARCHETYPES[k].name, sigil:ARCHETYPES[k].sigil,
+      pct:Math.round((soydScores[k]/total)*100), color:ARCHETYPES[k].color
+    })).sort((a,b)=>b.pct-a.pct);
+    wrap.innerHTML = `
+      <div class="soyd-result">
+        <span style="font-size:4rem;display:block;margin-bottom:12px;animation:breathe 4s ease-in-out infinite">${a.sigil}</span>
+        <h2 style="font-family:'Cinzel',serif;font-size:clamp(1.7rem,5vw,2.7rem);font-weight:700;letter-spacing:.04em;margin:0 0 3px;color:${a.color}">${a.name}</h2>
+        <p style="font-size:.75rem;text-transform:uppercase;letter-spacing:.2em;color:var(--muted);margin:0 0 22px">${a.branch} · The Shape of Your Doubt</p>
+        ${shiftNote}
+        <div style="color:var(--muted);line-height:1.9;font-size:.97rem;text-align:left;margin:0 0 18px;padding:20px;border-radius:15px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.055)">${a.desc}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:20px;text-align:left">
+          <div style="padding:12px;border-radius:12px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.05)">
+            <div style="font-size:.63rem;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);opacity:.6;margin-bottom:4px">Your gift</div>
+            <div style="font-size:.88rem;color:var(--text);line-height:1.44">${a.gift}</div>
+          </div>
+          <div style="padding:12px;border-radius:12px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.05)">
+            <div style="font-size:.63rem;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);opacity:.6;margin-bottom:4px">What it forgets</div>
+            <div style="font-size:.88rem;color:var(--text);line-height:1.44">${a.edge}</div>
+          </div>
+        </div>
+        ${second!==winner?'<p style="font-size:.84rem;color:var(--muted);margin-bottom:18px;line-height:1.6">Your secondary shape: <em style="color:' + b2.colorSoft + '">' + b2.name + '</em>. Doubt often has more than one face.</p>':''}
+        <div style="margin-bottom:20px">
+          ${breakdown.map(b=>`<div style="display:flex;align-items:center;gap:9px;margin-bottom:6px">
+            <span style="font-size:.72rem;color:var(--muted);opacity:.46;min-width:80px">${b.sigil} ${b.name}</span>
+            <div style="flex:1;height:3px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden">
+              <div style="height:100%;border-radius:999px;width:${b.pct}%;background:${b.color};opacity:${b.key===winner?1:.4};transition:width 1.3s cubic-bezier(.2,.8,.2,1)"></div>
+            </div>
+            <span style="font-size:.78rem;color:rgba(188,197,239,.35);min-width:34px;text-align:right">${b.pct}%</span>
+          </div>`).join('')}
+        </div>
+        <div style="padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025);margin-bottom:20px;text-align:left">
+          <p style="font-size:.78rem;color:rgba(255,190,210,.75);line-height:1.72;margin:0 0 10px">${a.research}</p>
+          <a href="${a.link}" target="_blank" rel="noopener"
+             style="font-size:.75rem;color:rgba(255,85,119,.55);text-decoration:underline">${a.linkLabel} →</a>
+        </div>
+        <div style="padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.05);background:rgba(255,255,255,.02);margin-bottom:24px">
+          <p style="font-size:.76rem;color:rgba(255,190,210,.55);margin:0 0 8px;font-weight:600;text-transform:uppercase;letter-spacing:.1em">Practices</p>
+          ${a.practices.map(p=>'<p style="font-size:.84rem;color:var(--muted);margin:0 0 8px;line-height:1.6;padding-left:12px;border-left:2px solid rgba(255,85,119,.25)">' + p + '</p>').join('')}
+        </div>
+        <div style="font-size:.72rem;color:rgba(154,164,204,.5);line-height:1.7;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.04);margin-bottom:24px;text-align:center">
+          This reflection draws on self-compassion research, shame and vulnerability research, and imposter phenomenon research. It is not a diagnostic tool.
+          <br><a href="${a.link}" target="_blank" rel="noopener" style="color:rgba(255,85,119,.4);text-decoration:underline;margin-right:8px">${a.linkLabel} →</a>
+        </div>
+        <div class="soyd-nav" style="justify-content:center">
+          <button class="btn btn-ghost" id="soydRetakeBtn">Cross Again</button>
+          <button class="btn btn-ghost" id="soydHubBtn">Return to Realm</button>
+        </div>
+      </div>`;
+    soydSlideIn(wrap.querySelector('.soyd-result'));
+    try {
+      window.archive?.inc?.('trialsCompleted');
+      window.progression?.increment?.();
+      trackCompletion('shape-of-doubt');
+    } catch(e) {}
+    document.getElementById('soydRetakeBtn')?.addEventListener('click', () => {
+      soydPhase='intro'; soydChamberIndex=0; soydSelected=null;
+      soydScores={spiral:0,disappearing:0,translator:0,watcher:0};
+      soydChambers=soydSelectChambers(); soydRenderIntro();
+    });
+    document.getElementById('soydHubBtn')?.addEventListener('click', () => {
+      if (typeof backToHub==='function') backToHub(()=>{});
+    });
+  }
+
+  // ── ENTRY POINT ─────────────────────────────────────────────────────────
+  function begin() {
+    soydPhase='intro'; soydChamberIndex=0; soydSelected=null;
+    soydScores={spiral:0,disappearing:0,translator:0,watcher:0};
+    soydChambers=soydSelectChambers(); soydRenderIntro();
+  }
+
+  return { begin };
+})();
+
+</script>
+
+<!-- ═══ THE WAY YOU HOLD OTHERS ═══ -->
+<script>
+
+window.wyho = (() => {
+  const wrap = document.getElementById('wyhoWrap');
+  if (!wrap) return { begin(){ console.warn('wyhoWrap not found'); } };
+
+  // ── RESEARCH FOUNDATION ────────────────────────────────────────────────
+  // The Gottman Institute (Gottman, 1999; Gottman & Silver, 2015):
+  // Decades of research on what actually sustains relationships.
+  // The "bids for connection" framework — how people signal need and
+  // how partners respond — is central to this experience.
+  //
+  // Sue Johnson — Emotionally Focused Therapy (EFT):
+  // Attachment theory applied to adult relationships. The key insight:
+  // people don't fight about content, they fight about whether they
+  // are seen, safe, and secure. Care styles reflect attachment patterns.
+  //
+  // Gary Chapman — The Five Love Languages (1992):
+  // An accessible framework for how people express and receive care.
+  // Used here as an entry point; deepened by Gottman and Johnson.
+  //
+  // Links: gottman.com | iceeft.com
+
+  // ── ARCHETYPES ─────────────────────────────────────────────────────────
+  const ARCHETYPES = {
+    lantern: {
+      name: 'The Lantern',
+      sigil: '🕯',
+      color: 'rgba(255,217,61,1)',
+      colorSoft: 'rgba(255,217,61,.7)',
+      branch: 'The Witness',
+      desc: `<p>The Lantern shows up with presence. When someone is struggling, you become very still and very attentive. You don't immediately try to fix or advise — you make the other person feel that they are being seen accurately, which is often the thing they most need.</p>
+<p>This is a rare gift. Many people in pain don't need solutions — they need someone who can hold the weight of what they're carrying without flinching. The Lantern is that person. Your attention is a form of love.</p>
+<p>The edge of this gift: presence is costly. You absorb a great deal of what others bring you, and you may find that you have very little left for yourself after tending to someone else's pain. The Lantern's challenge is learning to replenish — to be witnessed in return, not only to witness.</p>`,
+      gift: `Your presence makes people feel seen and less alone. You hold space without needing to fill it.`,
+      edge: `Witnessing others can deplete you. You may give more than you receive, and forget to ask for the same.`,
+      practices: [
+        `Notice when you are holding space for others and not receiving it in return. Name this, even quietly to yourself.`,
+        `Practice letting someone witness you. Not performing — actually letting them see something real.`,
+        `Your attention is a resource. It is not unlimited, and protecting it is not selfish.`
+      ],
+      research: `The Gottman Institute's research on "bids for connection" found that the most important predictor of relationship health is not grand gestures but attentiveness to small moments — turning toward rather than away. The Lantern excels at this. Sue Johnson's EFT research shows that feeling truly seen by another person activates the same neural pathways as physical safety.`,
+      link: 'https://www.gottman.com/about/research/',
+      linkLabel: 'The Gottman Institute: Relationship Research'
+    },
+    tide: {
+      name: 'The Tide',
+      sigil: '🌊',
+      color: 'rgba(126,200,255,1)',
+      colorSoft: 'rgba(126,200,255,.7)',
+      branch: 'The Attuner',
+      desc: `<p>The Tide feels what others feel — not as a performance, but as a genuine permeability. When someone you care about is in pain, some of that pain moves into you. When they are joyful, you feel that too. You are an emotional resonance chamber.</p>
+<p>This is a profound form of connection. People who are cared for by The Tide rarely feel alone in what they're experiencing, because The Tide is genuinely in it with them — not watching from the outside, but present from the inside.</p>
+<p>The edge of this gift: you can absorb more than is yours to carry. The Tide sometimes loses the distinction between their own feelings and the feelings of the people they love. Learning where you end and another person begins is the lifelong work of The Tide.</p>`,
+      gift: `You feel what others feel. People rarely feel alone when you are with them.`,
+      edge: `The boundary between your feelings and others' can blur. You may carry what isn't yours.`,
+      practices: [
+        `Ask yourself regularly: is this feeling mine, or did I absorb it from someone else?`,
+        `Practice being moved by someone's experience without being swept into it. Presence, not fusion.`,
+        `Your empathy is genuine and powerful. It does not require you to suffer alongside someone in order to be valid.`
+      ],
+      research: `Sue Johnson's EFT research identifies emotional accessibility and responsiveness as the foundation of secure attachment. The Tide embodies both. However, research on empathic overload (Klimecki & Singer, 2012) shows that empathy without self-regulation leads to burnout. The antidote is compassion — feeling with someone while remaining grounded in oneself.`,
+      link: 'https://iceeft.com/what-is-eft/',
+      linkLabel: 'Sue Johnson: Emotionally Focused Therapy'
+    },
+    stone: {
+      name: 'The Stone',
+      sigil: '🪨',
+      color: 'rgba(154,164,204,1)',
+      colorSoft: 'rgba(154,164,204,.7)',
+      branch: 'The Steadier',
+      desc: `<p>The Stone stays. When everything is moving and uncertain and difficult, you become more still. You don't require the situation to resolve before you can be present. You don't need the other person to be okay in order to remain with them.</p>
+<p>This is a rare and deeply valued form of care. In a world where people often leave when things get complicated, The Stone is the person who remains. Your steadiness is its own kind of love — a love that says: I am not going anywhere, and you don't have to perform recovery for me.</p>
+<p>The edge of this gift: steadiness can sometimes be mistaken for emotional distance, including by yourself. The Stone may struggle to communicate the depth of what they feel, because they manage it so quietly. People who love The Stone sometimes can't tell that The Stone loves them back — because love, for The Stone, is presence, not declaration.</p>`,
+      gift: `You stay. Your steadiness communicates safety in a way that words often cannot.`,
+      edge: `Others may not know how much you feel, because you carry it so quietly. You may seem distant when you are simply steady.`,
+      practices: [
+        `Try saying what you feel, even when the feeling is manageable. The people who love you need to hear it.`,
+        `Your steadiness is valuable — and it is not the same as not needing anything. You are allowed to need.`,
+        `Notice if you use steadiness to avoid vulnerability. Staying is not the same as showing up fully.`
+      ],
+      research: `Gottman's research identifies "calm influence" — the ability to remain non-defensive and grounded during conflict — as one of the strongest predictors of relationship longevity. The Stone has this naturally. Chapman's research suggests that acts of service and quality time, both expressions of the Stone's care style, rank among the most valued forms of connection.`,
+      link: 'https://www.gottman.com/about/research/',
+      linkLabel: 'The Gottman Institute: Relationship Research'
+    },
+    thread: {
+      name: 'The Thread',
+      sigil: '🧵',
+      color: 'rgba(94,221,168,1)',
+      colorSoft: 'rgba(94,221,168,.7)',
+      branch: 'The Connector',
+      desc: `<p>The Thread shows love by doing. When someone is struggling, your first instinct is to find something useful — to fix, to help, to solve, to act. You connect through action. Your care is expressed in what you do for people, not only in what you say.</p>
+<p>This is a tangible and deeply practical form of love. The Thread doesn't leave people alone in their problems — they reach in and try to help move something. They bring soup. They research the thing. They show up with the thing that was needed.</p>
+<p>The edge of this gift: action can sometimes substitute for presence. The Thread may find it easier to do something than to simply sit with someone in their difficulty without fixing it. The people you love sometimes need you to put down the solution and stay with the problem alongside them — not because your help is unwanted, but because your presence is also love.</p>`,
+      gift: `You show up through action. People feel cared for in concrete, tangible ways.`,
+      edge: `Doing can become a way of avoiding simply being with someone. Sometimes what's needed is presence, not a solution.`,
+      practices: [
+        `Before reaching for a solution, pause and ask: does this person want help, or do they want company?`,
+        `Practice staying with a problem without fixing it. This is a skill, and it can be learned.`,
+        `Your doing is love. And so is your being. Both are available to you.`
+      ],
+      research: `Chapman's love languages framework identifies acts of service as a primary care expression for many people. Gottman's research adds nuance: the most effective acts of service are those that are responsive to what someone actually needs in the moment — what he calls "accepting influence." The Thread's growth edge is in deepening this responsiveness.`,
+      link: 'https://www.gottman.com/about/research/',
+      linkLabel: 'The Gottman Institute: Relationship Research'
+    }
+  };
+
+  // ── QUESTION POOLS ─────────────────────────────────────────────────────
+  // Five branches: witness / attune / steady / act / receive
+  // Maps to the four archetypes + a synthesis chamber (receive — how you let others care for you)
+  // Branch mapping:
+  //   witness  → Lantern (sees and holds without fixing)
+  //   attune   → Tide (feels with others, emotional resonance)
+  //   steady   → Stone (stays present, creates safety through constancy)
+  //   act      → Thread (shows love through doing)
+  //   receive  → synthesis (how you allow care to come toward you)
+
+  const WYHO_POOLS = {
+
+    witness: [
+      {
+        eyebrow: 'Chamber I — Presence',
+        title: 'What you do before you do anything',
+        prose: `Someone you care about is struggling. You can feel it before they say a word. The room changes when they enter it.<br><br><em>The Veil is asking what happens in you before you respond.</em>`,
+        question: 'Before you say or do anything, what is your first instinct?',
+        choices: [
+          { text: `I become very still and very attentive. I want to understand exactly what is happening before I move.`, scores: { lantern:3, stone:1 } },
+          { text: `Something in me responds to something in them — I feel the shift before I can name it.`, scores: { tide:3, lantern:1 } },
+          { text: `I want to know what they need. There is probably something I can do.`, scores: { thread:3, lantern:1 } },
+          { text: `I stay close without intruding. They will come to me when they are ready.`, scores: { stone:3, lantern:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber I — Presence',
+        title: 'How you hold someone who is hurting',
+        prose: `The person in front of you is in pain. Not the manageable kind — the kind that does not resolve quickly.<br><br><em>The Veil is asking what your care looks like from the inside.</em>`,
+        question: 'When someone you love is in real pain, what does your care feel like from the inside?',
+        choices: [
+          { text: `A deep, quiet attention — I am tracking everything about them without letting them see how much I am watching.`, scores: { lantern:3, tide:1 } },
+          { text: `Something porous — their pain moves through me and I feel it alongside them.`, scores: { tide:3, lantern:1 } },
+          { text: `A settling — I become more grounded the harder things get, so they have something solid to lean on.`, scores: { stone:3, tide:1 } },
+          { text: `A searching — I am looking for what I can do, what I can bring, what might help.`, scores: { thread:3, stone:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber I — Presence',
+        title: 'What you offer without being asked',
+        prose: `There are things you give without being asked. Not because you decided to — because it is simply how you are built when someone you love needs something.<br><br><em>The Veil is asking about your unrequested gifts.</em>`,
+        question: 'What do you offer automatically, without needing to think about it?',
+        choices: [
+          { text: `My full attention. When someone is talking to me about something real, the rest of the world recedes.`, scores: { lantern:3, stone:1 } },
+          { text: `My feeling alongside them. I can't not be moved by the people I love.`, scores: { tide:3, lantern:1 } },
+          { text: `My presence over time. I show up consistently, not dramatically.`, scores: { stone:3, tide:1 } },
+          { text: `My hands. I find things to do. Tasks feel like love to me.`, scores: { thread:3, stone:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber I — Presence',
+        title: 'The kind of care that feels natural',
+        prose: `Some forms of care come naturally. Others require effort, even when the love is real. There is no hierarchy here — only different shapes.<br><br><em>The Veil is asking about the shape that is most naturally yours.</em>`,
+        question: 'Which of these feels most like your natural language of care?',
+        choices: [
+          { text: `Listening closely — hearing not just the words but what is underneath them.`, scores: { lantern:3, tide:1 } },
+          { text: `Feeling what they feel — letting their experience matter to you completely.`, scores: { tide:3, lantern:1 } },
+          { text: `Being reliable — being the person who shows up, every time, without drama.`, scores: { stone:3, thread:1 } },
+          { text: `Doing things — making the problem smaller, the path clearer, the load lighter.`, scores: { thread:3, stone:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber I — Presence',
+        title: 'What someone experiences when they are cared for by you',
+        prose: `You cannot fully see yourself from the outside. But there are things the people who love you have felt, even if they have never named them.<br><br><em>The Veil is asking what it is like to be held by you.</em>`,
+        question: 'What do people most consistently feel when they are with you at their worst?',
+        choices: [
+          { text: `Seen — like the thing they were carrying has been witnessed and held without judgment.`, scores: { lantern:3, stone:1 } },
+          { text: `Accompanied — like they are not alone inside the feeling, because I am in it with them.`, scores: { tide:3, lantern:1 } },
+          { text: `Safe — like they don't have to perform recovery, because I will not be scared off by difficulty.`, scores: { stone:3, tide:1 } },
+          { text: `Supported — like something concrete is being done, and the problem is already being moved.`, scores: { thread:3, stone:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber I — Presence',
+        title: 'The moment before someone asks for help',
+        prose: `There is a moment before someone asks for help — when they are deciding whether to. Something in that moment either opens the door or closes it.<br><br><em>The Veil is asking what you do in that moment.</em>`,
+        question: 'Someone is on the edge of asking you for something. What makes it easier for them?',
+        choices: [
+          { text: `The way I am listening — they can feel that I will not diminish what they bring.`, scores: { lantern:3, tide:1 } },
+          { text: `The fact that I already seem to know — they don't have to explain everything from the beginning.`, scores: { tide:3, lantern:1 } },
+          { text: `The fact that I am already there — I didn't wait to be asked to show up.`, scores: { stone:3, thread:1 } },
+          { text: `The fact that I am already doing something — they can see that I want to help.`, scores: { thread:3, stone:1 } }
+        ]
+      }
+    ],
+
+    attune: [
+      {
+        eyebrow: 'Chamber II — Resonance',
+        title: 'What happens in you when someone cries',
+        prose: `Someone you care about is crying. You did not expect it. There was no warning.<br><br><em>The Veil is asking what happens in your body before your mind has decided what to do.</em>`,
+        question: `When someone you love cries in front of you, what happens in you first?`,
+        choices: [
+          { text: `Something in me responds immediately — I feel something shift, and I am already moving toward them.`, scores: { tide:3, lantern:1 } },
+          { text: `I become very still. I want to understand what is happening before I respond to it.`, scores: { lantern:3, stone:1 } },
+          { text: `I want to hold them — the physical closeness feels like the most important thing.`, scores: { stone:2, tide:2 } },
+          { text: `I start thinking about what to do — what might help, what I can offer.`, scores: { thread:3, stone:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber II — Resonance',
+        title: 'How their feelings move through you',
+        prose: `The people you love are not separate from you. What happens to them happens, in some way, to you — not identically, but not neutrally either.<br><br><em>The Veil is asking how permeable you are to the people you love.</em>`,
+        question: `When someone you love is happy, really happy, what happens in you?`,
+        choices: [
+          { text: `I feel it too — their joy opens something in me that wants to meet it.`, scores: { tide:3, lantern:1 } },
+          { text: `I feel warmth — a pleasure in watching them, a deep gladness that they are okay.`, scores: { lantern:3, tide:1 } },
+          { text: `I feel settled — their happiness means they are safe, and that settles something in me.`, scores: { stone:3, tide:1 } },
+          { text: `I want to add to it — to do something that extends or deepens their happiness.`, scores: { thread:3, lantern:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber II — Resonance',
+        title: `Carrying what isn't yours`,
+        prose: `You have probably carried feelings that did not belong to you. Not intentionally — they just moved into you from someone you loved, and stayed.<br><br><em>The Veil is asking about your relationship with that permeability.</em>`,
+        question: `Have you ever left a difficult conversation carrying more than you walked in with?`,
+        choices: [
+          { text: `Often — I absorb what people bring me, and it takes time to set back down.`, scores: { tide:3, lantern:1 } },
+          { text: `Sometimes — if I wasn't careful enough about where I ended and they began.`, scores: { tide:2, lantern:2 } },
+          { text: `Occasionally — usually something that troubled me, that I couldn't stop thinking about.`, scores: { lantern:2, stone:2 } },
+          { text: `Rarely — I tend to stay in my own lane emotionally, even when I am deeply present.`, scores: { stone:3, thread:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber II — Resonance',
+        title: 'How you know something is wrong',
+        prose: `Before anyone tells you something is wrong, you sometimes already know. Not because of any visible signal — something subtler.<br><br><em>The Veil is asking how you read the people you love.</em>`,
+        question: `How do you usually know, before being told, that someone you love is struggling?`,
+        choices: [
+          { text: `A feeling in the space between us — something has changed in the quality of our contact.`, scores: { tide:3, lantern:1 } },
+          { text: `Small things I have noticed — shifts in how they speak or move or respond.`, scores: { lantern:3, tide:1 } },
+          { text: `A kind of alertness in me — something that makes me want to stay close without intruding.`, scores: { stone:3, lantern:1 } },
+          { text: `I often don't know until they tell me — I trust what they say more than what I sense.`, scores: { thread:3, stone:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber II — Resonance',
+        title: 'What costs you most in connection',
+        prose: `Love costs something. It asks different things of different people. The cost is not a reason not to love — it is just the shape of what you are asked to give.<br><br><em>The Veil is asking what love most asks of you.</em>`,
+        question: `What is most costly about how you love?`,
+        choices: [
+          { text: `How much I take in — I can't protect myself from feeling what the people I love feel.`, scores: { tide:3, lantern:1 } },
+          { text: `How much I hold — the weight of witnessing, which I would not trade, but which accumulates.`, scores: { lantern:3, tide:1 } },
+          { text: `How long I carry things — I stay with things others have moved on from, because I haven't finished yet.`, scores: { stone:3, tide:1 } },
+          { text: `How hard I work — love, for me, involves effort, and I put in a lot of it.`, scores: { thread:3, stone:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber II — Resonance',
+        title: 'When words are not enough',
+        prose: `Sometimes what you want to communicate cannot be carried by language. It has to travel a different way — through presence, through contact, through something that cannot be said.<br><br><em>The Veil is asking how you love when words fail.</em>`,
+        question: `When language feels inadequate, how do you communicate that you care?`,
+        choices: [
+          { text: `By being there fully — they can feel that I am attending completely even when I have nothing to say.`, scores: { lantern:3, stone:1 } },
+          { text: `By letting them feel that they are not alone in it — through physical closeness or emotional resonance.`, scores: { tide:3, lantern:1 } },
+          { text: `By staying — remaining present over time, without needing it to resolve.`, scores: { stone:3, tide:1 } },
+          { text: `By doing — finding something concrete that makes the problem or the moment more manageable.`, scores: { thread:3, stone:1 } }
+        ]
+      }
+    ],
+
+    steady: [
+      {
+        eyebrow: 'Chamber III — Constancy',
+        title: 'What you offer over time',
+        prose: `Some things can only be given over time. Not in a single gesture, but in the accumulation of many small ones — being there, again and again, across the ordinary days and the difficult ones.<br><br><em>The Veil is asking about your relationship with constancy.</em>`,
+        question: `What does showing up consistently mean to you?`,
+        choices: [
+          { text: `It is the most honest form of love I know — presence over time, not performance in a moment.`, scores: { stone:3, thread:1 } },
+          { text: `It means I am paying attention across the whole of a relationship, not just the highlighted moments.`, scores: { lantern:3, stone:1 } },
+          { text: `It means I keep showing up emotionally, not just physically — staying tuned to how they are.`, scores: { tide:3, stone:1 } },
+          { text: `It means there is always something I am doing — love that doesn't sit still.`, scores: { thread:3, stone:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber III — Constancy',
+        title: 'How you behave when things get hard',
+        prose: `Difficulty reveals things about how we love that ordinary days do not. When something breaks between you and someone you love, or when their life becomes difficult in a way that is hard to be near, what do you do?<br><br><em>The Veil is asking about your love under pressure.</em>`,
+        question: `When a relationship or someone in it goes through something genuinely hard, what is your instinct?`,
+        choices: [
+          { text: `To stay — not to fix it or to leave, but to remain present in the difficulty.`, scores: { stone:3, lantern:1 } },
+          { text: `To move closer emotionally — to make sure they know they are not alone in it.`, scores: { tide:3, stone:1 } },
+          { text: `To pay closer attention — difficulty sometimes carries information I don't want to miss.`, scores: { lantern:3, tide:1 } },
+          { text: `To do more — to find the concrete things that need doing and do them.`, scores: { thread:3, stone:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber III — Constancy',
+        title: `What you do when you can't fix it`,
+        prose: `There are things you cannot fix. Some pain cannot be solved, only witnessed. Some difficulty will not resolve no matter how much you do or how closely you attend.<br><br><em>The Veil is asking what you do when nothing works.</em>`,
+        question: `When you can't make something better for someone you love, what do you do?`,
+        choices: [
+          { text: `I stay anyway — being there without fixing it is still a form of help.`, scores: { stone:3, lantern:1 } },
+          { text: `I try to hold the feeling alongside them — even if I can't change it, I can share it.`, scores: { tide:3, stone:1 } },
+          { text: `I witness it carefully — I want them to know that what they are going through is being seen.`, scores: { lantern:3, tide:1 } },
+          { text: `I keep looking for something useful — there is always something, even when the problem can't be solved.`, scores: { thread:3, lantern:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber III — Constancy',
+        title: 'The love that shows itself in small things',
+        prose: `Love lives in small things as much as in large ones. The small things accumulate into a picture of who someone is to you.<br><br><em>The Veil is asking about the small things that are, for you, large things.</em>`,
+        question: `What small thing do you do regularly that is actually a large expression of care?`,
+        choices: [
+          { text: `Remembering — the details of their lives, the things they mentioned once, the things that matter to them.`, scores: { lantern:3, stone:1 } },
+          { text: `Checking in — reaching toward them across ordinary days to let them know I am thinking of them.`, scores: { tide:3, lantern:1 } },
+          { text: `Showing up — being where I said I would be, when I said I would be there, without having to be asked twice.`, scores: { stone:3, thread:1 } },
+          { text: `Doing the things — the small tasks that make their lives easier, that they would have had to do alone.`, scores: { thread:3, stone:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber III — Constancy',
+        title: 'How you love people who are difficult to love',
+        prose: `Everyone is difficult to love sometimes. And some people are difficult to love consistently, for sustained periods.<br><br><em>The Veil is asking how you navigate that.</em>`,
+        question: `When someone you love becomes difficult to be with — withdrawn, sharp, hard to reach — what do you do?`,
+        choices: [
+          { text: `I stay close — not intrusively, but present enough that they know I haven't left.`, scores: { stone:3, lantern:1 } },
+          { text: `I try to feel my way in — to understand what is happening underneath the difficulty.`, scores: { tide:3, lantern:1 } },
+          { text: `I pay closer attention — difficulty usually means something is happening that I want to understand.`, scores: { lantern:3, tide:1 } },
+          { text: `I find something to do for them — even if I can't reach them emotionally, I can act on their behalf.`, scores: { thread:3, stone:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber III — Constancy',
+        title: 'What love looks like from the outside',
+        prose: `From the outside, love can look like many things. What yours looks like to the people you love — the visible texture of how you care — may be different from what you feel on the inside.<br><br><em>The Veil is asking what your love looks like from where they stand.</em>`,
+        question: `If the people who love you most were asked to describe how you love them, what would they say?`,
+        choices: [
+          { text: `That I make them feel seen — that they can bring difficult things to me and I will hold them carefully.`, scores: { lantern:3, tide:1 } },
+          { text: `That I am always in it with them — emotionally present in a way that makes them feel less alone.`, scores: { tide:3, lantern:1 } },
+          { text: `That I am always there — that I don't disappear when things get hard or complicated.`, scores: { stone:3, thread:1 } },
+          { text: `That I always do something — that love, for me, comes in tangible forms that they can feel.`, scores: { thread:3, stone:1 } }
+        ]
+      }
+    ],
+
+    act: [
+      {
+        eyebrow: 'Chamber IV — Action',
+        title: 'Love as something you do',
+        prose: `For some people, love is primarily a feeling. For others, it is primarily a verb — something you enact, not only something you hold.<br><br><em>The Veil is asking how love moves in you.</em>`,
+        question: `When you love someone, how does that love most want to express itself?`,
+        choices: [
+          { text: `In what I do for them — tasks, acts, practical care that makes their life easier or better.`, scores: { thread:3, stone:1 } },
+          { text: `In how I am with them — in the quality of my presence when we are together.`, scores: { lantern:3, tide:1 } },
+          { text: `In what I feel alongside them — in the resonance that means neither of us is alone in our experience.`, scores: { tide:3, lantern:1 } },
+          { text: `In the fact that I stay — in showing up, reliably, across time.`, scores: { stone:3, thread:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber IV — Action',
+        title: 'When someone is struggling, what your hands want to do',
+        prose: `Something in you knows what it wants to do when someone you love is struggling. Before your mind has decided anything, your hands or your body already have an instinct.<br><br><em>The Veil is asking about that instinct.</em>`,
+        question: `When someone you love is in difficulty, what do you most want to do?`,
+        choices: [
+          { text: `Help — find the problem, identify what can be done, and do it.`, scores: { thread:3, stone:1 } },
+          { text: `Listen — give them the full weight of my attention until they feel understood.`, scores: { lantern:3, tide:1 } },
+          { text: `Feel with them — let them know, through my response, that what they are carrying has moved me too.`, scores: { tide:3, lantern:1 } },
+          { text: `Stay close — not intrusively, but present, available, not going anywhere.`, scores: { stone:3, thread:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber IV — Action',
+        title: 'The gift you give without being asked',
+        prose: `Every person who loves has things they give without being asked. Not because someone told them to — because it is simply the form their love takes when it moves outward.<br><br><em>The Veil is asking about yours.</em>`,
+        question: `What do you give to the people you love without needing to be asked?`,
+        choices: [
+          { text: `My effort — I do things for them. Small things and large ones, continuously.`, scores: { thread:3, stone:1 } },
+          { text: `My attention — I notice them, remember them, track what matters to them.`, scores: { lantern:3, tide:1 } },
+          { text: `My feeling — I let them matter to me fully, and that shows.`, scores: { tide:3, lantern:1 } },
+          { text: `My presence — I am there, again and again, without needing credit for it.`, scores: { stone:3, thread:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber IV — Action',
+        title: 'When sitting still is hard',
+        prose: `There are moments in caring for someone when the most loving thing is also the most uncomfortable — doing nothing but being present, when every instinct wants to act.<br><br><em>The Veil is asking about that discomfort.</em>`,
+        question: `When is it hardest for you to simply be present without doing something?`,
+        choices: [
+          { text: `When I can see something that could be fixed and I am not fixing it.`, scores: { thread:3, lantern:1 } },
+          { text: `When the feeling in the room is very heavy and I want to lift it.`, scores: { tide:2, thread:2 } },
+          { text: `Rarely — I find stillness relatively easy. Presence feels like something I am doing.`, scores: { stone:3, lantern:1 } },
+          { text: `When I am not sure what they need and I can't ask the right question to find out.`, scores: { lantern:3, stone:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber IV — Action',
+        title: `What you do when you don't know what to do`,
+        prose: `There is a moment in caring for someone when you genuinely don't know what they need — when no instinct gives you a clear answer and the usual moves don't seem right.<br><br><em>The Veil is asking what you do in that moment.</em>`,
+        question: `When you don't know what someone needs from you, what do you do?`,
+        choices: [
+          { text: `I ask what would help — not because I don't want to figure it out, but because I want to get it right.`, scores: { thread:3, lantern:1 } },
+          { text: `I stay close and watch — the answer usually becomes apparent if I pay enough attention.`, scores: { lantern:3, stone:1 } },
+          { text: `I try to feel my way in — tuning into what they are experiencing until something becomes clear.`, scores: { tide:3, lantern:1 } },
+          { text: `I stay, and trust that my presence is something even when I don't have anything specific to offer.`, scores: { stone:3, thread:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber IV — Action',
+        title: 'The shape of your love',
+        prose: `Love takes many shapes. None of them is more real than another. The shape yours takes is not a limitation — it is the particular way that care moves through you into the world.<br><br><em>The Veil is asking about the shape of yours.</em>`,
+        question: `If your love were a gesture rather than a word, what would it look like?`,
+        choices: [
+          { text: `Hands doing something — building, fixing, bringing, making things better.`, scores: { thread:3, stone:1 } },
+          { text: `Eyes that don't look away — an attention that says: I see you, and I am not going anywhere.`, scores: { lantern:3, tide:1 } },
+          { text: `Arms that hold — a closeness that says: I feel this with you, and you are not alone in it.`, scores: { tide:3, lantern:1 } },
+          { text: `Feet planted — a stillness that says: I was here before this happened, and I will be here after.`, scores: { stone:3, thread:1 } }
+        ]
+      }
+    ],
+
+    receive: [
+      {
+        eyebrow: 'Chamber V — Receiving',
+        title: 'How you let others care for you',
+        prose: `You know how to give. The question this chamber holds is different.<br><br>Receiving care is its own skill — and for many people who are skilled at giving, it is the harder one. The Veil is asking not about what you offer, but about what you allow to come toward you.<br><br><em>What happens when someone tries to care for you?</em>`,
+        question: `When someone you love tries to care for you, what is your most honest first response?`,
+        choices: [
+          { text: `Gratitude, and also a little discomfort — it is easier to be the one attending than the one attended to.`, scores: { lantern:3, stone:1 } },
+          { text: `Something opens in me — I am actually good at receiving, and it matters deeply to me.`, scores: { tide:3, lantern:1 } },
+          { text: `I let them, but quietly — I don't make a lot of it. I take it in without performing.`, scores: { stone:3, tide:1 } },
+          { text: `I am better at being helped than at being tended to — I can receive practical care more easily than emotional care.`, scores: { thread:3, stone:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber V — Receiving',
+        title: 'What you find hardest to ask for',
+        prose: `There are things you rarely ask for, even when you need them. Not because they are unavailable — but because asking for them requires something you do not always have easy access to.<br><br><em>The Veil is asking about the care that is hardest to ask for.</em>`,
+        question: `What kind of care is hardest for you to ask for?`,
+        choices: [
+          { text: `To simply be witnessed — to have someone pay close attention to me the way I pay attention to others.`, scores: { lantern:3, stone:1 } },
+          { text: `To be felt with — to have someone be genuinely moved by what I am experiencing.`, scores: { tide:3, lantern:1 } },
+          { text: `To be accompanied without pressure — someone present who doesn't need me to be okay yet.`, scores: { stone:3, tide:1 } },
+          { text: `Practical help — I find it easier to help than to be helped in concrete ways.`, scores: { thread:3, stone:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber V — Receiving',
+        title: 'What you need that you rarely say',
+        prose: `You give in the way that feels most true. But what you give is not necessarily what you most need in return. The gap between how you love and how you need to be loved is one of the most common sources of quiet disconnection.<br><br><em>The Veil is asking about your gap.</em>`,
+        question: `What do you most need from the people who love you that you rarely say out loud?`,
+        choices: [
+          { text: `To be seen as carefully as I see others — to have my details noticed, my experience tracked.`, scores: { lantern:3, tide:1 } },
+          { text: `To be felt with — to have someone be genuinely present in my experience, not just adjacent to it.`, scores: { tide:3, lantern:1 } },
+          { text: `To be stayed with — to know that they are not going anywhere, even when I am difficult.`, scores: { stone:3, thread:1 } },
+          { text: `To have someone do something for me without being asked — to have my needs anticipated and met.`, scores: { thread:3, stone:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber V — Receiving',
+        title: 'What the Veil has been waiting to ask',
+        prose: `This is the last chamber of this crossing. The Veil has been listening — to how you witness, how you feel, how you stay, how you act. Something has been reflected here.<br><br><em>It asks one final question.</em>`,
+        question: `If you could be loved more fully by the people who love you, what would be different?`,
+        choices: [
+          { text: `They would see me as carefully as I see them — not assume they know, but actually look.`, scores: { lantern:3, tide:1 } },
+          { text: `They would let my experience matter to them — not try to fix it or minimize it, but feel it with me.`, scores: { tide:3, lantern:1 } },
+          { text: `They would stay — through the parts of me that are not easy, without needing those parts to resolve.`, scores: { stone:3, thread:1 } },
+          { text: `They would do more — show their love in tangible ways that I can feel, not only in words.`, scores: { thread:3, stone:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber V — Receiving',
+        title: 'The care you are learning to accept',
+        prose: `Growth in love is not only about becoming a better giver. It is also about becoming a better receiver — about learning to let love land instead of deflecting it, managing it, or minimizing it.<br><br><em>The Veil is asking about what you are learning.</em>`,
+        question: `What are you learning about how to let yourself be cared for?`,
+        choices: [
+          { text: `That being witnessed is not a burden on the person doing it. I am allowed to be seen.`, scores: { lantern:3, stone:1 } },
+          { text: `That letting someone feel what I feel with me is a gift to them, not just a request from me.`, scores: { tide:3, lantern:1 } },
+          { text: `That asking for consistency is not asking too much. I am allowed to need someone to stay.`, scores: { stone:3, tide:1 } },
+          { text: `That letting someone help me is a form of trust, and trust is its own form of love.`, scores: { thread:3, stone:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber V — Receiving',
+        title: 'How you know you are loved',
+        prose: `There is a particular thing that, when it happens, makes you feel genuinely loved — not just cared for, but loved. It is specific to you, and not everyone who loves you knows what it is.<br><br><em>The Veil is asking what it is.</em>`,
+        question: `When do you feel most genuinely loved?`,
+        choices: [
+          { text: `When someone notices something about me that I did not tell them — when they were paying that kind of attention.`, scores: { lantern:3, tide:1 } },
+          { text: `When someone is moved by something I am going through — when my experience actually lands on them.`, scores: { tide:3, lantern:1 } },
+          { text: `When someone stays — when they are still there after the hard part, without having been scared off.`, scores: { stone:3, thread:1 } },
+          { text: `When someone does something for me — an unrequested act that shows they were thinking about what I needed.`, scores: { thread:3, stone:1 } }
+        ]
+      }
+    ]
+  };
+
+  // ── SESSION SELECTION ───────────────────────────────────────────────────
+  function wyhoSelectChambers() {
+    const BRANCHES = ['witness','attune','steady','act','receive'];
+    let lastUsed = {};
+    try { lastUsed = JSON.parse(localStorage.getItem('faeboundWYHOLastUsed') || '{}'); } catch(e) {}
+    const selected = BRANCHES.map((branch, idx) => {
+      const pool = WYHO_POOLS[branch];
+      const fresh = pool.filter((_, i) => i !== lastUsed[branch]);
+      const source = fresh.length > 0 ? fresh : pool;
+      const question = source[Math.floor(Math.random() * source.length)];
+      return { ...question, _branch: branch, _poolIndex: pool.indexOf(question),
+        eyebrow: `Chamber ${['I','II','III','IV','V'][idx]} — ${question.eyebrow.split('— ')[1] || question.eyebrow}` };
+    });
+    const used = {};
+    BRANCHES.forEach((b,i) => { used[b] = selected[i]._poolIndex; });
+    try { localStorage.setItem('faeboundWYHOLastUsed', JSON.stringify(used)); } catch(e) {}
+    return selected;
+  }
+
+  // ── STATE ───────────────────────────────────────────────────────────────
+  let wyhoChambers = [];
+  let wyhoChamberIndex = 0;
+  let wyhoSelected = null;
+  let wyhoPhase = 'intro';
+  let wyhoScores = { lantern:0, tide:0, stone:0, thread:0 };
+
+  // ── HELPERS ─────────────────────────────────────────────────────────────
+  function wyhoChime(freq=440, vol=.02) {
+    try { if (window.audio?.tone) window.audio.tone(freq, .18, 'sine', vol, freq*1.5); } catch(e) {}
+  }
+  function wyhoSlideIn(el) {
+    if (!el) return;
+    el.style.opacity = '0'; el.style.transform = 'translateY(18px)';
+    requestAnimationFrame(() => {
+      el.style.transition = 'opacity .55s ease, transform .55s ease';
+      el.style.opacity = '1'; el.style.transform = 'none';
+    });
+  }
+  function wyhoPips() {
+    if (wyhoPhase !== 'chamber') return '';
+    return `<div class="wyho-pips">${wyhoChambers.map((_,i) => {
+      const cls = i === wyhoChamberIndex ? 'active' : i < wyhoChamberIndex ? 'done' : '';
+      return `<div class="wyho-pip ${cls}"></div>`;
+    }).join('')}</div>`;
+  }
+
+  // ── RENDER INTRO ────────────────────────────────────────────────────────
+  function wyhoRenderIntro() {
+    const crossings = (() => {
+      try { return parseInt(localStorage.getItem('faeboundWYHOCrossings')||'0')||0; } catch(e) { return 0; }
+    })();
+    const lastResult = (() => {
+      try { return JSON.parse(localStorage.getItem('faeboundLastWYHOResult')||'null'); } catch(e) { return null; }
+    })();
+    const returningText = (() => {
+      if (!lastResult?.name) return '';
+      try { localStorage.setItem('faeboundWYHOCrossings', crossings + 1); } catch(e) {}
+      if (crossings === 0)
+        return '<p style="margin:0 0 14px;font-size:.88rem;color:rgba(255,158,200,.65);font-style:italic">You have been here before. Last time, the Veil saw <em style="color:rgba(255,158,200,.8)">' + lastResult.name + '</em>.<br><span style="font-size:.82rem;opacity:.75">The questions will be different this time.</span></p>';
+      return '<p style="margin:0 0 14px;font-size:.88rem;color:rgba(255,158,200,.7);font-style:italic">The Veil knows how you hold people. <em style="color:rgba(255,158,200,.85)">' + lastResult.name + '</em> has been present before.<br><span style="font-size:.82rem;opacity:.8">Come as honestly as you did last time.</span></p>';
+    })();
+    wrap.innerHTML = `
+      <div class="wyho-chamber" style="text-align:center">
+        <div style="font-size:3.2rem;margin:0 auto 20px;animation:breathe 4s ease-in-out infinite">🕯</div>
+        <p class="wyho-eyebrow" style="justify-content:center">Connection Trial</p>
+        <h1 class="wyho-title" style="color:var(--pink);text-align:center">The Way You Hold Others</h1>
+        <div class="wyho-prose" style="max-width:560px;margin:0 auto 24px;text-align:center">
+          ${returningText}
+          <p style="margin:0 0 14px">Five chambers about how you show up for the people you care about.</p>
+          <p style="margin:0 0 14px">Not what you intend to do. What you actually do — the particular shape your love takes when someone needs you.</p>
+          <p style="margin:0"><em>Choose what is true, not what is admirable. The Veil is not grading you.</em></p>
+        </div>
+        <div style="max-width:520px;margin:0 auto 28px;padding:16px;border-radius:14px;
+             border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025)">
+          <p style="font-size:.81rem;color:rgba(255,200,220,.82);line-height:1.72;margin:0 0 8px">
+            This experience draws on The Gottman Institute's research on bids for connection (Gottman, 1999), Sue Johnson's Emotionally Focused Therapy and attachment research, and Gary Chapman's work on care expression styles. It is not a diagnostic tool — a reflection of the particular way love moves through you.
+          </p>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px">
+            <a href="https://www.gottman.com/about/research/" target="_blank" rel="noopener"
+               style="font-size:.72rem;color:rgba(255,158,200,.5);text-decoration:underline">
+              Gottman Institute Research →
+            </a>
+            <a href="https://iceeft.com/what-is-eft/" target="_blank" rel="noopener"
+               style="font-size:.72rem;color:rgba(255,158,200,.5);text-decoration:underline">
+              Emotionally Focused Therapy →
+            </a>
+          </div>
+        </div>
+        <div class="wyho-nav" style="justify-content:center">
+          <button id="wyhoBeginBtn" class="btn" style="background:rgba(255,158,200,.12);border-color:rgba(255,158,200,.35);color:var(--pink);padding:17px 38px;font-size:.97rem">Enter the First Chamber</button>
+          <button id="wyhoBackFromIntroBtn" class="btn btn-ghost">Return to Realm</button>
+        </div>
+      </div>`;
+    wyhoSlideIn(wrap.querySelector('.wyho-chamber'));
+    document.getElementById('wyhoBeginBtn').addEventListener('click', () => {
+      wyhoPhase = 'chamber'; wyhoChamberIndex = 0;
+      wyhoScores = { lantern:0, tide:0, stone:0, thread:0 };
+      wyhoChime(440, .022);
+      setTimeout(wyhoRenderChamber, 60);
+    });
+    document.getElementById('wyhoBackFromIntroBtn').addEventListener('click', () => {
+      if (typeof backToHub === 'function') backToHub(()=>{});
+    });
+  }
+
+  // ── RENDER CHAMBER ──────────────────────────────────────────────────────
+  function wyhoRenderChamber() {
+    const ch = wyhoChambers[wyhoChamberIndex];
+    wyhoSelected = null;
+    wrap.innerHTML = `
+      ${wyhoPips()}
+      <div class="wyho-chamber">
+        <p class="wyho-eyebrow">${ch.eyebrow}</p>
+        <h2 class="wyho-title">${ch.title}</h2>
+        <div class="wyho-prose">${ch.prose}</div>
+        <p class="wyho-question">${ch.question}</p>
+        <div class="wyho-choices" id="wyhoChoices">
+          ${ch.choices.map((choice, i) => `
+            <button class="wyho-choice" data-idx="${i}" type="button">
+              <span class="wyho-choice-num">${['I','II','III','IV'][i]}</span>
+              ${choice.text}
+            </button>`).join('')}
+        </div>
+        <div class="wyho-nav" id="wyhoNav">
+          <button class="btn" id="wyhoNextBtn" disabled
+            style="background:rgba(255,158,200,.08);border-color:rgba(255,158,200,.2);color:rgba(255,158,200,.4)">
+            ${wyhoChamberIndex < wyhoChambers.length - 1 ? 'Continue →' : 'The Veil reflects →'}
+          </button>
+          <button class="btn btn-ghost" id="wyhoBackBtn">← Back</button>
+        </div>
+      </div>`;
+    wyhoSlideIn(wrap.querySelector('.wyho-chamber'));
+    document.querySelectorAll('.wyho-choice').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.wyho-choice').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        wyhoSelected = parseInt(btn.dataset.idx);
+        const next = document.getElementById('wyhoNextBtn');
+        if (next) {
+          next.disabled = false;
+          next.style.background = 'rgba(255,158,200,.12)';
+          next.style.borderColor = 'rgba(255,158,200,.35)';
+          next.style.color = 'var(--pink)';
+        }
+        wyhoChime(480 + wyhoSelected * 40, .018);
+        if (typeof window.ambient?.swell === 'function') window.ambient.swell(0.002);
+      });
+    });
+    document.getElementById('wyhoNextBtn')?.addEventListener('click', () => {
+      if (wyhoSelected === null) return;
+      const scores = wyhoChambers[wyhoChamberIndex].choices[wyhoSelected].scores;
+      Object.entries(scores).forEach(([k,v]) => { wyhoScores[k] = (wyhoScores[k]||0) + v; });
+      wyhoChamberIndex++;
+      if (wyhoChamberIndex >= wyhoChambers.length) {
+        wyhoPhase = 'result';
+        setTimeout(wyhoRenderResult, 180);
+      } else {
+        wyhoChime(440, .022);
+        setTimeout(wyhoRenderChamber, 60);
+      }
+    });
+    document.getElementById('wyhoBackBtn')?.addEventListener('click', () => {
+      if (wyhoChamberIndex > 0) {
+        wyhoChamberIndex--;
+        const prevScores = wyhoChambers[wyhoChamberIndex].choices[wyhoSelected ?? 0]?.scores || {};
+        Object.entries(prevScores).forEach(([k,v]) => { wyhoScores[k] = Math.max(0,(wyhoScores[k]||0)-v); });
+        wyhoSelected = null;
+        wyhoRenderChamber();
+      } else {
+        wyhoPhase = 'intro';
+        wyhoRenderIntro();
+      }
+    });
+  }
+
+  // ── RENDER RESULT ───────────────────────────────────────────────────────
+  function wyhoRenderResult() {
+    const order = ['lantern','tide','stone','thread'];
+    const winner = order.reduce((best,k) => wyhoScores[k] > wyhoScores[best] ? k : best, order[0]);
+    const second = order.filter(k => k !== winner).reduce((best,k) => wyhoScores[k] > wyhoScores[best] ? k : best);
+    const a = ARCHETYPES[winner];
+    const b2 = ARCHETYPES[second];
+    const total = Object.values(wyhoScores).reduce((s,v) => s+v, 0) || 1;
+    const lastResult = (() => {
+      try { return JSON.parse(localStorage.getItem('faeboundLastWYHOResult')||'null'); } catch(e) { return null; }
+    })();
+    const shiftNote = lastResult?.winner && lastResult.winner !== winner
+      ? '<p style="font-size:.84rem;color:rgba(255,200,220,.6);font-style:italic;margin-bottom:16px">Last time, the Veil saw <em style="color:rgba(255,158,200,.7)">' + lastResult.name + '</em>. This time it sees ' + a.name + '. The Veil notices the shift.</p>'
+      : '';
+    try {
+      localStorage.setItem('faeboundLastWYHOResult', JSON.stringify({ winner, name: a.name }));
+    } catch(e) {}
+    const chimeMap = { lantern:[520,660,780], tide:[440,560,680], stone:[360,460,580], thread:[600,740,880] };
+    const notes = chimeMap[winner] || [440,560,680];
+    wyhoChime(notes[0], .038);
+    setTimeout(() => wyhoChime(notes[1], .028), 180);
+    setTimeout(() => wyhoChime(notes[2], .018), 380);
+    const breakdown = order.map(k => ({
+      key:k, name:ARCHETYPES[k].name, sigil:ARCHETYPES[k].sigil,
+      pct:Math.round((wyhoScores[k]/total)*100), color:ARCHETYPES[k].color
+    })).sort((a,b) => b.pct - a.pct);
+    wrap.innerHTML = `
+      <div class="wyho-result">
+        <span style="font-size:4.2rem;display:block;margin-bottom:12px;animation:breathe 4s ease-in-out infinite">${a.sigil}</span>
+        <h2 style="font-family:'Cinzel',serif;font-size:clamp(1.7rem,5vw,2.7rem);font-weight:700;letter-spacing:.04em;margin:0 0 3px;color:${a.color}">${a.name}</h2>
+        <p style="font-size:.75rem;text-transform:uppercase;letter-spacing:.2em;color:var(--muted);margin:0 0 22px">${a.branch} · The Way You Hold Others</p>
+        ${shiftNote}
+        <div style="color:var(--muted);line-height:1.9;font-size:.97rem;text-align:left;margin:0 0 18px;padding:20px;border-radius:15px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.055)">${a.desc}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:20px;text-align:left">
+          <div style="padding:12px;border-radius:12px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.05)">
+            <div style="font-size:.63rem;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);opacity:.6;margin-bottom:4px">Your gift</div>
+            <div style="font-size:.88rem;color:var(--text);line-height:1.44">${a.gift}</div>
+          </div>
+          <div style="padding:12px;border-radius:12px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.05)">
+            <div style="font-size:.63rem;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);opacity:.6;margin-bottom:4px">Your edge</div>
+            <div style="font-size:.88rem;color:var(--text);line-height:1.44">${a.edge}</div>
+          </div>
+        </div>
+        ${second !== winner ? '<p style="font-size:.84rem;color:var(--muted);margin-bottom:18px;line-height:1.6">Your secondary pattern: <em style="color:' + b2.colorSoft + '">' + b2.name + '</em>. Where ' + a.name + ' is your primary way of holding others, ' + b2.name + ' is present underneath it.</p>' : ''}
+        <div style="margin-bottom:20px">
+          ${breakdown.map(b => `<div style="display:flex;align-items:center;gap:9px;margin-bottom:6px">
+            <span style="font-size:.72rem;color:var(--muted);opacity:.46;min-width:76px">${b.sigil} ${b.name}</span>
+            <div style="flex:1;height:3px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden">
+              <div style="height:100%;border-radius:999px;width:${b.pct}%;background:${b.color};opacity:${b.key===winner?1:.45};transition:width 1.3s cubic-bezier(.2,.8,.2,1)"></div>
+            </div>
+            <span style="font-size:.78rem;color:rgba(188,197,239,.35);min-width:34px;text-align:right">${b.pct}%</span>
+          </div>`).join('')}
+        </div>
+        <div style="padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025);margin-bottom:20px;text-align:left">
+          <p style="font-size:.78rem;color:rgba(255,200,220,.75);line-height:1.72;margin:0 0 10px">${a.research}</p>
+          <a href="${a.link}" target="_blank" rel="noopener" style="font-size:.75rem;color:rgba(255,158,200,.55);text-decoration:underline">
+            ${a.linkLabel} →
+          </a>
+        </div>
+        <div style="padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.05);background:rgba(255,255,255,.02);margin-bottom:24px">
+          <p style="font-size:.76rem;color:rgba(255,200,220,.55);margin:0 0 8px;font-weight:600;text-transform:uppercase;letter-spacing:.1em">Practices for ${a.name}</p>
+          ${a.practices.map(p => '<p style="font-size:.84rem;color:var(--muted);margin:0 0 8px;line-height:1.6;padding-left:12px;border-left:2px solid rgba(255,158,200,.25)">' + p + '</p>').join('')}
+        </div>
+        <div style="font-size:.72rem;color:rgba(154,164,204,.5);line-height:1.7;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.04);margin-bottom:24px;text-align:center">
+          This reflection draws on Gottman Institute research and Emotionally Focused Therapy.
+          It is not a diagnostic tool — a reflection.
+          <a href="${a.link}" target="_blank" rel="noopener" style="color:rgba(255,158,200,.45);text-decoration:underline;margin-left:6px">${a.linkLabel} →</a>
+        </div>
+        <div class="wyho-nav" style="justify-content:center">
+          <button class="btn btn-ghost" id="wyhoRetakeBtn">Cross Again</button>
+          <button class="btn btn-ghost" id="wyhoHubBtn">Return to Realm</button>
+        </div>
+      </div>`;
+    wyhoSlideIn(wrap.querySelector('.wyho-result'));
+    try {
+      window.archive?.inc?.('trialsCompleted');
+      window.progression?.increment?.();
+      trackCompletion('way-you-hold');
+    } catch(e) {}
+    document.getElementById('wyhoRetakeBtn')?.addEventListener('click', () => {
+      wyhoPhase = 'intro'; wyhoChamberIndex = 0; wyhoSelected = null;
+      wyhoScores = { lantern:0, tide:0, stone:0, thread:0 };
+      wyhoChambers = wyhoSelectChambers();
+      wyhoRenderIntro();
+    });
+    document.getElementById('wyhoHubBtn')?.addEventListener('click', () => {
+      if (typeof backToHub === 'function') backToHub(()=>{});
+    });
+  }
+
+  // ── ENTRY POINT ─────────────────────────────────────────────────────────
+  function begin() {
+    wyhoPhase = 'intro'; wyhoChamberIndex = 0; wyhoSelected = null;
+    wyhoScores = { lantern:0, tide:0, stone:0, thread:0 };
+    wyhoChambers = wyhoSelectChambers();
+    wyhoRenderIntro();
+  }
+
+  return { begin };
+})();
+
+</script>
+
+<!-- ═══ THE TIDE ═══ -->
+<script>
+
+window.tide = (() => {
+  const wrap = document.getElementById('tideWrap');
+  if (!wrap) return { enter(){}, stop(){} };
+
+  // ── RESEARCH FOUNDATION ──────────────────────────────────────────────
+  // Physiological sigh: Huberman et al. (Stanford, 2023) — double inhale
+  // through nose + long exhale is the fastest known method to reduce
+  // physiological stress. Works in a single breath cycle.
+  //
+  // Box breathing: equal 4-count phases. Used in clinical anxiety
+  // management and by high-performance practitioners (Navy SEAL protocol).
+  // Activates parasympathetic nervous system via vagal tone.
+  //
+  // 4-7-8 breathing: Weil (2015), drawing on pranayama traditions.
+  // Shown to reduce anxiety and support sleep onset.
+  //
+  // Affect labeling: Torre et al. (2018), Lieberman et al. (2007).
+  // Naming an emotion reduces amygdala activation. fMRI evidence shows
+  // that labeling what you feel reduces its intensity — you don't have
+  // to resolve it, only name it.
+  //
+  // Links: Greater Good Science Center (Berkeley) — greatergood.berkeley.edu
+  //        Huberman Lab — hubermanlab.com/breathing
+
+  // ── BREATH MODES ─────────────────────────────────────────────────────
+  const MODES = {
+    settling: {
+      id: 'settling',
+      name: 'The Settling',
+      desc: `Box breathing — equal counts for inhale, hold, exhale, and rest. Steady and grounding. Good for ordinary stress.`,
+      pattern: '4 · 4 · 4 · 4',
+      phases: [
+        { label: 'Breathe in', duration: 4000, scale: 1.35, opacity: 1 },
+        { label: 'Hold', duration: 4000, scale: 1.35, opacity: 0.85 },
+        { label: 'Breathe out', duration: 4000, scale: 1.0, opacity: 0.65 },
+        { label: 'Rest', duration: 4000, scale: 1.0, opacity: 0.5 },
+      ],
+      cycles: 4,
+      research: `Box breathing activates the parasympathetic nervous system through extended breath control. Equal-phase breathing has been shown to reduce cortisol and increase heart rate variability — a marker of nervous system health.`,
+      resultText: `Four cycles of box breathing. Something in the body has shifted — not resolved, but quieter. The Veil noticed you stayed with it.`,
+      link: 'https://www.medicalnewstoday.com/articles/321805',
+      linkLabel: 'Medical News Today: Box breathing — what it is and how to do it',
+    },
+    release: {
+      id: 'release',
+      name: 'The Release',
+      desc: `The physiological sigh — a double inhale through the nose, then a long slow exhale. The fastest known breath practice for reducing acute stress.`,
+      pattern: 'inhale · inhale · long exhale',
+      phases: [
+        { label: 'Breathe in', duration: 2000, scale: 1.25, opacity: 0.9 },
+        { label: 'In again', duration: 1000, scale: 1.38, opacity: 1.0 },
+        { label: 'Breathe out slowly', duration: 6000, scale: 1.0, opacity: 0.55 },
+        { label: 'Rest', duration: 2000, scale: 1.0, opacity: 0.45 },
+      ],
+      cycles: 5,
+      research: `Stanford research (Huberman et al., 2023) identified the physiological sigh as the most efficient single breath pattern for rapidly downregulating the nervous system. The double inhale fully inflates the lungs' alveoli; the long exhale activates the vagus nerve.`,
+      resultText: `Five physiological sighs. This is one of the most evidence-backed things you can do for your nervous system in under two minutes. The Veil held the space while you used it.`,
+      link: 'https://pubmed.ncbi.nlm.nih.gov/36630953/',
+      linkLabel: 'Huberman Lab / Stanford: Breathwork research (2023)',
+    },
+    deep: {
+      id: 'deep',
+      name: 'The Deep',
+      desc: `4-7-8 breathing — a longer hold and extended exhale for deeper calm. Takes more practice, offers more depth.`,
+      pattern: '4 in · 7 hold · 8 out',
+      phases: [
+        { label: 'Breathe in', duration: 4000, scale: 1.32, opacity: 0.95 },
+        { label: 'Hold', duration: 7000, scale: 1.32, opacity: 0.8 },
+        { label: 'Breathe out slowly', duration: 8000, scale: 1.0, opacity: 0.5 },
+        { label: 'Rest', duration: 2000, scale: 1.0, opacity: 0.4 },
+      ],
+      cycles: 4,
+      research: `The 4-7-8 pattern, based on pranayama traditions and popularized by Dr. Andrew Weil, uses an extended hold to build CO₂ tolerance and a long exhale to deepen parasympathetic activation. Often used for sleep onset and deep anxiety relief.`,
+      resultText: `Four cycles of 4-7-8. This is the deepest of the three practices — it takes the most from you and gives the most back. The Veil appreciates that you stayed.`,
+      link: 'https://www.drweil.com/health-wellness/body-mind-spirit/stress-anxiety/three-breathing-exercises-and-techniques/',
+      linkLabel: 'Dr. Andrew Weil: Three breathing exercises explained',
+    }
+  };
+
+  // ── AFFECT WORDS ─────────────────────────────────────────────────────
+  // Used for the before/after affect labeling prompt.
+  // Grouped loosely by valence and arousal — not labeled as such.
+  // Two distinct word sets — arrival (chaotic/difficult) and departure (calm/settled)
+  // Kept to 12 each to reduce cognitive load for players who need this most
+  // Arrival zones — broad categories shown first, specific words revealed on tap
+  const ARRIVAL_ZONES = [
+    { label: 'unsettled',  words: ['anxious', 'scattered', 'restless', 'tense'] },
+    { label: 'heavy',      words: ['sad', 'heavy', 'empty', 'numb'] },
+    { label: 'activated',  words: ['angry', 'overwhelmed', 'frustrated', 'lost'] },
+    { label: 'tired',      words: ['tired', 'drained', 'depleted', 'stuck'] },
+    { label: 'good',       words: ['okay', 'hopeful', 'curious', 'grateful'] },
+  ];
+  // Flat list for memory logic — all words that signal distress
+  const WORDS_DIFFICULT = [
+    'anxious', 'scattered', 'restless', 'tense',
+    'sad', 'heavy', 'empty', 'numb',
+    'angry', 'overwhelmed', 'frustrated', 'lost',
+    'tired', 'drained', 'depleted', 'stuck'
+  ];
+  // Also keep a flat WORDS_ARRIVAL for the departure/arrival check
+  const WORDS_ARRIVAL = ARRIVAL_ZONES.flatMap(z => z.words);
+  const WORDS_DEPARTURE = [
+    'calm', 'grounded', 'quiet', 'lighter', 'present',
+    'steadier', 'clear', 'settled', 'at ease', 'open',
+    'soft', 'okay'
+  ];
+
+  // ── SESSION MEMORY ─────────────────────────────────────────────
+  // Stores { date, before, after } for up to 10 sessions
+  // Only shows a note when: before ∈ WORDS_ARRIVAL AND after ∈ WORDS_DEPARTURE
+  // Silence in all other cases — no pressure, no implied failure
+
+  function loadTideSessions() {
+    try { return JSON.parse(localStorage.getItem('faeboundTideSessions') || '[]'); }
+    catch(e) { return []; }
+  }
+  function saveTideSession(before, after) {
+    if (!before || !after) return;
+    try {
+      const sessions = loadTideSessions();
+      sessions.push({ date: new Date().toISOString(), before, after });
+      // Keep last 10 only
+      if (sessions.length > 10) sessions.splice(0, sessions.length - 10);
+      localStorage.setItem('faeboundTideSessions', JSON.stringify(sessions));
+    } catch(e) {}
+  }
+  function getTideNote() {
+    // Returns a quiet note if a chaotic→calm pattern is present, else null
+    const sessions = loadTideSessions();
+    if (!sessions.length) return null;
+    const worked = sessions.filter(s =>
+      WORDS_DIFFICULT.includes(s.before) && WORDS_DEPARTURE.includes(s.after)
+    );
+    if (!worked.length) return null;
+    const total = sessions.length;
+    const last = worked[worked.length - 1];
+    // Multiple sessions showing the pattern
+    if (worked.length >= 3) {
+      return `The Tide has noticed something. You have arrived here ${total > 1 ? total + ' times' : 'before'} carrying something heavy, and left quieter each time. That is not a small thing.`;
+    }
+    if (worked.length >= 2) {
+      return `You have been here before — and the Tide remembers that something shifted. You arrived carrying <em style="color:rgba(94,221,168,.7)">${last.before}</em> and left with something closer to <em style="color:rgba(94,221,168,.7)">${last.after}</em>. It can do that again.`;
+    }
+    // Single session that worked
+    return `Last time you were here, you arrived carrying <em style="color:rgba(94,221,168,.7)">${last.before}</em> and left with something closer to <em style="color:rgba(94,221,168,.7)">${last.after}</em>. The Tide remembered.`;
+  }
+
+  // ── STATE ─────────────────────────────────────────────────────────────
+  let selectedMode = 'settling';
+  let running = false;
+  let animFrameId = null;
+  let cycleCount = 0;
+  let phaseIndex = 0;
+  let phaseStart = 0;
+  let beforeWord = null;
+  let afterWord = null;
+  let stopped = false;
+
+  // ── HELPERS ───────────────────────────────────────────────────────────
+  function $(id) { return document.getElementById(id); }
+  function toneBreath(type) {
+    try {
+      if (!window.audio?.tone) return;
+      if (type === 'in')   window.audio.tone(340, .12, 'sine', .022, 400);
+      if (type === 'hold') window.audio.tone(320, .08, 'sine', .014, 300);
+      if (type === 'out')  window.audio.tone(260, .16, 'sine', .018, 220);
+      if (type === 'rest') window.audio.tone(220, .06, 'sine', .010, 200);
+    } catch(e) {}
+  }
+
+  // ── RENDER INTRO ──────────────────────────────────────────────────────
+  function renderIntro() {
+    wrap.innerHTML = `
+      <div class="tide-result" style="width:100%;text-align:center">
+
+        <div style="font-size:2.8rem;margin-bottom:16px;animation:breathe 4s ease-in-out infinite">🌊</div>
+        <p style="font-size:.65rem;text-transform:uppercase;letter-spacing:.24em;
+           color:rgba(94,221,168,.5);margin-bottom:10px">Somatic Practice</p>
+        <h1 style="font-family:'Cinzel',serif;font-size:clamp(1.8rem,5vw,2.6rem);
+            font-weight:700;color:var(--mint);margin-bottom:14px">The Tide</h1>
+
+        <div style="max-width:480px;margin:0 auto 28px;color:var(--muted);
+            font-size:.92rem;line-height:1.78;text-align:center">
+          <p style="margin:0 0 12px">The Veil breathes. For a few minutes, you breathe with it.</p>
+          <p style="margin:0">Three practices drawn from breath science — each one is a different way of returning to yourself. Choose the one that feels right for where you are.</p>
+        </div>
+
+        <!-- Affect label — before -->
+        <div class="tide-affect-wrap" style="margin-bottom:24px">
+          <div class="tide-affect-label">Before you begin — what is most present for you right now?</div>
+          <div id="beforeZones" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:10px">
+            ${ARRIVAL_ZONES.map(z => `<button class="tide-chip tide-zone-btn" data-zone="${z.label}" style="font-size:.82rem;padding:8px 16px">${z.label}</button>`).join('')}
+          </div>
+          <div id="beforeWords" style="display:flex;flex-wrap:wrap;gap:7px;justify-content:center;min-height:36px">
+            <!-- specific words appear here after zone is tapped -->
+          </div>
+          <p style="font-size:.72rem;color:rgba(94,221,168,.35);margin-top:10px;text-align:center">
+            Tap a zone, then pick the word that fits. Naming what you feel reduces its intensity.
+          </p>
+        </div>
+
+        <!-- Returning player note — only shows if chaotic→calm pattern found -->
+        ${(()=>{
+          const note = getTideNote();
+          return note ? '<div style="max-width:480px;margin:0 auto 20px;padding:14px 16px;border-radius:14px;border:1px solid rgba(94,221,168,.15);background:rgba(94,221,168,.04);font-size:.84rem;color:rgba(94,221,168,.7);line-height:1.7;text-align:center">' + note + '</div>' : '';
+        })()}
+
+        <!-- Mode selection -->
+        <div class="tide-modes" id="tideModes">
+          ${Object.values(MODES).map(m => `
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <div class="tide-mode-card ${m.id === selectedMode ? 'active' : ''}"
+                   data-mode="${m.id}" id="modeCard-${m.id}">
+                <div class="tide-mode-title">${m.name}</div>
+                <div class="tide-mode-desc">${m.desc}</div>
+                <div class="tide-mode-pattern">${m.pattern}</div>
+              </div>
+              <a href="${m.link}" target="_blank" rel="noopener noreferrer"
+                 style="font-size:.7rem;color:rgba(94,221,168,.45);
+                 text-decoration:underline;padding:2px 0 6px 4px;
+                 display:inline-block">
+                Read the research →
+              </a>
+            </div>`).join('')}
+        </div>
+
+        <div style="max-width:480px;margin:0 auto 18px;padding:14px;border-radius:14px;
+             border:1px solid rgba(255,255,255,.05);background:rgba(255,255,255,.02)">
+          <p style="font-size:.78rem;color:rgba(94,221,168,.6);line-height:1.7;margin:0">
+            These practices draw on physiological sigh research (Huberman Lab / Stanford, 2023), box breathing protocols, and affect labeling science (Torre et al., 2018). Nothing here is a substitute for medical care — it is a space to practice regulation.
+          </p>
+        </div>
+
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          <button class="btn" id="tideBeginBtn"
+            style="background:rgba(94,221,168,.12);border-color:rgba(94,221,168,.35);
+            color:var(--mint);padding:15px 36px;font-size:.95rem">
+            Begin with the Tide
+          </button>
+          <button class="btn btn-ghost" id="tideBackIntroBtn">Return to Realm</button>
+        </div>
+      </div>`;
+
+    // Wire mode cards
+    wrap.querySelectorAll('.tide-mode-card').forEach(card => {
+      card.addEventListener('click', () => {
+        selectedMode = card.dataset.mode;
+        wrap.querySelectorAll('.tide-mode-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+      });
+    });
+
+    // Research links are plain <a> tags outside the card — no JS needed
+    wrap.querySelectorAll('.tide-research-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const href = link.dataset.href;
+        if (href) window.open(href, '_blank', 'noopener,noreferrer');
+      });
+    });
+
+    // Wire zone buttons — show specific words on tap
+    wrap.querySelectorAll('.tide-zone-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        wrap.querySelectorAll('.tide-zone-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        const zone = ARRIVAL_ZONES.find(z => z.label === btn.dataset.zone);
+        if (!zone) return;
+        const wordsEl = document.getElementById('beforeWords');
+        if (!wordsEl) return;
+        // Animate out then in
+        wordsEl.style.opacity = '0';
+        setTimeout(() => {
+          wordsEl.innerHTML = zone.words.map(w =>
+            `<button class="tide-chip tide-word-btn" data-word="${w}" data-set="before">${w}</button>`
+          ).join('');
+          wordsEl.style.transition = 'opacity .25s ease';
+          wordsEl.style.opacity = '1';
+          // Wire the word buttons
+          wordsEl.querySelectorAll('.tide-word-btn').forEach(wb => {
+            wb.addEventListener('click', () => {
+              wordsEl.querySelectorAll('.tide-word-btn').forEach(b => b.classList.remove('selected'));
+              wb.classList.add('selected');
+              beforeWord = wb.dataset.word;
+              try { window.audio?.tone(520, .06, 'sine', .018, 600); } catch(e) {}
+            });
+          });
+        }, 150);
+      });
+    });
+
+    $('tideBeginBtn')?.addEventListener('click', () => {
+      try { window.audio?.ensure(); window.ambient?.ensure(); } catch(e) {}
+      renderBreathing();
+    });
+    $('tideBackIntroBtn')?.addEventListener('click', () => {
+      if (typeof backToHub === 'function') backToHub(()=>{});
+    });
+  }
+
+  // ── RENDER BREATHING ─────────────────────────────────────────────────
+  function renderBreathing() {
+    const mode = MODES[selectedMode];
+    stopped = false;
+    cycleCount = 0;
+    phaseIndex = 0;
+    running = true;
+
+    wrap.innerHTML = `
+      <div style="width:100%;display:flex;flex-direction:column;align-items:center">
+
+        <p style="font-size:.65rem;text-transform:uppercase;letter-spacing:.22em;
+           color:rgba(94,221,168,.45);margin-bottom:8px">${mode.name}</p>
+
+        <!-- Breathing circle -->
+        <div class="tide-circle-wrap">
+          <div class="tide-circle-bg"></div>
+          <div class="tide-circle-ring" id="tideRing"></div>
+          <div class="tide-circle-inner" id="tideInner"></div>
+          <div class="tide-circle-label">
+            <span class="tide-phase-text" id="tidePhaseText">Preparing…</span>
+            <span class="tide-count-text" id="tideCountText"></span>
+          </div>
+        </div>
+
+        <div class="tide-status" id="tideStatus">Follow the circle. Breathe with the Tide.</div>
+
+        <!-- Cycle progress -->
+        <div style="display:flex;gap:7px;margin-bottom:28px" id="tideCycleProgress">
+          ${Array.from({length: mode.cycles}, (_, i) =>
+            `<div style="width:8px;height:8px;border-radius:50%;
+              background:rgba(94,221,168,.15);border:1px solid rgba(94,221,168,.2);
+              transition:all .4s ease" id="tideDot-${i}"></div>`
+          ).join('')}
+        </div>
+
+        <div class="tide-controls">
+          <button class="btn btn-ghost btn-sm" id="tidePauseBtn">Pause</button>
+          <button class="btn btn-ghost btn-sm" id="tideStopBtn">End early</button>
+        </div>
+
+      </div>`;
+
+    $('tidePauseBtn')?.addEventListener('click', () => {
+      running = !running;
+      $('tidePauseBtn').textContent = running ? 'Pause' : 'Resume';
+      if (running) {
+        phaseStart = performance.now();
+        animLoop(performance.now());
+      }
+    });
+    $('tideStopBtn')?.addEventListener('click', () => {
+      stopped = true; running = false;
+      if (animFrameId) cancelAnimationFrame(animFrameId);
+      renderResult(true);
+    });
+
+    // Brief countdown before starting
+    const phaseText = $('tidePhaseText');
+    const countText = $('tideCountText');
+    if (phaseText) phaseText.textContent = 'Preparing…';
+    if (countText) countText.textContent = '3';
+    setTimeout(() => { if (countText) countText.textContent = '2'; }, 1000);
+    setTimeout(() => { if (countText) countText.textContent = '1'; }, 2000);
+    setTimeout(() => {
+      if (countText) countText.textContent = '';
+      phaseStart = performance.now();
+      animFrameId = requestAnimationFrame(animLoop);
+    }, 3000);
+  }
+
+  // ── ANIMATION LOOP ────────────────────────────────────────────────────
+  function animLoop(now) {
+    if (!running || stopped) return;
+    const mode = MODES[selectedMode];
+    const phases = mode.phases;
+    const phase = phases[phaseIndex];
+    const elapsed = now - phaseStart;
+    const progress = Math.min(elapsed / phase.duration, 1);
+
+    // Update visuals
+    const ring = $('tideRing');
+    const inner = $('tideInner');
+    const phaseText = $('tidePhaseText');
+    const countText = $('tideCountText');
+
+    if (ring && inner) {
+      // Ease the scale transition
+      const eased = phaseIndex === 0 || phaseIndex === 1
+        ? easeInOut(progress)  // expanding — ease in-out
+        : 1 - easeInOut(1 - progress) * (phaseIndex === 3 ? 0 : 1); // contracting
+
+      const targetScale = phaseIndex <= 1
+        ? 1 + (phase.scale - 1) * easeInOut(progress)
+        : phase.scale + (1 - phase.scale) * easeInOut(progress);
+
+      const scaleVal = targetScale;
+      ring.style.transform = `scale(${scaleVal})`;
+      inner.style.transform = `scale(${scaleVal * 0.85})`;
+      ring.style.opacity = phase.opacity;
+      inner.style.opacity = phase.opacity * 0.7;
+    }
+
+    if (phaseText) phaseText.textContent = phase.label;
+
+    // Count display
+    const remaining = Math.ceil((phase.duration - elapsed) / 1000);
+    if (countText) countText.textContent = remaining > 0 ? remaining : '';
+
+    // Phase complete
+    if (progress >= 1) {
+      // Sound cue for next phase
+      const nextPhaseIdx = (phaseIndex + 1) % phases.length;
+      const sounds = ['in', 'hold', 'out', 'rest'];
+      toneBreath(sounds[nextPhaseIdx] || 'in');
+
+      phaseIndex = nextPhaseIdx;
+      phaseStart = performance.now();
+
+      // Cycle complete
+      if (phaseIndex === 0) {
+        cycleCount++;
+        // Update cycle dots
+        const dot = $('tideDot-' + (cycleCount - 1));
+        if (dot) {
+          dot.style.background = 'rgba(94,221,168,.85)';
+          dot.style.borderColor = 'rgba(94,221,168,.6)';
+          dot.style.boxShadow = '0 0 8px rgba(94,221,168,.4)';
+        }
+        if (window.ambient?.swell) window.ambient.swell(0.003);
+
+        if (cycleCount >= mode.cycles) {
+          running = false;
+          setTimeout(() => renderResult(false), 800);
+          return;
+        }
+      }
+    }
+
+    animFrameId = requestAnimationFrame(animLoop);
+  }
+
+  function easeInOut(t) {
+    return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+  }
+
+  // ── RENDER RESULT ─────────────────────────────────────────────────────
+  function renderResult(early) {
+    const mode = MODES[selectedMode];
+    const completedCycles = cycleCount;
+
+    // Completion sound
+    try {
+      if (window.audio?.tone) {
+        window.audio.tone(380, .14, 'sine', .028, 460);
+        setTimeout(() => window.audio.tone(480, .12, 'sine', .022, 580), 200);
+        setTimeout(() => window.audio.tone(580, .16, 'sine', .018, 700), 420);
+      }
+    } catch(e) {}
+
+    const earlyNote = early
+      ? `<p style="font-size:.82rem;color:rgba(94,221,168,.45);margin-bottom:16px;font-style:italic">You ended early — ${completedCycles} of ${mode.cycles} cycles. Even an incomplete practice has an effect. The breath you took is real.</p>`
+      : '';
+
+    wrap.innerHTML = `
+      <div class="tide-result" style="width:100%;text-align:center">
+
+        <div style="font-size:2.4rem;margin-bottom:14px;animation:breathe 5s ease-in-out infinite">🌊</div>
+        <h2 class="tide-result-title">${early ? 'You were here' : 'The Tide recedes'}</h2>
+
+        ${earlyNote}
+
+        <div class="tide-result-body" style="max-width:480px;margin:0 auto 20px;text-align:center">
+          <p style="margin:0 0 12px">${mode.resultText}</p>
+        </div>
+
+        <!-- Affect label — after -->
+        <div class="tide-affect-wrap" style="margin-bottom:20px">
+          <div class="tide-affect-label">What is most present for you now?</div>
+          <div class="tide-affect-chips" id="afterChips">
+            ${WORDS_DEPARTURE.map(w => `<button class="tide-chip"
+              data-word="${w}" data-set="after">${w}</button>`).join('')}
+          </div>
+          ${beforeWord ? `<p style="font-size:.78rem;color:rgba(94,221,168,.4);margin-top:10px;text-align:center" id="tideShiftNote">
+            You arrived carrying: <em style="color:rgba(94,221,168,.55)">${beforeWord}</em>
+          </p>` : ''}
+        </div>
+
+        <!-- Research note -->
+        <div style="max-width:480px;margin:0 auto 20px;padding:14px 16px;border-radius:14px;
+             border:1px solid rgba(255,255,255,.05);background:rgba(255,255,255,.02);text-align:left">
+          <p style="font-size:.76rem;color:rgba(94,221,168,.55);line-height:1.7;margin:0 0 8px">
+            ${mode.research}
+          </p>
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <a href="${mode.link}" target="_blank" rel="noopener"
+               style="font-size:.72rem;color:rgba(94,221,168,.55);text-decoration:underline;font-weight:600">
+              ${mode.linkLabel} →
+            </a>
+            <a href="https://ggia.berkeley.edu/practice/mindful_breathing" target="_blank" rel="noopener"
+               style="font-size:.72rem;color:rgba(94,221,168,.4);text-decoration:underline">
+              Greater Good Science Center →
+            </a>
+
+          </div>
+        </div>
+
+        <!-- Disclaimer -->
+        <div style="font-size:.74rem;color:rgba(154,164,204,.55);line-height:1.65;
+             padding:12px 16px;border-radius:10px;border:1px solid rgba(255,255,255,.04);
+             margin-bottom:24px;max-width:480px">
+          These breath practices are evidence-informed wellness tools, not medical treatment. If you are experiencing a mental health crisis, please contact a professional or crisis service.
+          <br><a href="https://988lifeline.org" target="_blank" rel="noopener"
+             style="color:rgba(154,164,204,.55)">988 Lifeline</a> ·
+          <a href="https://www.crisistextline.org" target="_blank" rel="noopener"
+             style="color:rgba(154,164,204,.55)">Crisis Text Line</a>
+        </div>
+
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          <button class="btn" id="tidePracticeAgainBtn"
+            style="background:rgba(94,221,168,.1);border-color:rgba(94,221,168,.3);color:var(--mint)">
+            Practice again
+          </button>
+          <button class="btn btn-ghost" id="tideHubBtn">Return to Realm</button>
+        </div>
+
+      </div>`;
+
+    // Wire after-chips
+    wrap.querySelectorAll('[data-set="after"]').forEach(chip => {
+      chip.addEventListener('click', () => {
+        wrap.querySelectorAll('[data-set="after"]').forEach(c => c.classList.remove('selected'));
+        chip.classList.add('selected');
+        afterWord = chip.dataset.word;
+        try { window.audio?.tone(540, .06, 'sine', .018, 640); } catch(e) {}
+        // Save session to memory when after-word is selected
+        saveTideSession(beforeWord, afterWord);
+        // Show shift note if both before and after are selected
+        const shiftNote = $('tideShiftNote');
+        if (shiftNote && beforeWord) {
+          const arrivedHard = WORDS_DIFFICULT.includes(beforeWord);
+          const leftCalm = WORDS_DEPARTURE.includes(afterWord);
+          if (arrivedHard && leftCalm) {
+            shiftNote.innerHTML = `You arrived carrying <em style="color:rgba(94,221,168,.6)">${beforeWord}</em>. You are leaving with something closer to <em style="color:rgba(94,221,168,.8)">${afterWord}</em>. The Tide noticed.`;
+          } else if (beforeWord === afterWord) {
+            shiftNote.innerHTML = `You named <em style="color:rgba(94,221,168,.55)">${beforeWord}</em> before and after. Sometimes the practice is just about staying with what is here.`;
+          }
+        }
+      });
+    });
+
+    $('tidePracticeAgainBtn')?.addEventListener('click', () => {
+      beforeWord = null; afterWord = null;
+      renderIntro();
+    });
+    $('tideHubBtn')?.addEventListener('click', () => {
+      if (typeof backToHub === 'function') backToHub(()=>{});
+    });
+
+    // Track completion
+    if (!early) {
+      try {
+        window.archive?.inc?.('trialsCompleted');
+        window.progression?.increment?.();
+        trackCompletion('the-tide');
+      } catch(e) {}
+    }
+  }
+
+  // ── PUBLIC API ────────────────────────────────────────────────────────
+  function enter() {
+    stopped = false; running = false; cycleCount = 0;
+    phaseIndex = 0; beforeWord = null; afterWord = null;
+    if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; }
+    renderIntro();
+  }
+
+  function stop() {
+    stopped = true; running = false;
+    if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; }
+  }
+
+  return { enter, stop };
 })();
 
 </script>
