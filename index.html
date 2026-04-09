@@ -2251,6 +2251,7 @@ const progression = (() => {
     Object.entries(DEPTH_OBS).forEach(([d,lines])=>{
       if(depth>=parseInt(d)) lines.forEach(l=>{if(!obsLines.includes(l))obsLines.push(l);});
     });
+    if (typeof updatePtcGate === 'function') updatePtcGate();
   }
   render();
   return {increment,getDepth:()=>depth,render};
@@ -2355,33 +2356,76 @@ setTimeout(()=>{
 
 // ── ECHO DRIFT BG (particle fog) ─────────────────────────────────────────
 const edBg = (() => {
-  const canvas=document.getElementById('edBgCanvas'); if(!canvas)return{setPhase:()=>{}};
+  const canvas=document.getElementById('edBgCanvas');
+  if(!canvas) return { setPhase:()=>{} };
+
   const ctx=canvas.getContext('2d');
+  if(!ctx) return { setPhase:()=>{} };
+
   let phase='idle', particles=[], animId=null;
-  function resize(){const p=canvas.parentElement;if(!p)return;canvas.width=p.offsetWidth;canvas.height=p.offsetHeight;}
-  function spawnP(){return{x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*4+1,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.3,op:Math.random()*.28+.04,life:1,decay:Math.random()*.003+.001};}
+
+  function resize(){
+    const p=canvas.parentElement;
+    if(!p) return false;
+    canvas.width=p.offsetWidth;
+    canvas.height=p.offsetHeight;
+    return canvas.width > 0 && canvas.height > 0;
+  }
+
+  function spawnP(){
+    return {
+      x:Math.random()*canvas.width,
+      y:Math.random()*canvas.height,
+      r:Math.random()*4+1,
+      vx:(Math.random()-.5)*.35,
+      vy:(Math.random()-.5)*.3,
+      op:Math.random()*.28+.04,
+      life:1,
+      decay:Math.random()*.003+.001
+    };
+  }
+
   function frame(){
-    resize(); ctx.clearRect(0,0,canvas.width,canvas.height);
-    const target=phase==='reveal'?80:phase==='input'?28:6;
-    while(particles.length<target)particles.push(spawnP());
+    if(!resize()){
+      animId=requestAnimationFrame(frame);
+      return;
+    }
+
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    const target=phase==='reveal' ? 80 : phase==='input' ? 28 : 6;
+
+    while(particles.length<target) particles.push(spawnP());
     particles=particles.filter(p=>p.life>0);
+
     particles.forEach(p=>{
       p.x+=p.vx; p.y+=p.vy; p.life-=p.decay;
-      if(p.x<0)p.x=canvas.width; if(p.x>canvas.width)p.x=0;
-      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle=`rgba(187,168,255,${p.op*p.life})`; ctx.fill();
+      if(p.x<0) p.x=canvas.width;
+      if(p.x>canvas.width) p.x=0;
+      if(p.y<0) p.y=canvas.height;
+      if(p.y>canvas.height) p.y=0;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(187,168,255,${p.op*p.life})`;
+      ctx.fill();
     });
+
     animId=requestAnimationFrame(frame);
   }
+
   function setPhase(p){
     phase=p;
     if(p==='idle'){
-      // After a moment of idle particles, stop the loop to save CPU
-      setTimeout(()=>{ if(phase==='idle'){ if(animId){cancelAnimationFrame(animId);animId=null;} } },8000);
+      setTimeout(()=>{
+        if(phase==='idle' && animId){
+          cancelAnimationFrame(animId);
+          animId=null;
+        }
+      },8000);
     }
-    if(!animId)frame();
+    if(!animId) frame();
   }
-  return{setPhase};
+
+  return { setPhase };
 })();
 
 // ── INIT ─────────────────────────────────────────────────────────────────
@@ -2919,7 +2963,7 @@ window.ed = (() => {
       state.pattern.forEach(index=>{ const t=tiles[index]; t.style.opacity=''; t.textContent=''; t.className='echo-tile ghost'; });
       // Place decoys
       if(cfg.decoys>0) placeDecoys(cfg.decoys);
-      state.phase='input'; els.checkBtn.disabled=false; hideEvent(); setTurn('Reconstruction phase','input'); edBg.setPhase('input');
+      state.phase='input'; els.checkBtn.disabled=false; hideEvent(); setTurn('Reconstruction phase','input'); if (typeof edBg !== 'undefined' && edBg?.setPhase) edBg.setPhase('input');
       const targetCount = DIFF[difficulty].count;
       setStatus('Recreate what remains',`Select a tile, then choose its rune. <strong style="color:var(--gold)">0 of ${targetCount}</strong> placed.`);
       pulse('success'); tone(460,.07,'triangle',.022,520);
@@ -2932,7 +2976,7 @@ window.ed = (() => {
     assignRunes(); state.phase='reveal'; els.checkBtn.disabled=true; hideEvent();
     setTurn('Reveal phase','reveal');
     setStatus('Hold what you see','The pattern is present only briefly. Let the runes settle before they pass from sight.');
-    revealPattern(); tone(560,.07,'triangle',.024,640); edBg.setPhase('reveal');
+    revealPattern(); tone(560,.07,'triangle',.024,640); if (typeof edBg !== 'undefined' && edBg?.setPhase) edBg.setPhase('reveal');
     window.archive?.inc?.('trialsPlayed');
     setTimeout(()=>{ setStatus('The Veil closes','The runes are slipping away.'); hidePattern(); }, cfg.revealMs);
   }
@@ -3073,7 +3117,7 @@ window.ed = (() => {
   });
 
   function resetAll(){
-    edBg.setPhase('idle');
+    if (typeof edBg !== 'undefined' && edBg?.setPhase) edBg.setPhase('idle');
     state.phase='idle'; state.pattern=[]; state.player=new Map(); state.runeMap=new Map(); state.streak=0;
     clearBoard(); els.checkBtn.disabled=true; hideEvent();
     setTurn('Awaiting first reveal','neutral');
