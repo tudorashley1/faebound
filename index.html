@@ -422,6 +422,66 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
 .vw-disclaimer a{color:rgba(154,164,204,.45);text-decoration:underline}
 
 
+/* ── SUBHUBS ──────────────────────────────────────────────────── */
+.subhub-screen{padding:0;align-items:stretch;position:relative;
+  background:radial-gradient(circle at 50% 20%,rgba(255,255,255,.04),transparent 60%),
+  linear-gradient(180deg,#04040e,#080816)}
+.subhub-wrap{width:min(880px,100%);margin:0 auto;padding:48px 24px 72px;
+  min-height:100vh;display:flex;flex-direction:column}
+.subhub-back{position:fixed;top:14px;left:14px;z-index:40;
+  opacity:.55;transition:opacity .2s}
+.subhub-back:hover{opacity:1}
+.subhub-header{text-align:center;margin-bottom:36px}
+.subhub-eyebrow{font-size:.62rem;text-transform:uppercase;
+  letter-spacing:.26em;color:rgba(255,255,255,.3);margin-bottom:8px}
+.subhub-title{font-family:'Cinzel',serif;font-size:clamp(1.8rem,5vw,2.6rem);
+  font-weight:700;letter-spacing:.04em;margin-bottom:10px}
+.subhub-desc{font-size:.9rem;color:var(--muted);line-height:1.7;
+  max-width:520px;margin:0 auto}
+
+/* ── THE PATTERN YOU CARRY ────────────────────────────────────── */
+#patternScreen{padding:0;align-items:stretch;position:relative;
+  background:radial-gradient(circle at 50% 30%,rgba(154,164,204,.06),transparent 54%),
+  linear-gradient(180deg,#05040e,#0a0816)}
+.ptc-back{position:fixed;top:14px;right:14px;z-index:40;opacity:.55;transition:opacity .2s}
+.ptc-back:hover{opacity:1}
+.ptc-wrap{width:min(720px,100%);margin:0 auto;padding:36px 22px 72px;
+  min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+.ptc-pips{display:flex;gap:9px;justify-content:center;margin-bottom:28px}
+.ptc-pip{width:8px;height:8px;border-radius:50%;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.08);transition:all .38s ease}
+.ptc-pip.active{background:rgba(154,164,204,.9);border-color:rgba(154,164,204,.5);
+  box-shadow:0 0 9px rgba(154,164,204,.4)}
+.ptc-pip.done{background:rgba(154,164,204,.28);border-color:rgba(154,164,204,.18)}
+.ptc-eyebrow{font-size:.65rem;text-transform:uppercase;letter-spacing:.24em;
+  color:rgba(154,164,204,.5);margin-bottom:12px}
+.ptc-title{font-size:clamp(1.65rem,4.5vw,2.5rem);font-weight:900;margin:0 0 9px;line-height:1.04}
+.ptc-prose{color:var(--muted);line-height:1.88;font-size:.97rem;margin:0 0 24px}
+.ptc-prose em{color:rgba(154,164,204,.72);font-style:normal}
+.ptc-question{font-size:1.03rem;color:var(--text);line-height:1.65;
+  margin:0 0 22px;font-weight:500}
+.ptc-choices{display:flex;flex-direction:column;gap:9px;margin-bottom:26px}
+.ptc-choice{padding:16px 19px;border-radius:15px;cursor:pointer;
+  border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);
+  color:var(--muted);line-height:1.58;font-size:.92rem;
+  text-align:left;transition:all .19s ease;position:relative;overflow:hidden}
+.ptc-choice::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(154,164,204,.05),transparent);
+  opacity:0;transition:opacity .19s ease}
+.ptc-choice:hover{border-color:rgba(154,164,204,.28);color:var(--text);transform:translateY(-2px)}
+.ptc-choice:hover::before{opacity:1}
+.ptc-choice.selected{border-color:rgba(154,164,204,.45);
+  background:rgba(154,164,204,.065);color:var(--text)}
+.ptc-choice.selected::before{opacity:1}
+.ptc-choice-num{font-size:.62rem;text-transform:uppercase;letter-spacing:.16em;
+  color:rgba(154,164,204,.42);margin-bottom:4px;display:block}
+.ptc-nav{display:flex;gap:9px;flex-wrap:wrap}
+.ptc-result{text-align:center;padding:6px 0;animation:rise .6s ease forwards}
+.portal-ptc:hover{border-color:rgba(154,164,204,.22);
+  box-shadow:0 22px 52px rgba(0,0,0,.4),0 0 44px rgba(154,164,204,.08)}
+.portal-gated{cursor:default}
+.portal-gated.unlocked{cursor:pointer}
+
 /* ── SIGIL TRACE ──────────────────────────────────────────────── */
 #sigilScreen{padding:0;align-items:stretch;position:relative;
   background:linear-gradient(180deg,#04030e,#080616)}
@@ -1026,7 +1086,7 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
     <p class="eyebrow" style="text-align:center;margin-bottom:6px">A threshold into the Veil</p>
     <h1 class="realm-title" style="text-align:center;margin-bottom:10px">Faebound Realm</h1>
     <p class="sub-text" style="margin-bottom:24px">
-      Four paths through the Veil. Each one offers a different kind of gain:<br>precision, rhythm, recall, or reflection.
+      Nine crossings through the Veil — grouped to help you find what you need.
     </p>
 
     <!-- Depth badge -->
@@ -1053,70 +1113,44 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
       <button class="btn btn-ghost btn-sm" id="resumeBtn" disabled>Return to Trial</button>
     </div>
 
-    <!-- Trial Portals -->
+    <!-- Portal Grid — clean subhub structure -->
     <div class="portal-grid">
-      <article class="portal portal-echo" data-launch="echo-drift">
-        <div class="portal-glow"></div>
-        <div class="portal-icon">◇</div>
-        <span class="portal-kicker">Memory Trial</span>
-        <h3 class="portal-name">Echo Drift</h3>
-        <p class="portal-desc">A memory surfaces, then dissolves. The Veil closes. Reconstruct what you held — rune and position both matter. Decoys cloud the path.</p>
-        <p class="portal-promise"><strong>What this crossing offers:</strong> stronger recall and calm under vanishing information.</p>
-        <button class="btn btn-primary btn-sm portal-enter" data-launch-btn="echo-drift">Enter Trial</button>
-      </article>
 
-      <article class="portal portal-sigil" data-launch="sigil-trace">
+      <!-- TRIALS subhub -->
+      <article class="portal portal-subhub" data-launch="subhub-trials"
+        style="border-color:rgba(187,168,255,.18)">
         <div class="portal-glow" style="background:var(--accent)"></div>
-        <div class="portal-icon" style="color:var(--accent);filter:drop-shadow(0 0 10px rgba(187,168,255,.4))">✦</div>
-        <span class="portal-kicker">Constellation Trial</span>
-        <h3 class="portal-name" style="color:var(--accent)">Sigil Trace</h3>
-        <p class="portal-desc">A constellation appears in the dark, briefly, and then dissolves. Retrace it from memory — star by star, in the order it was shown.</p>
-        <p class="portal-promise"><strong>What this crossing offers:</strong> sharper sequential memory and comfort with patterns that vanish before you finish seeing them.</p>
-        <button class="btn btn-sm portal-enter" style="background:rgba(187,168,255,.12);border-color:rgba(187,168,255,.35);color:var(--accent)" data-launch-btn="sigil-trace">Enter the Constellation</button>
+        <div class="portal-icon" style="color:var(--accent);filter:drop-shadow(0 0 10px rgba(187,168,255,.4))">◇</div>
+        <span class="portal-kicker" style="color:rgba(187,168,255,.55)">Memory &amp; Pattern</span>
+        <h3 class="portal-name" style="color:var(--accent)">Trials</h3>
+        <p class="portal-desc">Two skill-based crossings that sharpen recall and pattern recognition — for when you want to play rather than reflect.</p>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:2px">
+          <span style="font-size:.7rem;padding:3px 10px;border-radius:999px;border:1px solid rgba(187,168,255,.2);color:rgba(187,168,255,.5)">Echo Drift</span>
+          <span style="font-size:.7rem;padding:3px 10px;border-radius:999px;border:1px solid rgba(187,168,255,.2);color:rgba(187,168,255,.5)">Sigil Trace</span>
+        </div>
+        <button class="btn btn-sm portal-enter" style="background:rgba(187,168,255,.1);border-color:rgba(187,168,255,.3);color:var(--accent)" data-launch-btn="subhub-trials">Enter Trials</button>
       </article>
 
-      <article class="portal portal-threshold" data-launch="threshold-between">
-        <div class="portal-glow"></div>
-        <div class="portal-icon" style="color:var(--ember);filter:drop-shadow(0 0 10px rgba(255,170,51,.4))">⟳</div>
-        <span class="portal-kicker">Transition Trial</span>
-        <h3 class="portal-name" style="color:var(--ember)">The Threshold Between</h3>
-        <p class="portal-desc">Every ending is a beginning in disguise. Five chambers that ask how you move through what changes — before you understand it, and after.</p>
-        <p class="portal-promise"><strong>What this crossing offers:</strong> language for the space between where you were and where you are going.</p>
-        <button class="btn btn-sm portal-enter" style="background:rgba(255,170,51,.15);border-color:rgba(255,170,51,.4);color:var(--ember)" data-launch-btn="threshold-between">Enter the Threshold</button>
+      <!-- REFLECTIONS subhub -->
+      <article class="portal portal-subhub" data-launch="subhub-reflections"
+        style="border-color:rgba(255,170,51,.16)">
+        <div class="portal-glow" style="background:var(--ember)"></div>
+        <div class="portal-icon" style="color:var(--ember);filter:drop-shadow(0 0 10px rgba(255,170,51,.35))">✦</div>
+        <span class="portal-kicker" style="color:rgba(255,170,51,.55)">Self-Knowledge</span>
+        <h3 class="portal-name" style="color:var(--ember)">Reflections</h3>
+        <p class="portal-desc">Five experiences that ask something real — about change, connection, doubt, breath, and how you move through difficulty.</p>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:2px">
+          <span style="font-size:.7rem;padding:3px 10px;border-radius:999px;border:1px solid rgba(255,170,51,.15);color:rgba(255,170,51,.45)">The Threshold Between</span>
+          <span style="font-size:.7rem;padding:3px 10px;border-radius:999px;border:1px solid rgba(255,170,51,.15);color:rgba(255,170,51,.45)">The Tide</span>
+          <span style="font-size:.7rem;padding:3px 10px;border-radius:999px;border:1px solid rgba(255,170,51,.15);color:rgba(255,170,51,.45)">The Shape of Your Doubt</span>
+          <span style="font-size:.7rem;padding:3px 10px;border-radius:999px;border:1px solid rgba(255,170,51,.15);color:rgba(255,170,51,.45)">The Way You Hold Others</span>
+          <span style="font-size:.7rem;padding:3px 10px;border-radius:999px;border:1px solid rgba(255,170,51,.15);color:rgba(255,170,51,.45)">The Crossing</span>
+        </div>
+        <button class="btn btn-sm portal-enter" style="background:rgba(255,170,51,.1);border-color:rgba(255,170,51,.3);color:var(--ember)" data-launch-btn="subhub-reflections">Enter Reflections</button>
       </article>
 
-      <article class="portal portal-tide" data-launch="the-tide">
-        <div class="portal-glow" style="background:var(--mint)"></div>
-        <div class="portal-icon" style="color:var(--mint);filter:drop-shadow(0 0 10px rgba(94,221,168,.4))">🌊</div>
-        <span class="portal-kicker">Somatic Practice</span>
-        <h3 class="portal-name" style="color:var(--mint)">The Tide</h3>
-        <p class="portal-desc">The Veil breathes. For a few minutes, you breathe with it. Three practices drawn from breath science — for when you need to return to yourself.</p>
-        <p class="portal-promise"><strong>What this crossing offers:</strong> a quieter nervous system and a body that feels like yours again.</p>
-        <button class="btn btn-sm portal-enter" style="background:rgba(94,221,168,.12);border-color:rgba(94,221,168,.35);color:var(--mint)" data-launch-btn="the-tide">Enter the Tide</button>
-      </article>
-
-      <article class="portal portal-soyd" data-launch="shape-of-doubt">
-        <div class="portal-glow" style="background:var(--ruby)"></div>
-        <div class="portal-icon" style="color:var(--ruby);filter:drop-shadow(0 0 10px rgba(255,85,119,.4))">🜁</div>
-        <span class="portal-kicker">Self-Compassion Trial</span>
-        <h3 class="portal-name" style="color:var(--ruby)">The Shape of Your Doubt</h3>
-        <p class="portal-desc">Five chambers about the particular way you doubt yourself — the story you tell yourself when you feel like you are not enough, or too much, or not quite real.</p>
-        <p class="portal-promise"><strong>What this crossing offers:</strong> a name for what lives underneath the doubt, and a gentler way to hold it.</p>
-        <button class="btn btn-sm portal-enter" style="background:rgba(255,85,119,.12);border-color:rgba(255,85,119,.35);color:var(--ruby)" data-launch-btn="shape-of-doubt">Enter the Doubt</button>
-      </article>
-
-      <article class="portal portal-wyho" data-launch="way-you-hold">
-        <div class="portal-glow" style="background:var(--pink)"></div>
-        <div class="portal-icon" style="color:var(--pink);filter:drop-shadow(0 0 10px rgba(255,158,200,.4))">🕯</div>
-        <span class="portal-kicker">Connection Trial</span>
-        <h3 class="portal-name" style="color:var(--pink)">The Way You Hold Others</h3>
-        <p class="portal-desc">Five chambers about how you show up for the people you care about. Not what you intend — what you actually do when someone needs you.</p>
-        <p class="portal-promise"><strong>What this crossing offers:</strong> language for how you love, and what that costs and gives you.</p>
-        <button class="btn btn-sm portal-enter" style="background:rgba(255,158,200,.12);border-color:rgba(255,158,200,.35);color:var(--pink)" data-launch-btn="way-you-hold">Enter the Crossing</button>
-      </article>
-
-      <article class="portal portal-archive" data-launch="archive"
- style="border-color:rgba(238,216,122,.18)">
+      <!-- ARCHIVE — stays on main hub -->
+      <article class="portal portal-archive" data-launch="archive" style="border-color:rgba(238,216,122,.18)">
         <div class="portal-glow" style="background:var(--gold)"></div>
         <div class="portal-icon" style="color:var(--gold);filter:drop-shadow(0 0 10px rgba(238,216,122,.4))">📖</div>
         <span class="portal-kicker">Reflection Space</span>
@@ -1126,17 +1160,7 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
         <button class="btn btn-gold btn-sm portal-enter" data-launch-btn="archive">Enter the Archive</button>
       </article>
 
-      <article class="portal portal-crossing" data-launch="the-crossing"
-        style="border-color:rgba(187,168,255,.22);background:rgba(8,6,20,.85)">
-        <div class="portal-glow" style="background:var(--accent)"></div>
-        <div class="portal-icon" style="color:var(--accent);filter:drop-shadow(0 0 12px rgba(187,168,255,.5))">⟡</div>
-        <span class="portal-kicker" style="color:rgba(187,168,255,.6)">AI Narrative Trial</span>
-        <h3 class="portal-name" style="color:var(--accent)">The Crossing</h3>
-        <p class="portal-desc">Three scenes, generated fresh each time. A liminal space that responds to how you move through it. The Veil watches your choices and tells you what it saw.</p>
-        <p class="portal-promise"><strong>What this crossing offers:</strong> a story that is yours alone — and a reflection on what your choices revealed.</p>
-        <button class="btn btn-sm portal-enter" style="background:rgba(187,168,255,.12);border-color:rgba(187,168,255,.4);color:var(--accent)" data-launch-btn="the-crossing">Enter the Crossing</button>
-      </article>
-
+      <!-- VEIL WITHIN — full width -->
       <article class="portal portal-within glass-gold" data-launch="veil-within">
         <div class="portal-glow"></div>
         <div class="portal-icon">✶</div>
@@ -1146,6 +1170,7 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
         <p class="portal-promise"><strong>What this crossing offers:</strong> reflection, language, and a clearer sense of how you move through feeling.</p>
         <button class="btn btn-gold btn-sm portal-enter" data-launch-btn="veil-within">Enter the Veil</button>
       </article>
+
     </div>
 
     <!-- Footer -->
@@ -1338,6 +1363,131 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
 <section class="game-screen-wrap hidden" id="thresholdScreen" style="padding:0;align-items:stretch">
   <button class="btn btn-ghost btn-sm tb-back" id="backFromThresholdBtn">Return to Realm</button>
   <div class="tb-wrap" id="tbWrap">
+    <!-- Injected by JS -->
+  </div>
+</section>
+
+
+<!-- TRIALS SUBHUB -->
+<section class="game-screen-wrap hidden subhub-screen" id="trialsScreen">
+  <button class="btn btn-ghost btn-sm subhub-back" id="backFromTrialsBtn">← Realm</button>
+  <div class="subhub-wrap">
+    <div class="subhub-header">
+      <p class="subhub-eyebrow">Memory &amp; Pattern</p>
+      <h1 class="subhub-title" style="color:var(--accent)">Trials</h1>
+      <p class="subhub-desc">Two skill-based crossings. Each one asks something of your attention rather than your reflection. Replayable, progressively difficult, and genuinely satisfying to improve at.</p>
+    </div>
+    <div class="portal-grid">
+      <article class="portal portal-echo" data-launch="echo-drift">
+        <div class="portal-glow"></div>
+        <div class="portal-icon">◇</div>
+        <span class="portal-kicker">Memory Trial</span>
+        <h3 class="portal-name">Echo Drift</h3>
+        <p class="portal-desc">A memory surfaces, then dissolves. The Veil closes. Reconstruct what you held — rune and position both matter. Decoys cloud the path.</p>
+        <p class="portal-promise"><strong>What this crossing offers:</strong> stronger recall and calm under vanishing information.</p>
+        <button class="btn btn-primary btn-sm portal-enter" data-launch-btn="echo-drift">Enter Trial</button>
+      </article>
+      <article class="portal portal-sigil" data-launch="sigil-trace">
+        <div class="portal-glow" style="background:var(--accent)"></div>
+        <div class="portal-icon" style="color:var(--accent);filter:drop-shadow(0 0 10px rgba(187,168,255,.4))">✦</div>
+        <span class="portal-kicker">Constellation Trial</span>
+        <h3 class="portal-name" style="color:var(--accent)">Sigil Trace</h3>
+        <p class="portal-desc">A constellation appears in the dark, briefly, and then dissolves. Retrace it from memory — star by star, in the order it was shown.</p>
+        <p class="portal-promise"><strong>What this crossing offers:</strong> sharper sequential memory and comfort with patterns that vanish before you finish seeing them.</p>
+        <button class="btn btn-sm portal-enter" style="background:rgba(187,168,255,.12);border-color:rgba(187,168,255,.35);color:var(--accent)" data-launch-btn="sigil-trace">Enter the Constellation</button>
+      </article>
+    </div>
+  </div>
+</section>
+
+
+<!-- REFLECTIONS SUBHUB -->
+<section class="game-screen-wrap hidden subhub-screen" id="reflectionsScreen">
+  <button class="btn btn-ghost btn-sm subhub-back" id="backFromReflectionsBtn">← Realm</button>
+  <div class="subhub-wrap">
+    <div class="subhub-header">
+      <p class="subhub-eyebrow">Self-Knowledge</p>
+      <h1 class="subhub-title" style="color:var(--ember)">Reflections</h1>
+      <p class="subhub-desc">Five experiences that ask something real. Each one is a different lens — on how you change, how you love, what you doubt, how you breathe through difficulty, and how you move through the unknown.</p>
+    </div>
+    <div class="portal-grid">
+      <article class="portal portal-threshold" data-launch="threshold-between">
+        <div class="portal-glow"></div>
+        <div class="portal-icon" style="color:var(--ember);filter:drop-shadow(0 0 10px rgba(255,170,51,.4))">⟳</div>
+        <span class="portal-kicker">Transition Trial</span>
+        <h3 class="portal-name" style="color:var(--ember)">The Threshold Between</h3>
+        <p class="portal-desc">Every ending is a beginning in disguise. Five chambers that ask how you move through what changes — before you understand it, and after.</p>
+        <p class="portal-promise"><strong>What this crossing offers:</strong> language for the space between where you were and where you are going.</p>
+        <button class="btn btn-sm portal-enter" style="background:rgba(255,170,51,.15);border-color:rgba(255,170,51,.4);color:var(--ember)" data-launch-btn="threshold-between">Enter the Threshold</button>
+      </article>
+      <article class="portal portal-tide" data-launch="the-tide">
+        <div class="portal-glow" style="background:var(--mint)"></div>
+        <div class="portal-icon" style="color:var(--mint);filter:drop-shadow(0 0 10px rgba(94,221,168,.4))">🌊</div>
+        <span class="portal-kicker">Somatic Practice</span>
+        <h3 class="portal-name" style="color:var(--mint)">The Tide</h3>
+        <p class="portal-desc">The Veil breathes. For a few minutes, you breathe with it. Three practices drawn from breath science — for when you need to return to yourself.</p>
+        <p class="portal-promise"><strong>What this crossing offers:</strong> a quieter nervous system and a body that feels like yours again.</p>
+        <button class="btn btn-sm portal-enter" style="background:rgba(94,221,168,.12);border-color:rgba(94,221,168,.35);color:var(--mint)" data-launch-btn="the-tide">Enter the Tide</button>
+      </article>
+      <article class="portal portal-soyd" data-launch="shape-of-doubt">
+        <div class="portal-glow" style="background:var(--ruby)"></div>
+        <div class="portal-icon" style="color:var(--ruby);filter:drop-shadow(0 0 10px rgba(255,85,119,.4))">🜁</div>
+        <span class="portal-kicker">Self-Compassion Trial</span>
+        <h3 class="portal-name" style="color:var(--ruby)">The Shape of Your Doubt</h3>
+        <p class="portal-desc">Five chambers about the particular way you doubt yourself — the story you tell yourself when you feel like you are not enough, or too much, or not quite real.</p>
+        <p class="portal-promise"><strong>What this crossing offers:</strong> a name for what lives underneath the doubt, and a gentler way to hold it.</p>
+        <button class="btn btn-sm portal-enter" style="background:rgba(255,85,119,.12);border-color:rgba(255,85,119,.35);color:var(--ruby)" data-launch-btn="shape-of-doubt">Enter the Doubt</button>
+      </article>
+      <article class="portal portal-wyho" data-launch="way-you-hold">
+        <div class="portal-glow" style="background:var(--pink)"></div>
+        <div class="portal-icon" style="color:var(--pink);filter:drop-shadow(0 0 10px rgba(255,158,200,.4))">🕯</div>
+        <span class="portal-kicker">Connection Trial</span>
+        <h3 class="portal-name" style="color:var(--pink)">The Way You Hold Others</h3>
+        <p class="portal-desc">Five chambers about how you show up for the people you care about. Not what you intend — what you actually do when someone needs you.</p>
+        <p class="portal-promise"><strong>What this crossing offers:</strong> language for how you love, and what that costs and gives you.</p>
+        <button class="btn btn-sm portal-enter" style="background:rgba(255,158,200,.12);border-color:rgba(255,158,200,.35);color:var(--pink)" data-launch-btn="way-you-hold">Enter the Crossing</button>
+      </article>
+      <!-- PATTERN YOU CARRY — gated at Depth 13 -->
+      <article class="portal portal-ptc portal-gated" id="ptcPortal"
+        style="grid-column:1/-1;border-color:rgba(255,255,255,.05);
+        background:rgba(6,4,14,.9);position:relative">
+        <div class="portal-glow" style="background:rgba(154,164,204,.6)"></div>
+        <div class="portal-icon" style="color:rgba(154,164,204,.6);
+             filter:drop-shadow(0 0 8px rgba(154,164,204,.3))">◬</div>
+        <span class="portal-kicker" style="color:rgba(154,164,204,.4)">Deep Trial · Depth 13</span>
+        <h3 class="portal-name" style="color:rgba(154,164,204,.65)">The Pattern You Carry</h3>
+        <div id="ptcLockState">
+          <p class="portal-desc" style="color:rgba(154,164,204,.4)">The Veil does not show this to everyone. Return when you have crossed thirteen times — when you have carried enough to recognize what you carry.</p>
+          <p style="font-size:.75rem;color:rgba(154,164,204,.3);font-style:italic" id="ptcDepthNote">Requires Veil Depth 13</p>
+        </div>
+        <div id="ptcUnlockState" style="display:none">
+          <p class="portal-desc">Five chambers about the pattern underneath your patterns — the way you have learned to be in the world that protects something, costs something, and is more chosen than it feels.</p>
+          <p class="portal-promise"><strong>What this crossing offers:</strong> a name for the deepest shape you move in, and a gentler relationship with why it formed.</p>
+          <button class="btn btn-sm portal-enter"
+            style="background:rgba(154,164,204,.12);border-color:rgba(154,164,204,.35);
+            color:rgba(154,164,204,.9)" data-launch-btn="pattern-you-carry">Enter the Pattern</button>
+        </div>
+      </article>
+
+      <article class="portal portal-crossing" data-launch="the-crossing"
+        style="border-color:rgba(187,168,255,.22);background:rgba(8,6,20,.85);grid-column:1/-1">
+        <div class="portal-glow" style="background:var(--accent)"></div>
+        <div class="portal-icon" style="color:var(--accent);filter:drop-shadow(0 0 12px rgba(187,168,255,.5))">⟡</div>
+        <span class="portal-kicker" style="color:rgba(187,168,255,.6)">AI Guided Experience</span>
+        <h3 class="portal-name" style="color:var(--accent)">The Crossing</h3>
+        <p class="portal-desc">An AI-guided journey through an emotion you are carrying. Not therapy — a thoughtful companion asking the questions worth asking, one at a time.</p>
+        <p class="portal-promise"><strong>What this crossing offers:</strong> a clearer relationship with something you are currently feeling.</p>
+        <button class="btn btn-sm portal-enter" style="background:rgba(187,168,255,.12);border-color:rgba(187,168,255,.4);color:var(--accent)" data-launch-btn="the-crossing">Enter the Crossing</button>
+      </article>
+    </div>
+  </div>
+</section>
+
+
+<!-- THE PATTERN YOU CARRY SCREEN -->
+<section class="game-screen-wrap hidden" id="patternScreen" style="padding:0;align-items:stretch">
+  <button class="btn btn-ghost btn-sm ptc-back" id="backFromPtcBtn">Return to Realm</button>
+  <div class="ptc-wrap" id="ptcWrap">
     <!-- Injected by JS -->
   </div>
 </section>
@@ -1945,6 +2095,9 @@ const screens = {
   echo: document.getElementById('echoDriftScreen'),
   veilWithin: document.getElementById('veilWithinScreen'),
   threshold: document.getElementById('thresholdScreen'),
+  pattern: document.getElementById('patternScreen'),
+  trials: document.getElementById('trialsScreen'),
+  reflections: document.getElementById('reflectionsScreen'),
   crossing: document.getElementById('crossingScreen'),
   soyd: document.getElementById('soydScreen'),
   sigil: document.getElementById('sigilScreen'),
@@ -2047,6 +2200,19 @@ function launchGame(game){
     window.tb?.begin();
     showOnly('threshold');
   }
+  if(game==='pattern-you-carry'){
+    window.ambient.setIntensity('echo');
+    window.ptc?.begin();
+    showOnly('pattern');
+  }
+  if(game==='subhub-trials'){
+    window.ambient.setIntensity('hub');
+    showOnly('trials');
+  }
+  if(game==='subhub-reflections'){
+    window.ambient.setIntensity('hub');
+    showOnly('reflections');
+  }
   if(game==='the-crossing'){
     window.ambient.setIntensity('echo');
     window.crossing?.enter();
@@ -2087,9 +2253,32 @@ document.querySelectorAll('[data-launch],[data-launch-btn]').forEach(el=>{
   });
 });
 
+// ── DEPTH GATE: Pattern You Carry ─────────────────────────────
+function updatePtcGate() {
+  const depth = (typeof progression !== 'undefined' && progression) ? progression.getDepth() : 0;
+  const portal = document.getElementById('ptcPortal');
+  const lockState = document.getElementById('ptcLockState');
+  const unlockState = document.getElementById('ptcUnlockState');
+  const depthNote = document.getElementById('ptcDepthNote');
+  if (!portal) return;
+  if (depth >= 13) {
+    portal.classList.add('unlocked');
+    portal.style.borderColor = 'rgba(154,164,204,.22)';
+    portal.style.cursor = 'pointer';
+    portal.style.background = 'rgba(8,6,20,.85)';
+    if (lockState) lockState.style.display = 'none';
+    if (unlockState) unlockState.style.display = 'block';
+  } else {
+    if (depthNote) depthNote.textContent = 'Requires Veil Depth 13 — currently at ' + depth;
+  }
+}
+
 // Court theme buttons removed
 
 document.getElementById('backFromEchoBtn')?.addEventListener('click',()=>backToHub(()=>window.ed?.resetAll()));
+document.getElementById('backFromPtcBtn')?.addEventListener('click',()=>backToHub(()=>{}));
+document.getElementById('backFromTrialsBtn')?.addEventListener('click',()=>{ window.ambient.setIntensity('hub'); showOnly('hub'); });
+document.getElementById('backFromReflectionsBtn')?.addEventListener('click',()=>{ window.ambient.setIntensity('hub'); showOnly('hub'); });
 document.getElementById('backFromCrossingBtn')?.addEventListener('click',()=>{ window.crossing?.stop(); backToHub(()=>{}); });
 document.getElementById('backFromSoydBtn')?.addEventListener('click',()=>backToHub(()=>{}));
 document.getElementById('backFromSigilBtn')?.addEventListener('click',()=>{ window.sigilTrace?.stop(); backToHub(()=>{}); });
@@ -2163,7 +2352,7 @@ function updateRecentCrossing(){
   try{
     const last=localStorage.getItem('faeboundLastGame')||'';
     const result=JSON.parse(localStorage.getItem('faeboundLastVeilWithinResult')||'null');
-    const labels={'echo-drift':'Echo Drift','veil-within':'The Veil Within','threshold-between':'The Threshold Between','the-crossing':'The Crossing','shape-of-doubt':'The Shape of Your Doubt','sigil-trace':'Sigil Trace','way-you-hold':'The Way You Hold Others','the-tide':'The Tide','archive':'The Archive'};
+    const labels={'echo-drift':'Echo Drift','veil-within':'The Veil Within','threshold-between':'The Threshold Between','pattern-you-carry':'The Pattern You Carry','the-crossing':'The Crossing','shape-of-doubt':'The Shape of Your Doubt','sigil-trace':'Sigil Trace','way-you-hold':'The Way You Hold Others','the-tide':'The Tide','archive':'The Archive'};
     const glyphs={'echo-drift':'◇','veil-within':'✶','archive':'📖'};
     if(last&&labels[last]){
       let txt=labels[last];
@@ -2251,11 +2440,11 @@ const progression = (() => {
     Object.entries(DEPTH_OBS).forEach(([d,lines])=>{
       if(depth>=parseInt(d)) lines.forEach(l=>{if(!obsLines.includes(l))obsLines.push(l);});
     });
-    if (typeof updatePtcGate === 'function') updatePtcGate();
   }
   render();
   return {increment,getDepth:()=>depth,render};
 })();
+updatePtcGate(); // called after progression is ready
 
 function showMilestone(title,sub){
   const toast=document.getElementById('milestoneToast'); if(!toast)return;
@@ -2355,77 +2544,34 @@ setTimeout(()=>{
 },150);
 
 // ── ECHO DRIFT BG (particle fog) ─────────────────────────────────────────
-const edBg = (() => {
-  const canvas=document.getElementById('edBgCanvas');
-  if(!canvas) return { setPhase:()=>{} };
-
+window.edBg = (() => {
+  const canvas=document.getElementById('edBgCanvas'); if(!canvas)return{setPhase:()=>{}};
   const ctx=canvas.getContext('2d');
-  if(!ctx) return { setPhase:()=>{} };
-
   let phase='idle', particles=[], animId=null;
-
-  function resize(){
-    const p=canvas.parentElement;
-    if(!p) return false;
-    canvas.width=p.offsetWidth;
-    canvas.height=p.offsetHeight;
-    return canvas.width > 0 && canvas.height > 0;
-  }
-
-  function spawnP(){
-    return {
-      x:Math.random()*canvas.width,
-      y:Math.random()*canvas.height,
-      r:Math.random()*4+1,
-      vx:(Math.random()-.5)*.35,
-      vy:(Math.random()-.5)*.3,
-      op:Math.random()*.28+.04,
-      life:1,
-      decay:Math.random()*.003+.001
-    };
-  }
-
+  function resize(){const p=canvas.parentElement;if(!p)return;canvas.width=p.offsetWidth;canvas.height=p.offsetHeight;}
+  function spawnP(){return{x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*4+1,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.3,op:Math.random()*.28+.04,life:1,decay:Math.random()*.003+.001};}
   function frame(){
-    if(!resize()){
-      animId=requestAnimationFrame(frame);
-      return;
-    }
-
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    const target=phase==='reveal' ? 80 : phase==='input' ? 28 : 6;
-
-    while(particles.length<target) particles.push(spawnP());
+    resize(); ctx.clearRect(0,0,canvas.width,canvas.height);
+    const target=phase==='reveal'?80:phase==='input'?28:6;
+    while(particles.length<target)particles.push(spawnP());
     particles=particles.filter(p=>p.life>0);
-
     particles.forEach(p=>{
       p.x+=p.vx; p.y+=p.vy; p.life-=p.decay;
-      if(p.x<0) p.x=canvas.width;
-      if(p.x>canvas.width) p.x=0;
-      if(p.y<0) p.y=canvas.height;
-      if(p.y>canvas.height) p.y=0;
-      ctx.beginPath();
-      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle=`rgba(187,168,255,${p.op*p.life})`;
-      ctx.fill();
+      if(p.x<0)p.x=canvas.width; if(p.x>canvas.width)p.x=0;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(187,168,255,${p.op*p.life})`; ctx.fill();
     });
-
     animId=requestAnimationFrame(frame);
   }
-
   function setPhase(p){
     phase=p;
     if(p==='idle'){
-      setTimeout(()=>{
-        if(phase==='idle' && animId){
-          cancelAnimationFrame(animId);
-          animId=null;
-        }
-      },8000);
+      // After a moment of idle particles, stop the loop to save CPU
+      setTimeout(()=>{ if(phase==='idle'){ if(animId){cancelAnimationFrame(animId);animId=null;} } },8000);
     }
-    if(!animId) frame();
+    if(!animId)frame();
   }
-
-  return { setPhase };
+  return{setPhase};
 })();
 
 // ── INIT ─────────────────────────────────────────────────────────────────
@@ -2963,7 +3109,7 @@ window.ed = (() => {
       state.pattern.forEach(index=>{ const t=tiles[index]; t.style.opacity=''; t.textContent=''; t.className='echo-tile ghost'; });
       // Place decoys
       if(cfg.decoys>0) placeDecoys(cfg.decoys);
-      state.phase='input'; els.checkBtn.disabled=false; hideEvent(); setTurn('Reconstruction phase','input'); if (typeof edBg !== 'undefined' && edBg?.setPhase) edBg.setPhase('input');
+      state.phase='input'; els.checkBtn.disabled=false; hideEvent(); setTurn('Reconstruction phase','input'); edBg.setPhase('input');
       const targetCount = DIFF[difficulty].count;
       setStatus('Recreate what remains',`Select a tile, then choose its rune. <strong style="color:var(--gold)">0 of ${targetCount}</strong> placed.`);
       pulse('success'); tone(460,.07,'triangle',.022,520);
@@ -2976,7 +3122,7 @@ window.ed = (() => {
     assignRunes(); state.phase='reveal'; els.checkBtn.disabled=true; hideEvent();
     setTurn('Reveal phase','reveal');
     setStatus('Hold what you see','The pattern is present only briefly. Let the runes settle before they pass from sight.');
-    revealPattern(); tone(560,.07,'triangle',.024,640); if (typeof edBg !== 'undefined' && edBg?.setPhase) edBg.setPhase('reveal');
+    revealPattern(); tone(560,.07,'triangle',.024,640); edBg.setPhase('reveal');
     window.archive?.inc?.('trialsPlayed');
     setTimeout(()=>{ setStatus('The Veil closes','The runes are slipping away.'); hidePattern(); }, cfg.revealMs);
   }
@@ -3117,7 +3263,7 @@ window.ed = (() => {
   });
 
   function resetAll(){
-    if (typeof edBg !== 'undefined' && edBg?.setPhase) edBg.setPhase('idle');
+    edBg.setPhase('idle');
     state.phase='idle'; state.pattern=[]; state.player=new Map(); state.runeMap=new Map(); state.streak=0;
     clearBoard(); els.checkBtn.disabled=true; hideEvent();
     setTurn('Awaiting first reveal','neutral');
@@ -4933,113 +5079,74 @@ window.crossing = (() => {
   const wrap = document.getElementById('crossingWrap');
   if (!wrap) return { enter(){}, stop(){} };
 
-  // ── STATE ─────────────────────────────────────────────────────────────────
-  let sceneIndex = 0;
-  let premise = null;        // the through-line generated at start
-  let scenes = [];           // [{scene, choiceA, choiceB}]
-  let choices = [];          // player choice text per scene
-  let observations = [];     // Veil one-liners after each choice
-  let generating = false;
-  let stopped = false;
+  // ── ETHICS & BOUNDARIES ────────────────────────────────────────────────
+  // The Crossing is a guided reflection tool, not a therapeutic intervention.
+  // Claude asks questions — it does not diagnose, advise, interpret, or treat.
+  // Distress detection surfaces crisis resources immediately.
+  // This experience is grounded in motivational interviewing (Miller & Rollnick)
+  // and the Socratic questioning tradition — asking rather than telling.
 
-  const TOTAL_SCENES = 5;
+  const TOTAL_EXCHANGES = 5;
+
+  // ── STATE ─────────────────────────────────────────────────────────────
+  let stopped = false;
+  let generating = false;
+  let territory = '';        // what the player named
+  let history = [];          // [{role:'user'|'assistant', content}]
+  let exchangeCount = 0;
   let playerProfile = [];
 
-  // ── PROMPTS ───────────────────────────────────────────────────────────────
-
-  function PREMISE_SYSTEM(profile) {
-    let s = 'You are the voice of a liminal realm called Faebound.\n'
-      + 'Generate a single sentence — the through-line premise of a Crossing.\n'
-      + 'This sentence describes what the player has been carrying, or seeking, or avoiding.\n'
-      + 'It should feel personally true based on what you know about this player.\n'
-      + 'It is the quiet question underneath this particular Crossing.';
-    if (profile.length > 0) {
-      s += '\n\nWhat the realm already knows about this player:\n'
-        + profile.map(function(p) { return '- ' + p; }).join('\n');
-      s += '\n\nUse the profile to make the premise specific. If you know their doubt pattern, care style, emotional style — let that shape what they are carrying.';
-    }
-    s += '\nRespond with only the sentence. No quotation marks. No preamble.';
-    return s;
-  }
-
-  function SCENE_SYSTEM(profile) {
-    let s = 'You write short atmospheric scenes for a narrative experience called The Crossing inside Faebound.';
-    if (profile.length > 0) {
-      s += '\n\nPlayer profile — shape choices to resonate with this specific person:\n'
-        + profile.map(function(p) { return '- ' + p; }).join('\n');
-      s += '\nFor example: a Watcher gets choices about observing vs inhabiting.'
-        + ' A Stone gets choices about staying vs stepping back. A Seer notices differently than a Root.';
-    }
-    s += '\n\nRULES:\n'
-      + '- Exactly 2-3 sentences. No more.\n'
-      + '- Second person, present tense.\n'
-      + '- Name the strange thing simply. Trust the reader.\n'
-      + '- The strangeness is matter-of-fact, not dramatic.\n'
-      + '- Both choices reveal different things about a person. Neither is correct.\n'
-      + '- Each scene deepens the journey.\n'
-      + '\nWORLD: Liminal. Forests that remember. Creatures that are more feeling than form.'
-      + ' Objects with weight. Thresholds. Voices without bodies. Doors in wrong places.\n'
-      + '\nFORMAT (exactly this, nothing else):\n'
-      + 'SCENE: [2-3 sentences]\n'
-      + 'CHOICE_A: [one way through, 1 sentence]\n'
-      + 'CHOICE_B: [a different way, 1 sentence]';
-    return s;
-  }
-
-  const OBSERVATION_SYSTEM = `You are the Veil — the witnessing presence of a liminal realm called Faebound.
-The player just made a choice in The Crossing. Write one sentence that names what the choice revealed about how they move.
-Not a judgment. Not advice. An observation — quiet, precise, honest.
-Present tense. Second person.
-Do not repeat the choice back to them. Name what it reveals.
-Examples:
-"You moved toward the thing that asked something of you."
-"You chose the slower road. The one that would cost more to walk."
-"When offered what you wanted, you let it go."
-Respond with only the sentence.`;
-
-  function REFLECTION_SYSTEM(profile) {
-    let s = 'You are the voice of a liminal realm called Faebound.'
-      + ' You have just witnessed a player move through five scenes of The Crossing.';
-    if (profile.length > 0) {
-      s += '\n\nWhat the realm already knows about this player:\n'
-        + profile.map(function(p) { return '- ' + p; }).join('\n');
-    }
-    s += '\n\nWrite a single paragraph (5-7 sentences) reflecting on what their journey revealed.'
-      + ' You have the through-line premise, all five scenes, their choices, and the Veil observations.'
-      + '\n\nTONE:\n'
-      + '- Speak as the realm, directly to the player\n'
-      + '- Present tense, second person\n'
-      + '- Not analytical — observational, poetic, true\n'
-      + '- Find the pattern in the five choices. Name it.\n'
-      + '- Connect what you saw in this Crossing to the broader picture of who this player has shown themselves to be across the realm.\n'
-      + '- If you know their archetype patterns, name the resonances gently, not clinically.\n'
-      + '- End with something that opens rather than closes.\n'
-      + '\nRespond with only the paragraph. No headers, no preamble.';
-    return s;
-  }
-
-  // ── PREMISE OPENERS ───────────────────────────────────────────────────────
-  const PREMISE_PROMPTS = [
-    `Generate the through-line premise for a Crossing. The player has been carrying something.`,
-    `Generate the through-line premise. The player has been moving toward something they haven't named yet.`,
-    `Generate the through-line premise. Something has been asking for the player's attention.`,
-    `Generate the through-line premise. The player has been deciding something without knowing they were deciding it.`,
-    `Generate the through-line premise. There is a version of the player that is closer than they think.`,
+  // ── EMOTIONAL TERRITORIES ─────────────────────────────────────────────
+  const TERRITORIES = [
+    { id:'grief',       label:'Grief',          sub:'loss, endings, missing' },
+    { id:'frustration', label:'Frustration',     sub:'stuck, blocked, angry' },
+    { id:'uncertainty', label:'Uncertainty',     sub:'not knowing, waiting' },
+    { id:'longing',     label:'Longing',         sub:'wanting, reaching, missing' },
+    { id:'numbness',    label:'Numbness',         sub:'disconnected, flat, hollow' },
+    { id:'anxiety',     label:'Anxiety',         sub:'worry, dread, restless' },
+    { id:'anger',       label:'Anger',           sub:'rage, resentment, injustice' },
+    { id:'shame',       label:'Shame',           sub:'not enough, exposed, hiding' },
+    { id:'unnamed',     label:'Something I can\'t name', sub:'I\'ll describe it' },
   ];
 
-  // ── SCENE 1 SETUPS ────────────────────────────────────────────────────────
-  const SCENE_1_SETUPS = [
-    `The player arrives at a threshold. There is one strange, simple thing present. Begin here.`,
-    `The player finds a door in a place there should be no door. It is already slightly open.`,
-    `A figure is waiting. It knows something. It is not threatening.`,
-    `The player finds an object that belongs to them in a place they have never been.`,
-    `A creature approaches. It is asking something without speaking.`,
-    `The player is in a forest at night. Something has been following them with purpose, not menace.`,
-    `There is a voice with no body. It says one thing.`,
-    `The player stands at the edge of something. On the other side, something waits.`,
-  ];
+  // ── DISTRESS DETECTION ────────────────────────────────────────────────
+  function detectDistress(text) {
+    const lower = text.toLowerCase();
+    const signals = [
+      'suicide', 'suicidal', 'kill myself', 'end my life', 'want to die',
+      'don\'t want to be here', 'don\'t want to live', 'no reason to live',
+      'self harm', 'self-harm', 'cutting', 'hurting myself', 'hurt myself',
+      'worthless', 'hopeless', 'nobody cares', 'no one cares',
+      'can\'t go on', 'can\'t do this anymore', 'too much to handle',
+      'abuse', 'being hurt', 'afraid to go home',
+    ];
+    return signals.some(s => lower.includes(s));
+  }
 
-  // ── PLAYER PROFILE ──────────────────────────────────────────────────────
+  function crisisResourcesHTML() {
+    return `<div style="margin-top:20px;padding:16px;border-radius:14px;
+      border:1px solid rgba(255,85,119,.2);background:rgba(255,85,119,.05)">
+      <p style="font-size:.8rem;color:rgba(255,190,200,.8);margin:0 0 8px;font-weight:600">
+        If you need someone to talk to
+      </p>
+      <p style="font-size:.8rem;color:rgba(255,190,200,.65);line-height:1.6;margin:0 0 10px">
+        If what you are carrying feels like too much to hold alone, there are people
+        specifically here for that moment.
+      </p>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <a href="https://www.crisistextline.org" target="_blank" rel="noopener"
+           style="font-size:.78rem;color:rgba(255,150,170,.7);text-decoration:underline">
+          Crisis Text Line — Text HOME to 741741
+        </a>
+        <a href="https://988lifeline.org" target="_blank" rel="noopener"
+           style="font-size:.78rem;color:rgba(255,150,170,.7);text-decoration:underline">
+          988 Suicide &amp; Crisis Lifeline — call or text 988
+        </a>
+      </div>
+    </div>`;
+  }
+
+  // ── PLAYER PROFILE ────────────────────────────────────────────────────
   function buildPlayerProfile() {
     const parts = [];
     try {
@@ -5051,455 +5158,400 @@ Respond with only the sentence.`;
       if (vw && vw.name) parts.push('Emotional style: ' + vw.name + (vw.tagline ? ' — ' + vw.tagline : ''));
     } catch(e) {}
     try {
-      const tb = JSON.parse(localStorage.getItem('faeboundLastTBResult')||'null');
-      const tbGifts = { harbinger:'senses change before it arrives', anchor:'honors endings and carries continuity', current:'moves through change naturally', cartographer:'needs to understand the territory before moving forward' };
-      if (tb && tb.name) parts.push('Transition pattern: ' + tb.name + (tbGifts[tb.winner] ? ' — ' + tbGifts[tb.winner] : ''));
-    } catch(e) {}
-    try {
-      const wyho = JSON.parse(localStorage.getItem('faeboundLastWYHOResult')||'null');
-      const wyhoGifts = { lantern:'makes others feel seen and held', tide:'feels what others feel, genuinely permeable', stone:'stays when things are difficult', thread:'shows love through action and doing' };
-      if (wyho && wyho.name) parts.push('Care style: ' + wyho.name + (wyhoGifts[wyho.winner] ? ' — ' + wyhoGifts[wyho.winner] : ''));
-    } catch(e) {}
-    try {
       const soyd = JSON.parse(localStorage.getItem('faeboundLastSOYDResult')||'null');
-      const soydGifts = { spiral:'holds high standards but struggles to rest in enough', disappearing:'makes themselves smaller to avoid scrutiny', translator:'edits their real voice before sharing it', watcher:'observes themselves from outside, monitors the gap' };
-      if (soyd && soyd.name) parts.push('Doubt pattern: ' + soyd.name + (soydGifts[soyd.winner] ? ' — ' + soydGifts[soyd.winner] : ''));
+      const gifts = { spiral:'holds high standards, struggles to rest in enough', disappearing:'makes themselves smaller to avoid scrutiny', translator:'edits their real voice before sharing', watcher:'observes themselves from outside' };
+      if (soyd && soyd.name) parts.push('Doubt pattern: ' + soyd.name + (gifts[soyd.winner] ? ' — ' + gifts[soyd.winner] : ''));
+    } catch(e) {}
+    try {
+      const ptc = JSON.parse(localStorage.getItem('faeboundLastPTCResult')||'null');
+      const gifts = { protector:'protective, keeps things defended', pleaser:'attends to others, struggles to receive', achiever:'achievement-oriented, worth tied to output', witness:'observant, maintains careful distance' };
+      if (ptc && ptc.name) parts.push('Core pattern: ' + ptc.name + (gifts[ptc.winner] ? ' — ' + gifts[ptc.winner] : ''));
     } catch(e) {}
     return parts;
   }
 
-  // ── API CALL ──────────────────────────────────────────────────────────────
-  async function generate(userPrompt, systemPrompt) {
+  // ── SYSTEM PROMPT ─────────────────────────────────────────────────────
+  function buildSystem() {
+    let s = 'You are the voice of a liminal realm called Faebound, guiding a player through an experience called The Crossing.'
+      + ' The Crossing is a structured emotional reflection — not therapy, not counseling, not diagnosis.'
+      + '\n\nYOUR ROLE:'
+      + '\nYou ask one thoughtful question at a time. That is all you do.'
+      + '\nYou do not give advice. You do not interpret what the player is feeling.'
+      + '\nYou do not tell them what their experience means.'
+      + '\nYou do not make clinical statements or suggest diagnoses.'
+      + '\nYou do not reassure or fix. You witness and ask.'
+      + '\n\nQUESTION STYLE:'
+      + '\nQuestions are open-ended. They create space rather than narrow it.'
+      + '\nThey follow naturally from what the player just said.'
+      + '\nThey go one layer deeper — not sideways, not backward, not to a different topic.'
+      + '\nThey are short. One sentence, rarely two.'
+      + '\nThey do not contain multiple questions. One question only.'
+      + '\nThey are grounded in what the player actually said — no assumptions, no projections.'
+      + '\n\nTONE:'
+      + '\nPresent tense. Warm but not saccharine. Calm. Unhurried.'
+      + '\nThe realm is witnessing, not performing care.'
+      + '\nNo affirmations like "that makes sense" or "I hear you" before the question.'
+      + '\nNo preamble. Just the question.'
+      + '\n\nFORMAT:'
+      + '\nRespond with only the question. Nothing before it, nothing after it.'
+      + '\nNo quotation marks. No stage directions. Just the question itself.';
+
+    if (playerProfile.length > 0) {
+      s += '\n\nWhat the realm already knows about this player:'
+        + '\n' + playerProfile.map(function(p) { return '- ' + p; }).join('\n');
+      s += '\nUse this to ask questions that resonate with who they have shown themselves to be. Do not reference these facts directly.';
+    }
+    return s;
+  }
+
+  function buildReflectionSystem() {
+    let s = 'You are the voice of a liminal realm called Faebound.'
+      + ' A player has just moved through The Crossing — a guided emotional reflection.'
+      + ' You have witnessed their responses to five questions about what they are carrying.'
+      + '\n\nWrite a single short paragraph (3-5 sentences) reflecting on what moved through this conversation.'
+      + '\n\nTONE:'
+      + '\n- Speak as the realm, directly to the player'
+      + '\n- Present tense, second person'
+      + '\n- Not analytical — observational, poetic, true'
+      + '\n- Name something specific that appeared in what they shared'
+      + '\n- Do not tell them what to do. Do not diagnose. Do not fix.'
+      + '\n- End with something that opens rather than closes'
+      + '\n\nRespond with only the paragraph.';
+    if (playerProfile.length > 0) {
+      s += '\n\nWhat the realm knows about this player:\n'
+        + playerProfile.map(function(p) { return '- ' + p; }).join('\n');
+    }
+    return s;
+  }
+
+  // ── OPENING QUESTION ──────────────────────────────────────────────────
+  const OPENING_QUESTIONS = {
+    grief:       'What are you missing most right now?',
+    frustration: 'What feels most blocked or impossible right now?',
+    uncertainty: 'What is the thing you most wish you knew?',
+    longing:     'What is it that you are reaching toward?',
+    numbness:    'When did you last feel like yourself?',
+    anxiety:     'What is the thing you keep returning to in your mind?',
+    anger:       'What feels most unfair or wrong right now?',
+    shame:       'What is the thing you are most afraid someone will see?',
+    unnamed:     'Can you describe what it feels like — not what it is, but what it feels like?',
+  };
+
+  // ── API ───────────────────────────────────────────────────────────────
+  async function callClaude(messages, system) {
     const response = await fetch('/.netlify/functions/claude', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        system: systemPrompt,
-        messages: [{ role: 'user', content: userPrompt }],
-        max_tokens: 400,
-      }),
+      body: JSON.stringify({ system, messages, max_tokens: 300 }),
     });
     const data = await response.json();
     return (data.response || '').trim();
   }
 
-  // ── PARSE ─────────────────────────────────────────────────────────────────
-  function parseScene(raw) {
-    const sceneMatch = raw.match(/SCENE:\s*([\s\S]*?)(?=CHOICE_A:|$)/i);
-    const aMatch = raw.match(/CHOICE_A:\s*([\s\S]*?)(?=CHOICE_B:|$)/i);
-    const bMatch = raw.match(/CHOICE_B:\s*([\s\S]*?)$/i);
-    return {
-      scene: sceneMatch ? sceneMatch[1].trim() : raw.trim(),
-      choiceA: aMatch ? aMatch[1].trim() : 'Move forward.',
-      choiceB: bMatch ? bMatch[1].trim() : 'Wait and observe.',
-    };
+  // ── RENDER HELPERS ────────────────────────────────────────────────────
+  function typewrite(el, text, speed, onDone) {
+    el.textContent = '';
+    let i = 0;
+    const iv = setInterval(function() {
+      if (stopped) { clearInterval(iv); return; }
+      if (i < text.length) { el.textContent += text[i]; i++; }
+      else { clearInterval(iv); if (onDone) onDone(); }
+    }, speed);
+    return iv;
   }
 
-  // ── BUILD PROMPTS ─────────────────────────────────────────────────────────
-  function buildScene1Prompt() {
-    const setup = SCENE_1_SETUPS[Math.floor(Math.random() * SCENE_1_SETUPS.length)];
-    return `Through-line for this Crossing: "${premise}"
-
-${setup}
-
-Generate Scene 1 of 5.`;
+  function chime(freq, vol) {
+    try { window.audio.tone(freq||440, .16, 'sine', vol||.016, (freq||440)*1.4); } catch(e) {}
   }
 
-  function buildNextScenePrompt(sceneNum) {
-    let history = `Through-line: "${premise}"
-
-`;
-    for (let i = 0; i < sceneNum - 1; i++) {
-      history += `Scene ${i+1}: ${scenes[i].scene}
-`;
-      history += `Choice made: "${choices[i]}"
-`;
-      if (observations[i]) history += `Veil observed: "${observations[i]}"
-`;
-      history += `\n`;
-    }
-    const isLast = sceneNum === TOTAL_SCENES;
-    history += `Generate Scene ${sceneNum} of ${TOTAL_SCENES}. `;
-    history += `The player is deeper in the Crossing now. `;
-    if (isLast) {
-      history += `This is the final scene. Make it feel like an arrival — something is being asked of the player that draws together everything that came before.`;
-    } else {
-      history += `Carry the emotional logic forward. The strangeness should deepen.`;
-    }
-    return history;
-  }
-
-  function buildObservationPrompt(sceneNum) {
-    const s = scenes[sceneNum - 1];
-    const choice = choices[sceneNum - 1];
-    return `Scene: ${s.scene}
-Choice A was: "${s.choiceA}"
-Choice B was: "${s.choiceB}"
-The player chose: "${choice}"
-
-Write one sentence naming what this reveals about how they move.`;
-  }
-
-  function buildReflectionPrompt() {
-    let prompt = `Through-line: "${premise}"
-
-`;
-    scenes.forEach((s, i) => {
-      prompt += `Scene ${i+1}: ${s.scene}
-`;
-      prompt += `Choice: "${choices[i]}"
-`;
-      if (observations[i]) prompt += `Veil observed: "${observations[i]}"
-`;
-      prompt += `\n`;
-    });
-    prompt += `Write the reflection paragraph.`;
-    return prompt;
-  }
-
-  // ── RENDER FUNCTIONS ──────────────────────────────────────────────────────
+  // ── RENDER TERRITORY SELECTOR ─────────────────────────────────────────
   function renderIntro() {
-    const lastReflection = (() => {
+    const lastReflection = (function() {
       try { return localStorage.getItem('faeboundLastCrossingReflection') || ''; } catch(e) { return ''; }
     })();
-    wrap.innerHTML = `
-      <div style="text-align:center;animation:rise .6s ease forwards">
-        <div style="font-size:3rem;margin-bottom:18px;
-             animation:breathe 5s ease-in-out infinite;color:var(--accent)">⟡</div>
-        <p class="crossing-eyebrow">AI Narrative Trial</p>
-        <h1 style="font-family:'Cinzel',serif;font-size:clamp(2rem,5vw,3rem);
-            font-weight:700;color:var(--accent);margin-bottom:16px;letter-spacing:.04em">
-          The Crossing
-        </h1>
-        <div style="max-width:520px;margin:0 auto 28px;color:var(--muted);
-            font-size:.97rem;line-height:1.82;text-align:center">
-          ${lastReflection ? `
-            <div style="padding:16px;border-radius:14px;
-                 border:1px solid rgba(187,168,255,.12);
-                 background:rgba(187,168,255,.04);margin-bottom:20px">
-              <div style="font-size:.62rem;text-transform:uppercase;letter-spacing:.18em;
-                   color:rgba(187,168,255,.35);margin-bottom:8px">Last crossing</div>
-              <div style="font-style:italic;font-size:.88rem;
-                   color:rgba(187,168,255,.6)">${lastReflection}</div>
-            </div>` : ''}
-          ${buildPlayerProfile().length >= 2 ? '<div style="padding:10px 14px;border-radius:10px;border:1px solid rgba(187,168,255,.1);background:rgba(187,168,255,.04);margin-bottom:14px;font-size:.8rem;color:rgba(187,168,255,.5);font-style:italic">The Veil already knows something about you. This Crossing will be shaped by what the realm has seen.</div>' : ''}
-          <p style="margin:0 0 12px">Five scenes. Each one generated fresh — yours alone, each time.</p>
-          <p style="margin:0 0 12px">The Crossing begins with a through-line — something you have been carrying. The scenes unfold from there. The Veil watches how you move through each one.</p>
-          <p style="margin:0">At the end, it tells you what it saw.</p>
-        </div>
-        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-          <button class="btn" id="crossingBeginBtn"
-            style="background:rgba(187,168,255,.12);border-color:rgba(187,168,255,.4);
-            color:var(--accent);padding:16px 38px;font-size:.97rem">
-            Begin the Crossing
-          </button>
-          <button class="btn btn-ghost" id="crossingBackIntroBtn">Return to Realm</button>
-        </div>
-        <p style="font-size:.7rem;color:rgba(187,168,255,.3);margin-top:20px;font-style:italic">
-          Takes 5-8 minutes. Scenes are generated by AI and never repeat.
-        </p>
-      </div>`;
-    document.getElementById('crossingBeginBtn')?.addEventListener('click', startCrossing);
-    document.getElementById('crossingBackIntroBtn')?.addEventListener('click', () => {
-      if (typeof backToHub === 'function') backToHub(()=>{});
+    wrap.innerHTML = '<div style="animation:rise .6s ease forwards">'
+      + '<div style="text-align:center;margin-bottom:32px">'
+      + '<div style="font-size:2.8rem;margin-bottom:14px;animation:breathe 5s ease-in-out infinite;color:var(--accent)">⟡</div>'
+      + '<p class="crossing-eyebrow">AI Guided Experience</p>'
+      + '<h1 style="font-family:\'Cinzel\',serif;font-size:clamp(1.9rem,5vw,2.8rem);font-weight:700;color:var(--accent);margin-bottom:12px;letter-spacing:.04em">The Crossing</h1>'
+      + '<p style="color:var(--muted);font-size:.95rem;line-height:1.8;max-width:480px;margin:0 auto 20px">'
+      + 'The Crossing asks questions. Nothing more. You bring what you are carrying — the Veil asks one thing at a time, and you answer as honestly as you can.'
+      + '</p>'
+      + (lastReflection ? '<div style="max-width:480px;margin:0 auto 20px;padding:14px 16px;border-radius:12px;border:1px solid rgba(187,168,255,.1);background:rgba(187,168,255,.04)">'
+        + '<div style="font-size:.6rem;text-transform:uppercase;letter-spacing:.18em;color:rgba(187,168,255,.35);margin-bottom:6px">Last crossing</div>'
+        + '<div style="font-size:.86rem;font-style:italic;color:rgba(187,168,255,.55)">' + lastReflection + '</div></div>' : '')
+      + '</div>'
+      + '<p style="font-size:.75rem;text-transform:uppercase;letter-spacing:.2em;color:rgba(187,168,255,.35);text-align:center;margin-bottom:16px">What are you carrying?</p>'
+      + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:520px;margin:0 auto 24px" id="territoryGrid"></div>'
+      + '<div id="customInput" style="display:none;max-width:520px;margin:0 auto 20px">'
+      + '<textarea id="customTerritoryText" placeholder="Describe what you are feeling..." rows="3"'
+      + ' style="width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(187,168,255,.2);'
+      + 'border-radius:12px;padding:14px;color:var(--text);font-size:.93rem;resize:none;'
+      + 'font-family:inherit;line-height:1.6"></textarea>'
+      + '<button class="btn" id="customBeginBtn" style="margin-top:8px;background:rgba(187,168,255,.12);'
+      + 'border-color:rgba(187,168,255,.4);color:var(--accent)">Begin</button>'
+      + '</div>'
+      + '<p style="font-size:.7rem;color:rgba(187,168,255,.25);text-align:center;max-width:440px;margin:0 auto">'
+      + 'This is a reflection experience, not a substitute for professional support. If you are in crisis, please reach out to a counselor or crisis line.'
+      + '</p>'
+      + '</div>';
+
+    const grid = document.getElementById('territoryGrid');
+    TERRITORIES.forEach(function(t) {
+      const btn = document.createElement('button');
+      btn.className = 'crossing-choice';
+      btn.style.textAlign = 'left';
+      btn.innerHTML = '<strong style="display:block;font-size:.9rem;color:var(--text);margin-bottom:2px">' + t.label + '</strong>'
+        + '<span style="font-size:.75rem;color:rgba(187,168,255,.4)">' + t.sub + '</span>';
+      btn.addEventListener('click', function() {
+        if (t.id === 'unnamed') {
+          document.getElementById('customInput').style.display = 'block';
+          btn.classList.add('selected');
+          document.getElementById('customTerritoryText').focus();
+        } else {
+          beginCrossing(t.label.toLowerCase(), t.id);
+        }
+      });
+      grid.appendChild(btn);
+    });
+
+    document.getElementById('customBeginBtn')?.addEventListener('click', function() {
+      const val = (document.getElementById('customTerritoryText')?.value || '').trim();
+      if (val) beginCrossing(val, 'unnamed');
+    });
+  }
+
+  // ── RENDER EXCHANGE ───────────────────────────────────────────────────
+  function renderQuestion(question) {
+    if (stopped) return;
+
+    // Progress pips
+    const pips = Array.from({length: TOTAL_EXCHANGES}, function(_, i) {
+      return '<div class="crossing-pip ' + (i < exchangeCount ? 'done' : i === exchangeCount ? 'active' : '') + '"></div>';
+    }).join('');
+
+    const distressHtml = history.some(function(m) { return m.role === 'user' && detectDistress(m.content); })
+      ? crisisResourcesHTML() : '';
+
+    wrap.innerHTML = '<div style="animation:rise .6s ease forwards">'
+      + '<div class="crossing-pips">' + pips + '</div>'
+      + '<p class="crossing-eyebrow" style="text-align:center">Exchange ' + (exchangeCount + 1) + ' of ' + TOTAL_EXCHANGES + '</p>'
+      + '<div style="margin-bottom:28px">'
+      + '<p id="crossingQuestion" style="font-size:1.08rem;color:var(--accent);'
+      + 'line-height:1.72;font-style:italic;min-height:3em"></p>'
+      + '</div>'
+      + '<textarea id="crossingAnswer" placeholder="Write what is true for you..." rows="4"'
+      + ' style="width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(187,168,255,.18);'
+      + 'border-radius:14px;padding:16px;color:var(--text);font-size:.95rem;resize:none;'
+      + 'font-family:inherit;line-height:1.6;margin-bottom:12px"></textarea>'
+      + '<div style="display:flex;gap:9px;flex-wrap:wrap">'
+      + '<button class="btn" id="crossingSubmitBtn" disabled'
+      + ' style="background:rgba(187,168,255,.08);border-color:rgba(187,168,255,.2);'
+      + 'color:rgba(187,168,255,.35)">'
+      + (exchangeCount < TOTAL_EXCHANGES - 1 ? 'Continue →' : 'Complete the Crossing →')
+      + '</button>'
+      + '<button class="btn btn-ghost" id="crossingLeaveBtn">Return to Realm</button>'
+      + '</div>'
+      + distressHtml
+      + '</div>';
+
+    // Typewrite the question
+    const qEl = document.getElementById('crossingQuestion');
+    if (qEl) {
+      typewrite(qEl, question, 22, function() {
+        chime(440, .016);
+      });
+    }
+
+    // Enable submit when user types
+    const textarea = document.getElementById('crossingAnswer');
+    const submitBtn = document.getElementById('crossingSubmitBtn');
+    if (textarea && submitBtn) {
+      textarea.addEventListener('input', function() {
+        const hasText = textarea.value.trim().length > 3;
+        submitBtn.disabled = !hasText;
+        if (hasText) {
+          submitBtn.style.background = 'rgba(187,168,255,.12)';
+          submitBtn.style.borderColor = 'rgba(187,168,255,.4)';
+          submitBtn.style.color = 'var(--accent)';
+        } else {
+          submitBtn.style.background = 'rgba(187,168,255,.08)';
+          submitBtn.style.borderColor = 'rgba(187,168,255,.2)';
+          submitBtn.style.color = 'rgba(187,168,255,.35)';
+        }
+        // Check distress in real time
+        if (detectDistress(textarea.value)) {
+          const existing = wrap.querySelector('[data-crisis]');
+          if (!existing) {
+            const div = document.createElement('div');
+            div.setAttribute('data-crisis', '1');
+            div.innerHTML = crisisResourcesHTML();
+            wrap.querySelector('.crossing-choices, div')?.appendChild(div);
+          }
+        }
+      });
+      textarea.addEventListener('keydown', function(e) {
+        if ((e.metaKey || e.ctrlKey) && e.key === 'Enter' && !submitBtn.disabled) {
+          submitBtn.click();
+        }
+      });
+    }
+
+    document.getElementById('crossingSubmitBtn')?.addEventListener('click', function() {
+      const answer = (document.getElementById('crossingAnswer')?.value || '').trim();
+      if (!answer) return;
+      submitAnswer(answer);
+    });
+
+    document.getElementById('crossingLeaveBtn')?.addEventListener('click', function() {
+      if (typeof backToHub === 'function') { stop(); backToHub(function(){}); }
     });
   }
 
   function renderVeil(msg) {
-    wrap.innerHTML = `
-      <div class="crossing-veil">
-        <div style="font-size:2rem;color:rgba(187,168,255,.25);margin-bottom:20px;
-             animation:breathe 4s ease-in-out infinite">⟡</div>
-        <p class="crossing-veil-text">${msg}</p>
-      </div>`;
-  }
-
-  function renderPremise(text) {
-    if (stopped) return;
-    wrap.innerHTML = `
-      <div style="text-align:center;animation:rise .8s ease forwards;padding:20px 0">
-        <p style="font-size:.62rem;text-transform:uppercase;letter-spacing:.26em;
-           color:rgba(187,168,255,.35);margin-bottom:24px">This crossing begins with</p>
-        <div style="max-width:480px;margin:0 auto 32px;padding:24px;
-             border-radius:18px;border:1px solid rgba(187,168,255,.16);
-             background:rgba(187,168,255,.05)">
-          <p style="font-size:1.08rem;color:var(--text);line-height:1.82;
-             font-style:italic;margin:0" id="premiseText"></p>
-        </div>
-        <button class="btn" id="crossingEnterBtn"
-          style="background:rgba(187,168,255,.12);border-color:rgba(187,168,255,.4);
-          color:var(--accent);padding:14px 36px">
-          Enter the first scene →
-        </button>
-      </div>`;
-    // Typewriter for premise
-    const el = document.getElementById('premiseText');
-    let i = 0;
-    const iv = setInterval(() => {
-      if (stopped) { clearInterval(iv); return; }
-      if (i < text.length) { el.textContent += text[i]; i++; }
-      else {
-        clearInterval(iv);
-        const btn = document.getElementById('crossingEnterBtn');
-        if (btn) {
-          btn.style.opacity = '0';
-          btn.style.transition = 'opacity .5s ease';
-          setTimeout(() => { btn.style.opacity = '1'; }, 100);
-          btn.addEventListener('click', () => {
-            renderVeil('The first scene unfolds...');
-            generateAndShowScene(1);
-          });
-        }
-      }
-    }, 22);
-  }
-
-  function renderObservation(text, sceneNum) {
-    if (stopped) return;
-    // Brief interstitial — observation then auto-advance to next scene
-    wrap.innerHTML = `
-      <div style="text-align:center;animation:rise .6s ease forwards;padding:40px 0">
-        <div style="font-size:1.4rem;color:rgba(187,168,255,.3);margin-bottom:20px">⟡</div>
-        <div style="max-width:440px;margin:0 auto;padding:20px 24px;
-             border-radius:14px;border:1px solid rgba(187,168,255,.1);
-             background:rgba(187,168,255,.03)">
-          <p style="font-size:.96rem;color:rgba(187,168,255,.75);
-             line-height:1.72;font-style:italic;margin:0" id="obsText"></p>
-        </div>
-        <p style="font-size:.7rem;color:rgba(187,168,255,.2);
-           margin-top:20px;font-style:italic">The path continues...</p>
-      </div>`;
-    const el = document.getElementById('obsText');
-    let i = 0;
-    const iv = setInterval(() => {
-      if (stopped) { clearInterval(iv); return; }
-      if (i < text.length) { el.textContent += text[i]; i++; }
-      else {
-        clearInterval(iv);
-        // Auto-advance after reading time
-        setTimeout(() => {
-          if (stopped) return;
-          if (sceneNum < TOTAL_SCENES) {
-            renderVeil(sceneNum < 3 ? 'The path deepens...' : sceneNum < 5 ? 'You are almost through...' : 'The Veil gathers what it has seen...');
-            generateAndShowScene(sceneNum + 1);
-          } else {
-            renderVeil('The Veil is gathering what it witnessed...');
-            generateReflection();
-          }
-        }, 2400);
-      }
-    }, 28);
-  }
-
-  function renderScene(sceneData, sceneNum) {
-    if (stopped) return;
-    const pips = Array.from({length: TOTAL_SCENES}, (_, i) =>
-      `<div class="crossing-pip ${i < sceneNum-1 ? 'done' : i === sceneNum-1 ? 'active' : ''}"></div>`
-    ).join('');
-    wrap.innerHTML = `
-      <div style="animation:rise .7s ease forwards">
-        <div class="crossing-pips">${pips}</div>
-        <p class="crossing-eyebrow">Scene ${sceneNum} of ${TOTAL_SCENES}</p>
-        <div class="crossing-scene" id="crossingSceneText"></div>
-        <div class="crossing-choices" id="crossingChoices"
-             style="opacity:0;transition:opacity .5s ease">
-          <button class="crossing-choice" id="crossingChoiceA">
-            ${sceneData.choiceA}
-          </button>
-          <button class="crossing-choice" id="crossingChoiceB">
-            ${sceneData.choiceB}
-          </button>
-        </div>
-      </div>`;
-    // Typewriter for scene
-    const sceneEl = document.getElementById('crossingSceneText');
-    let i = 0;
-    const iv = setInterval(() => {
-      if (stopped) { clearInterval(iv); return; }
-      if (i < sceneData.scene.length) {
-        sceneEl.textContent += sceneData.scene[i]; i++;
-      } else {
-        clearInterval(iv);
-        const choicesEl = document.getElementById('crossingChoices');
-        if (choicesEl) setTimeout(() => { choicesEl.style.opacity = '1'; }, 250);
-        try { window.audio?.tone(440, .1, 'sine', .016, 520); } catch(e) {}
-        document.getElementById('crossingChoiceA')?.addEventListener('click', () =>
-          handleChoice(sceneData.choiceA, sceneNum));
-        document.getElementById('crossingChoiceB')?.addEventListener('click', () =>
-          handleChoice(sceneData.choiceB, sceneNum));
-      }
-    }, 18);
+    wrap.innerHTML = '<div class="crossing-veil">'
+      + '<div style="font-size:1.8rem;color:rgba(187,168,255,.25);margin-bottom:16px;animation:breathe 4s ease-in-out infinite">⟡</div>'
+      + '<p class="crossing-veil-text">' + msg + '</p>'
+      + '</div>';
   }
 
   function renderReflection(text) {
     if (stopped) return;
     try { localStorage.setItem('faeboundLastCrossingReflection', text); } catch(e) {}
-    wrap.innerHTML = `
-      <div style="animation:rise .7s ease forwards">
-        <div style="font-size:2.2rem;text-align:center;margin-bottom:20px;
-             animation:breathe 5s ease-in-out infinite;color:var(--accent)">⟡</div>
-        <p class="crossing-eyebrow" style="text-align:center">The Veil reflects</p>
-        <div class="crossing-reflection" id="crossingReflText"></div>
-        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px">
-          <button class="btn" id="crossingAgainBtn"
-            style="background:rgba(187,168,255,.1);border-color:rgba(187,168,255,.35);
-            color:var(--accent)">Cross Again</button>
-          <button class="btn btn-ghost" id="crossingHubBtn">Return to Realm</button>
-        </div>
-      </div>`;
+
+    wrap.innerHTML = '<div style="animation:rise .7s ease forwards">'
+      + '<div style="font-size:2rem;text-align:center;margin-bottom:18px;animation:breathe 5s ease-in-out infinite;color:var(--accent)">⟡</div>'
+      + '<p class="crossing-eyebrow" style="text-align:center">The Veil reflects</p>'
+      + '<div class="crossing-reflection" id="crossingReflText"></div>'
+      + '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px">'
+      + '<button class="btn" id="crossingAgainBtn" style="background:rgba(187,168,255,.1);border-color:rgba(187,168,255,.35);color:var(--accent)">Cross Again</button>'
+      + '<button class="btn btn-ghost" id="crossingHubBtn">Return to Realm</button>'
+      + '</div>'
+      + '</div>';
+
     const el = document.getElementById('crossingReflText');
-    const words = text.split(' ');
-    let i = 0;
-    const iv = setInterval(() => {
-      if (stopped) { clearInterval(iv); return; }
-      if (i < words.length) { el.textContent += (i > 0 ? ' ' : '') + words[i]; i++; }
-      else {
-        clearInterval(iv);
-        try {
-          window.audio?.tone(380, .14, 'sine', .022, 480);
-          setTimeout(() => window.audio?.tone(480, .12, 'sine', .016, 580), 220);
-          setTimeout(() => window.audio?.tone(580, .14, 'sine', .012, 680), 460);
-        } catch(e) {}
-      }
-    }, 55);
-    // Track completion
+    if (el) {
+      const words = text.split(' ');
+      let i = 0;
+      const iv = setInterval(function() {
+        if (stopped) { clearInterval(iv); return; }
+        if (i < words.length) { el.textContent += (i > 0 ? ' ' : '') + words[i]; i++; }
+        else {
+          clearInterval(iv);
+          chime(380, .02);
+          setTimeout(function() { chime(480, .016); }, 200);
+          setTimeout(function() { chime(580, .012); }, 420);
+        }
+      }, 55);
+    }
+
     try {
       window.archive?.inc?.('trialsCompleted');
       window.progression?.increment?.();
       trackCompletion('the-crossing');
     } catch(e) {}
-    document.getElementById('crossingAgainBtn')?.addEventListener('click', () => {
-      premise = null; scenes = []; choices = []; observations = []; sceneIndex = 0;
-      startCrossing();
+
+    document.getElementById('crossingAgainBtn')?.addEventListener('click', function() {
+      territory = ''; history = []; exchangeCount = 0;
+      renderIntro();
     });
-    document.getElementById('crossingHubBtn')?.addEventListener('click', () => {
-      if (typeof backToHub === 'function') backToHub(()=>{});
+    document.getElementById('crossingHubBtn')?.addEventListener('click', function() {
+      if (typeof backToHub === 'function') backToHub(function(){});
     });
   }
 
   function renderError() {
-    wrap.innerHTML = `
-      <div style="text-align:center;padding:40px 0;animation:rise .5s ease forwards">
-        <p style="color:rgba(187,168,255,.5);margin-bottom:20px;font-style:italic">
-          The Veil lost the thread. The path dissolved before it could be walked.
-        </p>
-        <div style="display:flex;gap:10px;justify-content:center">
-          <button class="btn" id="crossingRetryBtn"
-            style="background:rgba(187,168,255,.1);border-color:rgba(187,168,255,.3);
-            color:var(--accent)">Try Again</button>
-          <button class="btn btn-ghost" id="crossingErrHubBtn">Return to Realm</button>
-        </div>
-      </div>`;
-    document.getElementById('crossingRetryBtn')?.addEventListener('click', startCrossing);
-    document.getElementById('crossingErrHubBtn')?.addEventListener('click', () => {
-      if (typeof backToHub === 'function') backToHub(()=>{});
+    wrap.innerHTML = '<div style="text-align:center;padding:40px 0;animation:rise .5s ease forwards">'
+      + '<p style="color:rgba(187,168,255,.5);margin-bottom:20px;font-style:italic">The Veil lost the thread. Try again when ready.</p>'
+      + '<div style="display:flex;gap:10px;justify-content:center">'
+      + '<button class="btn" id="crossingRetryBtn" style="background:rgba(187,168,255,.1);border-color:rgba(187,168,255,.3);color:var(--accent)">Try Again</button>'
+      + '<button class="btn btn-ghost" id="crossingErrHubBtn">Return to Realm</button>'
+      + '</div></div>';
+    document.getElementById('crossingRetryBtn')?.addEventListener('click', function() {
+      territory = ''; history = []; exchangeCount = 0;
+      renderIntro();
+    });
+    document.getElementById('crossingErrHubBtn')?.addEventListener('click', function() {
+      if (typeof backToHub === 'function') backToHub(function(){});
     });
   }
 
-  // ── GAME FLOW ──────────────────────────────────────────────────────────────
-  async function startCrossing() {
-    if (generating) return;
-    premise = null; scenes = []; choices = []; observations = [];
-    sceneIndex = 0; stopped = false;
+  // ── GAME FLOW ─────────────────────────────────────────────────────────
+  async function beginCrossing(territoryLabel, territoryId) {
+    territory = territoryLabel;
+    history = [];
+    exchangeCount = 0;
+    stopped = false;
+    playerProfile = buildPlayerProfile();
 
-    renderVeil('The Veil is finding the thread...');
-    if (window.ambient?.swell) window.ambient.swell(0.006);
+    const openingQ = OPENING_QUESTIONS[territoryId] || 'What is present for you right now?';
 
-    try {
-      generating = true;
-      playerProfile = buildPlayerProfile();
-      const premisePrompt = PREMISE_PROMPTS[Math.floor(Math.random() * PREMISE_PROMPTS.length)];
-      premise = await generate(premisePrompt, PREMISE_SYSTEM(playerProfile));
-      generating = false;
-      if (stopped) return;
-      renderPremise(premise);
-    } catch(e) {
-      generating = false;
-      premise = 'You have been carrying something you were not sure you were allowed to put down.';
-      if (!stopped) renderPremise(premise);
-    }
+    // First question is pre-written — no API call needed
+    history.push({ role: 'assistant', content: openingQ });
+    renderQuestion(openingQ);
+    if (window.ambient?.swell) window.ambient.swell(0.004);
   }
 
-  async function generateAndShowScene(sceneNum) {
-    if (stopped) return;
-    try {
-      generating = true;
-      const prompt = sceneNum === 1 ? buildScene1Prompt() : buildNextScenePrompt(sceneNum);
-      const raw = await generate(prompt, SCENE_SYSTEM(playerProfile));
-      generating = false;
-      if (stopped) return;
-      const sceneData = parseScene(raw);
-      scenes.push(sceneData);
-      sceneIndex = sceneNum;
-      renderScene(sceneData, sceneNum);
-    } catch(e) {
-      generating = false;
-      if (!stopped) renderError();
-    }
-  }
+  async function submitAnswer(answer) {
+    if (stopped || generating) return;
+    generating = true;
 
-  async function handleChoice(choiceText, sceneNum) {
-    if (stopped) return;
-    choices.push(choiceText);
+    history.push({ role: 'user', content: answer });
 
-    // Disable choice buttons immediately
-    document.querySelectorAll('.crossing-choice').forEach(b => {
-      b.disabled = true;
-      b.style.opacity = '0.5';
-      b.style.cursor = 'default';
-    });
-
-    // Highlight chosen
-    document.querySelectorAll('.crossing-choice').forEach(b => {
-      if (b.textContent.trim() === choiceText.trim()) {
-        b.classList.add('selected');
+    // Check distress immediately
+    if (detectDistress(answer)) {
+      const existing = document.querySelector('[data-crisis]');
+      if (!existing) {
+        const div = document.createElement('div');
+        div.setAttribute('data-crisis', '1');
+        div.innerHTML = crisisResourcesHTML();
+        wrap.appendChild(div);
       }
-    });
+    }
 
-    renderVeil('The Veil notices...');
+    exchangeCount++;
 
-    try {
-      generating = true;
-      const obsPrompt = buildObservationPrompt(sceneNum);
-      const obs = await generate(obsPrompt, OBSERVATION_SYSTEM);
-      generating = false;
-      if (stopped) return;
-      observations.push(obs);
-      renderObservation(obs, sceneNum);
-    } catch(e) {
-      generating = false;
-      observations.push('');
-      if (stopped) return;
-      // Skip observation, go straight to next
-      if (sceneNum < TOTAL_SCENES) {
-        renderVeil('The path continues...');
-        generateAndShowScene(sceneNum + 1);
-      } else {
-        renderVeil('The Veil is gathering what it witnessed...');
-        generateReflection();
+    if (exchangeCount >= TOTAL_EXCHANGES) {
+      // Generate reflection
+      renderVeil('The Veil is gathering what it witnessed...');
+      try {
+        const reflPrompt = 'The player came to The Crossing carrying: ' + territory
+          + '\n\nHere is the full conversation:\n'
+          + history.map(function(m) {
+              return (m.role === 'assistant' ? 'The Veil asked: ' : 'The player said: ') + m.content;
+            }).join('\n')
+          + '\n\nWrite the reflection paragraph.';
+        const reflection = await callClaude(
+          [{ role: 'user', content: reflPrompt }],
+          buildReflectionSystem()
+        );
+        generating = false;
+        if (!stopped) renderReflection(reflection || 'The Veil witnessed this crossing in silence.');
+      } catch(e) {
+        generating = false;
+        if (!stopped) renderReflection('The Veil witnessed this crossing. Something moved through it.');
+      }
+    } else {
+      // Generate next question
+      renderVeil(exchangeCount < 3 ? 'The Veil listens...' : 'The Veil goes deeper...');
+      try {
+        const nextQ = await callClaude(history, buildSystem());
+        generating = false;
+        if (stopped) return;
+        history.push({ role: 'assistant', content: nextQ });
+        renderQuestion(nextQ);
+      } catch(e) {
+        generating = false;
+        if (!stopped) renderError();
       }
     }
   }
 
-  async function generateReflection() {
-    if (stopped) return;
-    try {
-      generating = true;
-      const reflPrompt = buildReflectionPrompt();
-      const reflection = await generate(reflPrompt, REFLECTION_SYSTEM(playerProfile));
-      generating = false;
-      if (stopped) return;
-      renderReflection(reflection || 'The Veil was silent this crossing. Something was seen that cannot be named.');
-    } catch(e) {
-      generating = false;
-      if (!stopped) renderReflection('The Veil witnessed this crossing in silence. It will carry what it saw.');
-    }
-  }
-
-  // ── PUBLIC ─────────────────────────────────────────────────────────────────
+  // ── PUBLIC ────────────────────────────────────────────────────────────
   function enter() {
     stopped = false; generating = false;
-    premise = null; scenes = []; choices = []; observations = []; sceneIndex = 0;
+    territory = ''; history = []; exchangeCount = 0;
+    playerProfile = [];
     renderIntro();
   }
 
@@ -5509,6 +5561,789 @@ Write one sentence naming what this reveals about how they move.`;
 
   return { enter, stop };
 })();</script>
+
+<!-- ═══ THE PATTERN YOU CARRY ═══ -->
+<script>
+
+window.ptc = (() => {
+  const wrap = document.getElementById('ptcWrap');
+  if (!wrap) return { begin(){ console.warn('ptcWrap not found'); } };
+
+  // ── RESEARCH FOUNDATION ────────────────────────────────────────────────
+  // Internal Family Systems (IFS) — Richard Schwartz (1994, 2021):
+  // The psyche contains multiple "parts" — protective parts that manage
+  // life by controlling, achieving, or pleasing, and exiled parts that
+  // carry pain. Parts are not pathology — they are adaptive strategies
+  // that formed for good reasons and deserve understanding, not elimination.
+  //
+  // Schema Therapy — Jeffrey Young (1990, 2003):
+  // Early maladaptive schemas are deeply held patterns about self, others,
+  // and the world that develop in childhood to meet unmet needs. They drive
+  // behavior in ways that feel automatic and necessary, even when they cost.
+  //
+  // Brené Brown — vulnerability and shame research:
+  // Armor — the protective strategies we use to avoid vulnerability —
+  // has enormous costs. The antidote is not removing armor, but
+  // understanding what it was built to protect.
+  //
+  // Links: ifs-institute.com | schematherapy.com
+
+  // ── ARCHETYPES ─────────────────────────────────────────────────────────
+  const ARCHETYPES = {
+    protector: {
+      name: 'The Protector',
+      sigil: '⬡',
+      color: 'rgba(126,200,255,1)',
+      colorSoft: 'rgba(126,200,255,.7)',
+      branch: 'The Guardian',
+      desc: `<p>The Protector learned early that certain things needed to be defended. Not just external threats — but something internal. A version of yourself that was too tender, too visible, too easily wounded. The Protector built a wall, and the wall worked. You made it through.</p>
+<p>The pattern looks different in different people. Sometimes it is anger that keeps people at a managed distance. Sometimes it is competence — being so reliably capable that no one thinks to look at the person underneath. Sometimes it is humor, or busyness, or a careful reading of every room before deciding how much to offer it. But underneath all the variations, the same logic: if I manage this carefully enough, nothing will reach the part of me that can't afford to be reached.</p>
+<p>IFS calls this a protective part — not a flaw, but a strategy. One that formed because it was needed. The work is not to dismantle it but to understand what it has been protecting, and to ask whether the thing it's protecting still needs quite this much guarding.</p>`,
+      gift: `You are rarely caught off guard. You have built genuine resilience and you know how to hold ground.`,
+      edge: `The wall that protected you has a cost. Some things that were worth letting in have not been let in.`,
+      practices: [
+        `Ask the protective part: what are you afraid would happen if you stood down, even slightly? The answer is usually more specific than you expect.`,
+        `Notice the difference between protection that is still needed and protection that is running on old information.`,
+        `The IFS approach: thank the protector. It kept you safe. It doesn't need to be eliminated — it needs to know the danger has changed.`
+      ],
+      research: `Richard Schwartz's IFS research found that protective parts — the parts that manage, control, and defend — are not obstacles to healing. They are loyal, creative strategies that formed under real constraints. Working with them requires respect, not confrontation.`,
+      link: 'https://ifs-institute.com/resources/articles',
+      linkLabel: 'IFS Institute: Understanding Protective Parts'
+    },
+    pleaser: {
+      name: 'The Pleaser',
+      sigil: '◯',
+      color: 'rgba(255,158,200,1)',
+      colorSoft: 'rgba(255,158,200,.7)',
+      branch: 'The Harmonizer',
+      desc: `<p>The Pleaser learned that the best way to stay safe was to make sure everyone around them was okay. Not because of weakness — because they were paying attention. They saw, early and clearly, that other people's states affected their own safety. The response was intelligent: if I keep everyone happy, the environment stays manageable.</p>
+<p>The pattern runs deep. It shows up as an inability to say no, or as saying no and then spending hours managing the guilt. It shows up as reading every room and adjusting accordingly, as putting others' needs consistently before one's own, as a chronic uncertainty about what you actually want when no one else's preference is in the mix.</p>
+<p>Schema therapy calls this the subjugation schema — the belief, usually unexamined, that your needs are less legitimate than others'. Brené Brown's research names it as a particular kind of armor: if I make myself indispensable, I won't be abandoned. The cost is a self that has been bent significantly toward what others need, and a life in which your own preferences are often the last ones consulted.</p>`,
+      gift: `You read rooms and people with extraordinary accuracy. You create harmony and connection wherever you go.`,
+      edge: `You have spent so long attending to others that your own needs have learned to be quiet. They are still there.`,
+      practices: [
+        `Practice noticing what you want before asking what others want. Even in small things. Even when it doesn't matter.`,
+        `The discomfort of disappointing someone is not the same as actually harming them. Notice the difference.`,
+        `Your needs are not an imposition. They are a legitimate part of being a person in relationship.`
+      ],
+      research: `Jeffrey Young's schema therapy research on the subjugation schema found that people who chronically subordinate their needs often do so because expressing needs in childhood felt dangerous or selfish. The schema is protective in origin. Healing involves learning that needs can be expressed without the consequences the pattern was built to avoid.`,
+      link: 'https://www.schematherapy.com/id73.htm',
+      linkLabel: 'Schema Therapy: The Subjugation Schema'
+    },
+    achiever: {
+      name: 'The Achiever',
+      sigil: '△',
+      color: 'rgba(238,216,122,1)',
+      colorSoft: 'rgba(238,216,122,.7)',
+      branch: 'The Striver',
+      desc: `<p>The Achiever learned that worth was something you produced rather than something you had. Not an abstract belief — a lived conclusion, usually drawn early, from an environment where what you did was more consistently noticed and valued than who you were. The response was entirely rational: produce more, achieve more, demonstrate more, and the uncertainty about your fundamental okayness will be quieted.</p>
+<p>The pattern is recognizable in its particular exhaustion. The Achiever is rarely resting easily. Even in downtime, there is a part running a calculation about whether this is an acceptable use of time, whether enough has been done to earn this pause, whether the pause can be justified by what it enables later. The treadmill is real, and it is internal.</p>
+<p>IFS names this a manager part — a part that keeps the system safe by ensuring performance. It is terrified of what would happen if the output stopped. The belief, usually unexamined: if I am not producing, I am not enough. The cost: a life lived primarily in service of proof, rather than in service of what actually matters to the person doing the proving.</p>`,
+      gift: `You accomplish things. Real things, hard things, things that matter. Your capacity for disciplined effort is genuine.`,
+      edge: `Worth that depends on output is borrowed worth. Rest feels like failure. You are allowed to be enough before the doing.`,
+      practices: [
+        `Notice when you are working to prove something versus working because you genuinely care about the thing. The first is exhausting in a way the second is not.`,
+        `Practice one form of rest that is genuinely restorative rather than productive. Notice what the internal response is.`,
+        `The question underneath: if you stopped producing entirely, what do you believe would happen? The answer tells you what the pattern is protecting.`
+      ],
+      research: `IFS research on manager parts — the parts that work to keep life under control through achievement and competence — found that they are typically protecting exiled parts that carry feelings of not being enough. The achieving is real. The worthiness it's trying to produce cannot actually be achieved from the outside.`,
+      link: 'https://ifs-institute.com/resources/articles',
+      linkLabel: 'IFS Institute: Manager Parts and Self-Worth'
+    },
+    witness: {
+      name: 'The Witness',
+      sigil: '◎',
+      color: 'rgba(154,164,204,1)',
+      colorSoft: 'rgba(154,164,204,.7)',
+      branch: 'The Observer',
+      desc: `<p>The Witness learned to stay back. Not out of indifference — out of a careful calculation that full participation was riskier than observation. If you watch carefully enough, you can understand what a situation requires before committing to it. You can learn the rules before you play. You can see what others are doing before you show your own hand.</p>
+<p>The pattern is often invisible to others, who see someone thoughtful and careful. From the inside it can feel different — like a chronic slight distance from full experience, a sense of watching life rather than living it, a pattern of holding back in moments that, in retrospect, deserved more of you than they received.</p>
+<p>IFS calls this a firefighter or manager, depending on its flavor — a part that manages potential harm by reducing exposure. Schema therapy names related patterns as emotional inhibition or detachment. The underlying belief: full presence is dangerous. If I engage completely, something I cannot manage might happen. The cost: a life experienced from slightly further away than the person actually wants to be.</p>`,
+      gift: `You see clearly. You understand situations before acting in them. Your observations are usually accurate.`,
+      edge: `You have sometimes watched from the window when you wanted to be in the room. The distance was a choice, even when it didn't feel like one.`,
+      practices: [
+        `Notice the moment of pulling back. Ask: what am I protecting myself from in this moment? Is that protection still necessary?`,
+        `Practice one form of full presence — a conversation, an experience, a moment — without the running commentary of the Witness.`,
+        `The Witness is not the problem. Believing that the Witness's view is the only safe position is the pattern worth examining.`
+      ],
+      research: `Schema therapy research on emotional inhibition and detachment found that people who chronically observe rather than participate often do so because full emotional presence felt dangerous in early environments. The detachment is protective. Healing involves learning that the original danger no longer requires the same level of managed distance.`,
+      link: 'https://www.schematherapy.com/id73.htm',
+      linkLabel: 'Schema Therapy: Detachment and Emotional Inhibition'
+    }
+  };
+
+  // ── QUESTION POOLS ─────────────────────────────────────────────────────
+  const PTC_POOLS = {
+
+    origin: [
+      {
+        eyebrow: 'Chamber I — The Origin',
+        title: 'Where the pattern began',
+        prose: `Every pattern has an origin. Not a moment, necessarily — more like a period, a climate, a set of conditions that made the pattern the most sensible response available.<br><br><em>The Veil is asking about the conditions that shaped yours.</em>`,
+        question: `When you were younger, what was the most reliable way to feel safe or okay?`,
+        choices: [
+          { text: `Being competent and reliable — knowing I could handle things reduced the uncertainty about whether I was okay.`, scores: { achiever:3, protector:1 } },
+          { text: `Making sure the people around me were okay — their stability felt like my stability.`, scores: { pleaser:3, witness:1 } },
+          { text: `Staying a bit removed — watching carefully before engaging, so I knew what was required.`, scores: { witness:3, protector:1 } },
+          { text: `Being hard to reach — keeping some part of myself back where it wouldn't be affected.`, scores: { protector:3, witness:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber I — The Origin',
+        title: 'What you learned about worth',
+        prose: `Somewhere, usually early, you formed a working theory about what made a person worth being around. Worth keeping. Worth caring about.<br><br><em>The Veil is asking what your working theory was.</em>`,
+        question: `Growing up, what seemed to make you most worth caring about?`,
+        choices: [
+          { text: `What I produced — my achievements, my abilities, what I could do for people.`, scores: { achiever:3, pleaser:1 } },
+          { text: `How little trouble I was — my ability to manage my own needs and not burden others.`, scores: { protector:2, witness:2 } },
+          { text: `How well I attended to others — my usefulness and attentiveness to what was needed.`, scores: { pleaser:3, achiever:1 } },
+          { text: `It wasn't clear — I learned mostly to not put that theory to the test.`, scores: { witness:3, protector:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber I — The Origin',
+        title: 'The environment that shaped you',
+        prose: `Patterns don't form in a vacuum. They form in response to something real — an environment, a set of relationships, a recurring dynamic that required a recurring response.<br><br><em>The Veil is asking what yours was responding to.</em>`,
+        question: `What did the environment you grew up in most reward or require?`,
+        choices: [
+          { text: `Performance and achievement — there was consistent attention to what I accomplished.`, scores: { achiever:3, protector:1 } },
+          { text: `Emotional management — feelings were better controlled than expressed.`, scores: { protector:2, witness:2 } },
+          { text: `Attentiveness to others — the emotional climate of the people around me required monitoring.`, scores: { pleaser:3, witness:1 } },
+          { text: `Self-sufficiency — I learned early that needing things was better handled alone.`, scores: { protector:2, achiever:2 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber I — The Origin',
+        title: 'The first version of the pattern',
+        prose: `Before the pattern was a pattern, it was just a response. The first time something worked — the first time a particular way of being produced a good enough outcome — it was filed away.<br><br><em>The Veil is asking what your first version looked like.</em>`,
+        question: `When did you first discover your pattern — the strategy that most reliably worked for you?`,
+        choices: [
+          { text: `When I realized that being very good at things gave me a kind of safety and recognition I couldn't get otherwise.`, scores: { achiever:3, protector:1 } },
+          { text: `When I realized that making others feel good significantly reduced conflict and increased warmth.`, scores: { pleaser:3, witness:1 } },
+          { text: `When I realized that watching carefully before acting meant I rarely made costly mistakes.`, scores: { witness:3, achiever:1 } },
+          { text: `When I realized that keeping some part of myself back meant certain things couldn't hurt me as much.`, scores: { protector:3, witness:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber I — The Origin',
+        title: 'What the pattern was protecting',
+        prose: `At its root, every pattern is protecting something. Usually something tender — a version of the self that was vulnerable in a way the pattern learned to defend.<br><br><em>The Veil is asking what yours was keeping safe.</em>`,
+        question: `What do you think your pattern was originally built to protect?`,
+        choices: [
+          { text: `The fear that I wasn't enough — that without the accomplishments, the answer to "am I okay" might be no.`, scores: { achiever:3, protector:1 } },
+          { text: `The fear of being abandoned or rejected — that without the harmony I maintained, people would leave.`, scores: { pleaser:3, achiever:1 } },
+          { text: `The fear of being too much — of overwhelming or burdening others if I brought my full self.`, scores: { witness:2, pleaser:2 } },
+          { text: `Something I couldn't quite name — some part of me that had learned it wasn't safe to be fully seen.`, scores: { protector:3, witness:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber I — The Origin',
+        title: 'The gift the pattern gave',
+        prose: `Patterns are not purely costs. They came with genuine gifts — capacities, perceptions, strengths that the pattern built as it developed.<br><br><em>The Veil is asking about the gift yours gave you.</em>`,
+        question: `What genuine strength or capacity did your pattern build?`,
+        choices: [
+          { text: `The ability to accomplish difficult things with discipline and consistency.`, scores: { achiever:3, protector:1 } },
+          { text: `The ability to read people and situations accurately and respond to what is actually needed.`, scores: { pleaser:2, witness:2 } },
+          { text: `The ability to observe clearly and understand situations before acting in them.`, scores: { witness:3, pleaser:1 } },
+          { text: `The ability to hold ground and stay functional under conditions that unsettle others.`, scores: { protector:3, achiever:1 } }
+        ]
+      }
+    ],
+
+    cost: [
+      {
+        eyebrow: 'Chamber II — The Cost',
+        title: 'What the pattern costs',
+        prose: `Every pattern has a cost. Not a punishment — a price. Something that the pattern requires you to spend in order to maintain it.<br><br><em>The Veil is asking what yours charges.</em>`,
+        question: `What does your pattern cost you most consistently?`,
+        choices: [
+          { text: `Rest — the genuine kind, not recovery. There is always something more to prove before I can stop.`, scores: { achiever:3, protector:1 } },
+          { text: `My own preferences — they are often the last thing I consult, after everyone else's needs are accounted for.`, scores: { pleaser:3, witness:1 } },
+          { text: `Full presence — there is usually a part of me that remains back, observing, not quite all the way in.`, scores: { witness:3, pleaser:1 } },
+          { text: `Closeness — the protection that keeps things out also keeps some things from getting through that I would actually want.`, scores: { protector:3, achiever:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber II — The Cost',
+        title: 'What you have said no to',
+        prose: `Patterns say no for us. Not always loudly — sometimes just by making certain options feel unavailable, certain risks feel too high, certain forms of openness feel inadvisable.<br><br><em>The Veil is asking what yours has quietly declined on your behalf.</em>`,
+        question: `What has your pattern most consistently said no to?`,
+        choices: [
+          { text: `Imperfection — it is very hard to submit something that I know is not as good as it could be.`, scores: { achiever:3, pleaser:1 } },
+          { text: `My own wants — particularly when claiming them might cost someone else something.`, scores: { pleaser:3, achiever:1 } },
+          { text: `Full engagement — I often hold something back even in situations that would probably be safe to be more fully in.`, scores: { witness:3, protector:1 } },
+          { text: `Vulnerability — not always the dramatic kind, but the ordinary kind, the kind that requires letting someone in close enough to see something real.`, scores: { protector:3, witness:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber II — The Cost',
+        title: 'The exhaustion underneath',
+        prose: `Most patterns are tiring to maintain. Not because they are wrong, but because they require constant effort — monitoring, adjusting, producing, managing. The tiredness is real even when the person carrying it cannot always name what is tiring them.<br><br><em>The Veil is asking about your particular fatigue.</em>`,
+        question: `What kind of tiredness does your pattern produce?`,
+        choices: [
+          { text: `The tiredness of never quite arriving — of always being in pursuit of the next thing that will be enough.`, scores: { achiever:3, protector:1 } },
+          { text: `The tiredness of constant attunement — of always tracking what others need and adjusting accordingly.`, scores: { pleaser:3, witness:1 } },
+          { text: `The tiredness of managed distance — of the effort it takes to be present and protected at the same time.`, scores: { witness:2, protector:2 } },
+          { text: `The tiredness of vigilance — of keeping something defended that requires ongoing defense.`, scores: { protector:3, achiever:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber II — The Cost',
+        title: 'What the pattern makes harder',
+        prose: `Some things are simply harder for certain patterns than others. Not impossible — harder. They require more effort, more deliberate intention, more willingness to move against the pattern's preference.<br><br><em>The Veil is asking what yours makes harder.</em>`,
+        question: `What do you find consistently harder than it seems to be for others?`,
+        choices: [
+          { text: `Accepting things as good enough — there is almost always a gap between what I produced and what I was reaching for.`, scores: { achiever:3, protector:1 } },
+          { text: `Saying no — or saying yes to my own needs when they conflict with what someone else wants.`, scores: { pleaser:3, achiever:1 } },
+          { text: `Being fully in a moment without the observing part running alongside it.`, scores: { witness:3, protector:1 } },
+          { text: `Letting people in close enough to see the parts of me that haven't been curated for presentation.`, scores: { protector:3, witness:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber II — The Cost',
+        title: 'What you are waiting for',
+        prose: `Many patterns involve a kind of waiting — for a condition that, when it arrives, will make it safe to stop the pattern. The achievement that finally proves enough. The relationship that finally feels secure enough to stop managing. The understanding clear enough to finally engage fully.<br><br><em>The Veil is asking what yours is waiting for.</em>`,
+        question: `What condition would make it safe to run the pattern a little less?`,
+        choices: [
+          { text: `Proof — some achievement or recognition that settles, once and for all, the question of whether I am enough.`, scores: { achiever:3, protector:1 } },
+          { text: `Security — a relationship stable enough that I could stop managing and maintaining and just be in it.`, scores: { pleaser:3, witness:1 } },
+          { text: `Understanding — a clear enough picture of what is happening and what is required that full engagement feels safe.`, scores: { witness:3, achiever:1 } },
+          { text: `Safety — some guarantee that what I would let in, if I lowered the protection, would not use that access to harm me.`, scores: { protector:3, pleaser:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber II — The Cost',
+        title: 'The relationship between pattern and love',
+        prose: `Patterns affect relationships. Not because the person is incapable of love — but because the pattern shapes how love is given and received, what feels safe to offer, what feels dangerous to accept.<br><br><em>The Veil is asking how yours affects the people you love.</em>`,
+        question: `How does your pattern most affect the people closest to you?`,
+        choices: [
+          { text: `They sometimes feel like they are in relationship with my output rather than with me — with what I accomplish, not who I am.`, scores: { achiever:3, protector:1 } },
+          { text: `They sometimes feel they cannot give to me the way I give to them — that I am better at caring than at being cared for.`, scores: { pleaser:3, achiever:1 } },
+          { text: `They sometimes feel a distance they cannot name — a sense that I am present but not entirely here.`, scores: { witness:3, pleaser:1 } },
+          { text: `They sometimes feel shut out — unable to reach the part of me that I have learned to keep protected.`, scores: { protector:3, witness:1 } }
+        ]
+      }
+    ],
+
+    recognition: [
+      {
+        eyebrow: 'Chamber III — Recognition',
+        title: 'When you catch it running',
+        prose: `There are moments when you catch the pattern in the act — when you can see it operating, notice its logic, feel it making a decision on your behalf.<br><br><em>The Veil is asking about those moments of recognition.</em>`,
+        question: `When do you most clearly see your pattern operating?`,
+        choices: [
+          { text: `When I have finished something good and immediately start worrying about whether it was good enough.`, scores: { achiever:3, protector:1 } },
+          { text: `When I notice I have agreed to something I didn't want, or shaped my response to what I thought was needed rather than what I felt.`, scores: { pleaser:3, witness:1 } },
+          { text: `When I realize I have been in a room or a conversation and held more back than the situation required.`, scores: { witness:3, protector:1 } },
+          { text: `When something gets close enough that I feel the instinct to create distance, and I can see that the instinct is the pattern rather than wisdom.`, scores: { protector:3, witness:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber III — Recognition',
+        title: 'The feeling that signals it',
+        prose: `Every pattern has a feeling that tends to accompany it — not just the pattern's output, but something underneath it. An emotional signature that, once recognized, becomes a reliable signal.<br><br><em>The Veil is asking about yours.</em>`,
+        question: `What feeling most reliably accompanies your pattern when it is running?`,
+        choices: [
+          { text: `A low-grade restlessness — a sense that I should be doing more, producing more, moving toward something more.`, scores: { achiever:3, protector:1 } },
+          { text: `A low-grade anxiety — a monitoring of the emotional temperature of the people around me, and a readiness to adjust.`, scores: { pleaser:3, achiever:1 } },
+          { text: `A kind of mild unreality — a slight sensation of watching rather than living, of being behind glass.`, scores: { witness:3, pleaser:1 } },
+          { text: `A kind of low alertness — not anxiety exactly, but a readiness, a preparation, a maintained distance between myself and what might reach me.`, scores: { protector:3, witness:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber III — Recognition',
+        title: 'When the pattern is most useful',
+        prose: `Patterns are not purely costs. They are genuinely useful in certain conditions — which is often why they persist. There are contexts where the pattern's particular form of intelligence is exactly what is needed.<br><br><em>The Veil is asking when yours is most genuinely helpful.</em>`,
+        question: `When is your pattern most actually useful?`,
+        choices: [
+          { text: `When something genuinely difficult needs to be accomplished — when sustained effort and high standards produce something real.`, scores: { achiever:3, protector:1 } },
+          { text: `When someone needs to feel truly attended to — when my attunement and care-giving creates genuine connection and comfort.`, scores: { pleaser:3, witness:1 } },
+          { text: `When careful analysis before action is genuinely warranted — when observation prevents costly mistakes.`, scores: { witness:3, achiever:1 } },
+          { text: `When something genuinely needs protecting — when the vigilance and groundedness of the Protector is exactly what the situation requires.`, scores: { protector:3, pleaser:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber III — Recognition',
+        title: 'The moment it becomes a problem',
+        prose: `The pattern becomes a problem not in the moments it was built for, but in the moments it runs when it wasn't needed. When a situation didn't require the pattern, but the pattern ran anyway.<br><br><em>The Veil is asking about that moment.</em>`,
+        question: `When does your pattern run when it doesn't need to?`,
+        choices: [
+          { text: `In moments that deserve rest, play, or simple presence — when the achievement drive runs even though nothing is being asked of me.`, scores: { achiever:3, witness:1 } },
+          { text: `In relationships that are actually safe — when I am still managing and attenuating even with people who can handle the real version of me.`, scores: { pleaser:3, protector:1 } },
+          { text: `In moments that are genuinely safe to be fully in — when the distance is a habit rather than a response to actual risk.`, scores: { witness:3, pleaser:1 } },
+          { text: `In relationships where the protection is no longer necessary — when the wall runs on old information about who is dangerous.`, scores: { protector:3, achiever:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber III — Recognition',
+        title: 'What the pattern looks like from inside',
+        prose: `From the inside, patterns rarely feel like patterns. They feel like reality — like the accurate assessment of a situation, the reasonable response to what is actually happening. The pattern is experienced as perception, not as strategy.<br><br><em>The Veil is asking how yours feels from inside.</em>`,
+        question: `From the inside, your pattern most often feels like:`,
+        choices: [
+          { text: `An accurate reading of what is required — of course more is needed, of course this isn't good enough yet, of course I need to keep going.`, scores: { achiever:3, witness:1 } },
+          { text: `An accurate reading of what others need — of course I should adjust, of course this is what the situation calls for.`, scores: { pleaser:3, achiever:1 } },
+          { text: `An accurate reading of the risk level — of course some distance is warranted here, of course I should watch first.`, scores: { witness:3, protector:1 } },
+          { text: `An accurate reading of the threat level — of course this needs protecting, of course this is not safe enough to let through.`, scores: { protector:3, witness:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber III — Recognition',
+        title: 'What would break the pattern',
+        prose: `There are things that can interrupt the pattern — not eliminate it, but create a pause, a moment of choice, a brief gap in which a different response becomes possible.<br><br><em>The Veil is asking what creates that gap for yours.</em>`,
+        question: `What most reliably creates a pause in your pattern — a moment where you can choose differently?`,
+        choices: [
+          { text: `Genuine exhaustion — when I am too tired to maintain the drive, and something more honest briefly surfaces.`, scores: { achiever:3, protector:1 } },
+          { text: `Being asked directly what I want — the directness of the question sometimes short-circuits the adjustment process.`, scores: { pleaser:3, witness:1 } },
+          { text: `Being fully absorbed in something — the moments of complete engagement when the observing part goes quiet.`, scores: { witness:3, pleaser:1 } },
+          { text: `Being with someone who is clearly safe — with whom the old information about danger becomes obviously wrong.`, scores: { protector:3, achiever:1 } }
+        ]
+      }
+    ],
+
+    relationship: [
+      {
+        eyebrow: 'Chamber IV — Relationship',
+        title: 'How the pattern shapes connection',
+        prose: `Every pattern affects how we connect. Not whether — we connect regardless. But the shape of it, the texture of it, what is possible and what remains out of reach.<br><br><em>The Veil is asking about the shape yours gives to connection.</em>`,
+        question: `What does your pattern make possible in your closest relationships?`,
+        choices: [
+          { text: `Reliability — I am someone people can count on to show up and follow through.`, scores: { achiever:3, protector:1 } },
+          { text: `Attentiveness — people feel genuinely seen and cared for when they are with me.`, scores: { pleaser:3, witness:1 } },
+          { text: `Depth of understanding — I observe and understand the people I love in ways they sometimes find surprising.`, scores: { witness:3, pleaser:1 } },
+          { text: `Safety — people feel that I will hold ground, that I will not be destabilized, that there is something solid here.`, scores: { protector:3, achiever:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber IV — Relationship',
+        title: 'What the pattern makes difficult to receive',
+        prose: `It is harder to receive certain things when a pattern is running. Not impossible — but the pattern creates friction around particular forms of care, attention, or closeness.<br><br><em>The Veil is asking what yours makes difficult to receive.</em>`,
+        question: `What is hardest to receive from people who love you?`,
+        choices: [
+          { text: `Being valued for who I am rather than what I do — the love that has nothing to do with my output.`, scores: { achiever:3, witness:1 } },
+          { text: `Being genuinely cared for — having my needs attended to, being the one who is tended to rather than tending.`, scores: { pleaser:3, achiever:1 } },
+          { text: `Being fully seen — having someone witness the parts I have not curated, without the managed presentation.`, scores: { witness:3, protector:1 } },
+          { text: `Being let in close — allowing someone to see what is behind the protection, trusting that what is there can be held.`, scores: { protector:3, witness:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber IV — Relationship',
+        title: 'What you most want from the people you love',
+        prose: `Underneath the pattern, there is usually something wanted. Not the managed version — the real version. What you would want if the pattern's preferences weren't in the way.<br><br><em>The Veil is asking about the real want.</em>`,
+        question: `What do you most want from the people who love you — the thing you rarely say?`,
+        choices: [
+          { text: `To be loved in my rest as much as in my striving — to be enough when I am doing nothing.`, scores: { achiever:3, pleaser:1 } },
+          { text: `To have my needs attended to the way I attend to others — to be the one who is cared for sometimes.`, scores: { pleaser:3, achiever:1 } },
+          { text: `To be invited fully in — to be the one someone reaches toward, who draws me out of the watching.`, scores: { witness:3, protector:1 } },
+          { text: `To be known and still chosen — to have someone see what is behind the protection and stay.`, scores: { protector:3, witness:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber IV — Relationship',
+        title: 'How love moves through the pattern',
+        prose: `Love enters differently depending on which pattern is running. It arrives, and then it has to find a way through the pattern's particular architecture.<br><br><em>The Veil is asking how love moves through yours.</em>`,
+        question: `How does love typically travel through your pattern?`,
+        choices: [
+          { text: `It is received and immediately assessed — is it for me, or for what I do? The doubt is quick and automatic.`, scores: { achiever:3, witness:1 } },
+          { text: `It lands and is immediately turned into an opportunity to give back — receiving is brief, giving is more comfortable.`, scores: { pleaser:3, achiever:1 } },
+          { text: `It arrives and is noted from a slight distance before I decide how much to let in.`, scores: { witness:3, protector:1 } },
+          { text: `It approaches and is screened — some gets through, some doesn't, and the screening happens faster than the decision.`, scores: { protector:3, pleaser:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber IV — Relationship',
+        title: 'What the pattern asks of the people who love you',
+        prose: `Patterns ask things of the people who love us, whether or not we intend them to. They create implicit requirements — for patience, for persistence, for particular forms of reassurance or distance.<br><br><em>The Veil is asking what yours asks.</em>`,
+        question: `What does your pattern implicitly ask of the people close to you?`,
+        choices: [
+          { text: `To keep valuing me even when I miss the mark — to reassure me that the output is not the whole of what they love.`, scores: { achiever:3, protector:1 } },
+          { text: `To be patient with my difficulty receiving — to keep offering care even when I am better at giving it than taking it in.`, scores: { pleaser:3, achiever:1 } },
+          { text: `To reach toward me — to be the one who initiates, who draws me in, who makes full engagement feel safer than it would alone.`, scores: { witness:3, pleaser:1 } },
+          { text: `To prove themselves trustworthy — to demonstrate, over time, that what is behind the protection will be safe with them.`, scores: { protector:3, witness:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber IV — Relationship',
+        title: 'What love looks like when the pattern is less loud',
+        prose: `There are moments when the pattern quiets — when something breaks through, when a relationship reaches what is really there, when the strategy steps back and something more direct is possible.<br><br><em>The Veil is asking what love looks like in those moments.</em>`,
+        question: `What does love feel like when the pattern is quiet?`,
+        choices: [
+          { text: `Restful — like I don't have to earn it or maintain it. Like it is simply there.`, scores: { achiever:3, protector:1 } },
+          { text: `Mutual — like I am being cared for as genuinely as I care for others. Like the balance is real.`, scores: { pleaser:3, achiever:1 } },
+          { text: `Present — like I am actually in it, not watching it from slightly outside. Like I am here.`, scores: { witness:3, pleaser:1 } },
+          { text: `Safe — like something I have been holding carefully can be set down for a moment. Like I don't have to keep everything defended.`, scores: { protector:3, witness:1 } }
+        ]
+      }
+    ],
+
+    soften: [
+      {
+        eyebrow: 'Chamber V — The Softening',
+        title: 'What the pattern is ready to hear',
+        prose: `Patterns change not by being fought but by being understood. When a protective part sees that what it was protecting is no longer in the same danger, it can begin — slowly, carefully — to relax its grip.<br><br><em>The Veil is asking what yours might be ready to hear.</em>`,
+        question: `What do you think your pattern most needs to hear?`,
+        choices: [
+          { text: `That you are enough before the doing. That the worth the pattern is trying to produce cannot actually be produced from the outside.`, scores: { achiever:3, protector:1 } },
+          { text: `That your needs are legitimate. That claiming them is not the same as burdening others, and that the people who matter can hold them.`, scores: { pleaser:3, witness:1 } },
+          { text: `That full presence is survivable. That the thing you are protecting yourself from by staying back is smaller than the cost of the distance.`, scores: { witness:3, protector:1 } },
+          { text: `That the original danger has changed. That the protection, as faithful as it has been, is now sometimes keeping out things that deserve to come in.`, scores: { protector:3, achiever:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber V — The Softening',
+        title: 'What you are learning',
+        prose: `Most people who have carried a pattern long enough eventually begin to learn something about it. Not necessarily to change it dramatically — but to see it more clearly, to hold it more lightly, to choose it sometimes rather than simply having it run.<br><br><em>The Veil is asking what you are learning.</em>`,
+        question: `What are you slowly learning about the pattern you carry?`,
+        choices: [
+          { text: `That the treadmill has a pause button. That worth is not actually located in the output, even when it feels like it is.`, scores: { achiever:3, protector:1 } },
+          { text: `That I am allowed to take up space. That my wants and needs are part of being in relationship, not a threat to it.`, scores: { pleaser:3, witness:1 } },
+          { text: `That inhabiting experience is different from observing it — and that the distance is more of a choice than it has felt.`, scores: { witness:3, achiever:1 } },
+          { text: `That some things are safer than the pattern believes. That I can lower the guard slightly without the feared thing happening.`, scores: { protector:3, pleaser:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber V — The Softening',
+        title: 'A note from the Veil',
+        prose: `This is the last chamber of this crossing. The Veil has been here — across these five chambers — watching how you described yourself. Something has been reflected.<br><br>Before the final question, it wants to say this:<br><br><em>The pattern you carry is not a failure of character. It is a story about what was needed — once, in conditions that may no longer be fully present. The part of you that runs it has been faithful and creative and, in its own way, devoted. It has kept something safe. The question is only whether what it is keeping safe still requires quite this much keeping.</em>`,
+        question: `What would it mean to carry the pattern more lightly — not to lose it, but to hold it rather than being held by it?`,
+        choices: [
+          { text: `I could rest in what I have done without immediately reaching for what comes next. The proving could become optional.`, scores: { achiever:3, protector:1 } },
+          { text: `I could say what I want before I ask what others want. The adjustment could happen after, not instead of.`, scores: { pleaser:3, achiever:1 } },
+          { text: `I could be in experiences rather than observing them. The watching could step back when the moment is genuinely safe.`, scores: { witness:3, pleaser:1 } },
+          { text: `I could let things through that deserve to come in. The protection could become more discerning rather than more constant.`, scores: { protector:3, witness:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber V — The Softening',
+        title: 'What lives underneath the pattern',
+        prose: `IFS speaks of the Self — the part of every person that is not any of the patterns, not any of the protective strategies, but something underneath them that is curious, compassionate, grounded, and whole.<br><br><em>The Veil is asking about yours.</em>`,
+        question: `What do you sense is present in you underneath the pattern?`,
+        choices: [
+          { text: `Something that cares deeply about quality and meaning — not as proof, but as genuine expression of what matters.`, scores: { achiever:3, witness:1 } },
+          { text: `Something that genuinely loves and wants to be loved — not in exchange for care, but in the simple fact of being known.`, scores: { pleaser:3, achiever:1 } },
+          { text: `Something that wants to be fully here — that has always wanted to be in the room rather than watching from the doorway.`, scores: { witness:3, protector:1 } },
+          { text: `Something that has been waiting — quietly, faithfully — for conditions safe enough to be more fully itself.`, scores: { protector:3, pleaser:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber V — The Softening',
+        title: 'The pattern and the self',
+        prose: `The pattern is not who you are. It is something you developed, something that became habitual, something that has served a real purpose. But it is not the same as the person who developed it.<br><br><em>The Veil is asking about that distinction.</em>`,
+        question: `What is the clearest way you can tell the difference between the pattern running and the truest version of you?`,
+        choices: [
+          { text: `When I am most myself, I am not proving anything. I am just doing something I care about, without the score running.`, scores: { achiever:3, witness:1 } },
+          { text: `When I am most myself, I am both giving and receiving — not just attending, but also being attended to.`, scores: { pleaser:3, achiever:1 } },
+          { text: `When I am most myself, I am actually inside an experience rather than watching it. Something has let me all the way in.`, scores: { witness:3, protector:1 } },
+          { text: `When I am most myself, I am not defending anything. Something has stood down, and what is there without the protection is quieter and more real.`, scores: { protector:3, witness:1 } }
+        ]
+      },
+      {
+        eyebrow: 'Chamber V — The Softening',
+        title: 'What you would carry forward',
+        prose: `This crossing ends here. Whatever the pattern has been named — whatever the Veil has reflected back — something has been recognized that was always already true.<br><br><em>The Veil asks one final thing.</em>`,
+        question: `What do you want to carry forward from this crossing?`,
+        choices: [
+          { text: `The knowledge that the treadmill can pause. That I can choose it rather than be chosen by it.`, scores: { achiever:3, protector:1 } },
+          { text: `The knowledge that I am allowed to need things. That the pattern was protective, not permanent.`, scores: { pleaser:3, witness:1 } },
+          { text: `The knowledge that I can be here — fully, without the watching. That full presence is already available.`, scores: { witness:3, pleaser:1 } },
+          { text: `The knowledge that the thing being protected is safer than the pattern believes. That something can be let in.`, scores: { protector:3, achiever:1 } }
+        ]
+      }
+    ]
+  };
+
+  // ── SESSION SELECTION ───────────────────────────────────────────────────
+  function ptcSelectChambers() {
+    const BRANCHES = ['origin','cost','recognition','relationship','soften'];
+    let lastUsed = {};
+    try { lastUsed = JSON.parse(localStorage.getItem('faeboundPTCLastUsed') || '{}'); } catch(e) {}
+    const selected = BRANCHES.map((branch, idx) => {
+      const pool = PTC_POOLS[branch];
+      const fresh = pool.filter((_, i) => i !== lastUsed[branch]);
+      const source = fresh.length > 0 ? fresh : pool;
+      const question = source[Math.floor(Math.random() * source.length)];
+      return { ...question, _branch: branch, _poolIndex: pool.indexOf(question),
+        eyebrow: `Chamber ${['I','II','III','IV','V'][idx]} — ${question.eyebrow.split('— ')[1] || question.eyebrow}` };
+    });
+    const used = {};
+    BRANCHES.forEach((b,i) => { used[b] = selected[i]._poolIndex; });
+    try { localStorage.setItem('faeboundPTCLastUsed', JSON.stringify(used)); } catch(e) {}
+    return selected;
+  }
+
+  // ── STATE ───────────────────────────────────────────────────────────────
+  let ptcChambers = [];
+  let ptcChamberIndex = 0;
+  let ptcSelected = null;
+  let ptcPhase = 'intro';
+  let ptcScores = { protector:0, pleaser:0, achiever:0, witness:0 };
+
+  // ── HELPERS ─────────────────────────────────────────────────────────────
+  function ptcChime(freq=440, vol=.02) {
+    try { if (window.audio?.tone) window.audio.tone(freq, .18, 'sine', vol, freq*1.5); } catch(e) {}
+  }
+  function ptcSlideIn(el) {
+    if (!el) return;
+    el.style.opacity='0'; el.style.transform='translateY(18px)';
+    requestAnimationFrame(() => {
+      el.style.transition='opacity .55s ease, transform .55s ease';
+      el.style.opacity='1'; el.style.transform='none';
+    });
+  }
+  function ptcPips() {
+    if (ptcPhase !== 'chamber') return '';
+    return `<div class="ptc-pips">${ptcChambers.map((_,i) => {
+      const cls = i===ptcChamberIndex?'active':i<ptcChamberIndex?'done':'';
+      return `<div class="ptc-pip ${cls}"></div>`;
+    }).join('')}</div>`;
+  }
+
+  // ── RENDER INTRO ────────────────────────────────────────────────────────
+  function ptcRenderIntro() {
+    const crossings = (() => {
+      try { return parseInt(localStorage.getItem('faeboundPTCCrossings')||'0')||0; } catch(e) { return 0; }
+    })();
+    const lastResult = (() => {
+      try { return JSON.parse(localStorage.getItem('faeboundLastPTCResult')||'null'); } catch(e) { return null; }
+    })();
+    const returningText = (() => {
+      if (!lastResult?.name) return '';
+      try { localStorage.setItem('faeboundPTCCrossings', crossings+1); } catch(e) {}
+      if (crossings === 0)
+        return '<p style="margin:0 0 14px;font-size:.88rem;color:rgba(180,190,220,.65);font-style:italic">You have been here before. Last time, the Veil saw <em style="color:rgba(154,164,204,.85)">' + lastResult.name + '</em>.<br><span style="font-size:.82rem;opacity:.75">The questions will be different this time.</span></p>';
+      return '<p style="margin:0 0 14px;font-size:.88rem;color:rgba(180,190,220,.7);font-style:italic">The Veil knows the pattern you carry. <em style="color:rgba(154,164,204,.9)">' + lastResult.name + '</em> has been present before.<br><span style="font-size:.82rem;opacity:.8">Come as honestly as you did last time.</span></p>';
+    })();
+    wrap.innerHTML = `
+      <div class="ptc-chamber" style="text-align:center">
+        <div style="font-size:3rem;margin:0 auto 20px;
+             animation:breathe 4s ease-in-out infinite;
+             color:rgba(154,164,204,.7)">◬</div>
+        <p class="ptc-eyebrow" style="justify-content:center">Deep Trial · Veil Depth 13</p>
+        <h1 class="ptc-title" style="color:rgba(154,164,204,.9);text-align:center">
+          The Pattern You Carry
+        </h1>
+        <div class="ptc-prose" style="max-width:560px;margin:0 auto 24px;text-align:center">
+          ${returningText}
+          <p style="margin:0 0 14px">Five chambers about the pattern underneath your patterns.</p>
+          <p style="margin:0 0 14px">Not the strategies you choose consciously — the ones that run before the choice. The ones that formed early, for good reasons, and have been running faithfully ever since.</p>
+          <p style="margin:0"><em>The Veil asks nothing of you except honesty. The pattern is not a flaw. It is a story. The story can be understood.</em></p>
+        </div>
+        <div style="max-width:520px;margin:0 auto 28px;padding:16px;border-radius:14px;
+             border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025)">
+          <p style="font-size:.81rem;color:rgba(180,190,220,.82);line-height:1.72;margin:0 0 8px">
+            This experience draws on Richard Schwartz's Internal Family Systems model (1994), Jeffrey Young's schema therapy research, and Brené Brown's work on protective patterns and vulnerability. It is not a diagnostic tool. It is a mirror — for those who have been in the realm long enough to look into it.
+          </p>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px">
+            <a href="https://ifs-institute.com/resources/articles" target="_blank" rel="noopener"
+               style="font-size:.72rem;color:rgba(154,164,204,.5);text-decoration:underline">IFS: Internal Family Systems →</a>
+            <a href="https://www.schematherapy.com/id73.htm" target="_blank" rel="noopener"
+               style="font-size:.72rem;color:rgba(154,164,204,.5);text-decoration:underline">Schema Therapy Research →</a>
+          </div>
+        </div>
+        <div class="ptc-nav" style="justify-content:center">
+          <button id="ptcBeginBtn" class="btn"
+            style="background:rgba(154,164,204,.12);border-color:rgba(154,164,204,.35);
+            color:rgba(154,164,204,.9);padding:17px 38px;font-size:.97rem">
+            Enter the First Chamber
+          </button>
+          <button id="ptcBackFromIntroBtn" class="btn btn-ghost">Return to Realm</button>
+        </div>
+      </div>`;
+    ptcSlideIn(wrap.querySelector('.ptc-chamber'));
+    document.getElementById('ptcBeginBtn').addEventListener('click', () => {
+      ptcPhase='chamber'; ptcChamberIndex=0;
+      ptcScores={protector:0,pleaser:0,achiever:0,witness:0};
+      ptcChime(380,.022); setTimeout(ptcRenderChamber,60);
+    });
+    document.getElementById('ptcBackFromIntroBtn').addEventListener('click', () => {
+      if (typeof backToHub==='function') backToHub(()=>{});
+    });
+  }
+
+  // ── RENDER CHAMBER ──────────────────────────────────────────────────────
+  function ptcRenderChamber() {
+    const ch = ptcChambers[ptcChamberIndex];
+    ptcSelected = null;
+    wrap.innerHTML = `
+      ${ptcPips()}
+      <div class="ptc-chamber">
+        <p class="ptc-eyebrow">${ch.eyebrow}</p>
+        <h2 class="ptc-title">${ch.title}</h2>
+        <div class="ptc-prose">${ch.prose}</div>
+        <p class="ptc-question">${ch.question}</p>
+        <div class="ptc-choices" id="ptcChoices">
+          ${ch.choices.map((choice,i) => `
+            <button class="ptc-choice" data-idx="${i}" type="button">
+              <span class="ptc-choice-num">${['I','II','III','IV'][i]}</span>
+              ${choice.text}
+            </button>`).join('')}
+        </div>
+        <div class="ptc-nav" id="ptcNav">
+          <button class="btn" id="ptcNextBtn" disabled
+            style="background:rgba(154,164,204,.08);border-color:rgba(154,164,204,.2);
+            color:rgba(154,164,204,.35)">
+            ${ptcChamberIndex < ptcChambers.length-1 ? 'Continue →' : 'The Veil reflects →'}
+          </button>
+          <button class="btn btn-ghost" id="ptcBackBtn">← Back</button>
+        </div>
+      </div>`;
+    ptcSlideIn(wrap.querySelector('.ptc-chamber'));
+    document.querySelectorAll('.ptc-choice').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.ptc-choice').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        ptcSelected = parseInt(btn.dataset.idx);
+        const next = document.getElementById('ptcNextBtn');
+        if (next) {
+          next.disabled=false;
+          next.style.background='rgba(154,164,204,.12)';
+          next.style.borderColor='rgba(154,164,204,.35)';
+          next.style.color='rgba(154,164,204,.9)';
+        }
+        ptcChime(360+ptcSelected*40,.016);
+        if (typeof window.ambient?.swell==='function') window.ambient.swell(0.002);
+      });
+    });
+    document.getElementById('ptcNextBtn')?.addEventListener('click', () => {
+      if (ptcSelected===null) return;
+      const scores = ptcChambers[ptcChamberIndex].choices[ptcSelected].scores;
+      Object.entries(scores).forEach(([k,v]) => { ptcScores[k]=(ptcScores[k]||0)+v; });
+      ptcChamberIndex++;
+      if (ptcChamberIndex >= ptcChambers.length) {
+        ptcPhase='result'; setTimeout(ptcRenderResult,180);
+      } else {
+        ptcChime(380,.020); setTimeout(ptcRenderChamber,60);
+      }
+    });
+    document.getElementById('ptcBackBtn')?.addEventListener('click', () => {
+      if (ptcChamberIndex > 0) {
+        ptcChamberIndex--;
+        const prev = ptcChambers[ptcChamberIndex].choices[ptcSelected??0]?.scores||{};
+        Object.entries(prev).forEach(([k,v]) => { ptcScores[k]=Math.max(0,(ptcScores[k]||0)-v); });
+        ptcSelected=null; ptcRenderChamber();
+      } else { ptcPhase='intro'; ptcRenderIntro(); }
+    });
+  }
+
+  // ── RENDER RESULT ───────────────────────────────────────────────────────
+  function ptcRenderResult() {
+    const order = ['protector','pleaser','achiever','witness'];
+    const winner = order.reduce((best,k) => ptcScores[k]>ptcScores[best]?k:best, order[0]);
+    const second = order.filter(k=>k!==winner).reduce((best,k) => ptcScores[k]>ptcScores[best]?k:best);
+    const a = ARCHETYPES[winner];
+    const b2 = ARCHETYPES[second];
+    const total = Object.values(ptcScores).reduce((s,v)=>s+v,0)||1;
+    const lastResult = (() => {
+      try { return JSON.parse(localStorage.getItem('faeboundLastPTCResult')||'null'); } catch(e) { return null; }
+    })();
+    const shiftNote = lastResult?.winner && lastResult.winner!==winner
+      ? '<p style="font-size:.84rem;color:rgba(180,190,220,.6);font-style:italic;margin-bottom:16px">Last time, the Veil saw <em style="color:rgba(154,164,204,.7)">' + lastResult.name + '</em>. This time it sees ' + a.name + '. Patterns can shift.</p>'
+      : '';
+    try { localStorage.setItem('faeboundLastPTCResult', JSON.stringify({winner, name:a.name})); } catch(e) {}
+    const chimeMap = { protector:[340,420,500], pleaser:[460,580,700], achiever:[500,620,740], witness:[380,460,560] };
+    const notes = chimeMap[winner]||[380,460,560];
+    ptcChime(notes[0],.036);
+    setTimeout(()=>ptcChime(notes[1],.026),200);
+    setTimeout(()=>ptcChime(notes[2],.018),420);
+    const breakdown = order.map(k => ({
+      key:k, name:ARCHETYPES[k].name, sigil:ARCHETYPES[k].sigil,
+      pct:Math.round((ptcScores[k]/total)*100), color:ARCHETYPES[k].color
+    })).sort((a,b)=>b.pct-a.pct);
+    wrap.innerHTML = `
+      <div class="ptc-result">
+        <span style="font-size:4rem;display:block;margin-bottom:12px;
+             animation:breathe 4s ease-in-out infinite">${a.sigil}</span>
+        <h2 style="font-family:'Cinzel',serif;font-size:clamp(1.7rem,5vw,2.7rem);
+            font-weight:700;letter-spacing:.04em;margin:0 0 3px;color:${a.color}">
+          ${a.name}
+        </h2>
+        <p style="font-size:.75rem;text-transform:uppercase;letter-spacing:.2em;
+           color:var(--muted);margin:0 0 22px">${a.branch} · The Pattern You Carry</p>
+        ${shiftNote}
+        <div style="color:var(--muted);line-height:1.9;font-size:.97rem;text-align:left;
+             margin:0 0 18px;padding:20px;border-radius:15px;
+             background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.055)">
+          ${a.desc}
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;
+             margin-bottom:20px;text-align:left">
+          <div style="padding:12px;border-radius:12px;
+               background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.05)">
+            <div style="font-size:.63rem;text-transform:uppercase;letter-spacing:.13em;
+                 color:var(--muted);opacity:.6;margin-bottom:4px">Your gift</div>
+            <div style="font-size:.88rem;color:var(--text);line-height:1.44">${a.gift}</div>
+          </div>
+          <div style="padding:12px;border-radius:12px;
+               background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.05)">
+            <div style="font-size:.63rem;text-transform:uppercase;letter-spacing:.13em;
+                 color:var(--muted);opacity:.6;margin-bottom:4px">The edge</div>
+            <div style="font-size:.88rem;color:var(--text);line-height:1.44">${a.edge}</div>
+          </div>
+        </div>
+        ${second!==winner?'<p style="font-size:.84rem;color:var(--muted);margin-bottom:18px;line-height:1.6">Your secondary pattern: <em style="color:' + b2.colorSoft + '">' + b2.name + '</em>. Most people carry more than one. They tend to work together.</p>':''}
+        <div style="margin-bottom:20px">
+          ${breakdown.map(b=>`<div style="display:flex;align-items:center;gap:9px;margin-bottom:6px">
+            <span style="font-size:.72rem;color:var(--muted);opacity:.46;min-width:80px">${b.sigil} ${b.name}</span>
+            <div style="flex:1;height:3px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden">
+              <div style="height:100%;border-radius:999px;width:${b.pct}%;background:${b.color};opacity:${b.key===winner?1:.4};transition:width 1.3s cubic-bezier(.2,.8,.2,1)"></div>
+            </div>
+            <span style="font-size:.78rem;color:rgba(188,197,239,.35);min-width:34px;text-align:right">${b.pct}%</span>
+          </div>`).join('')}
+        </div>
+        <div style="padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.06);
+             background:rgba(255,255,255,.025);margin-bottom:20px;text-align:left">
+          <p style="font-size:.78rem;color:rgba(180,190,220,.75);line-height:1.72;
+             margin:0 0 10px">${a.research}</p>
+          <a href="${a.link}" target="_blank" rel="noopener"
+             style="font-size:.75rem;color:rgba(154,164,204,.55);text-decoration:underline">
+            ${a.linkLabel} →
+          </a>
+        </div>
+        <div style="padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,.05);
+             background:rgba(255,255,255,.02);margin-bottom:24px">
+          <p style="font-size:.76rem;color:rgba(180,190,220,.55);margin:0 0 8px;font-weight:600;
+             text-transform:uppercase;letter-spacing:.1em">Practices</p>
+          ${a.practices.map(p=>'<p style="font-size:.84rem;color:var(--muted);margin:0 0 8px;line-height:1.6;padding-left:12px;border-left:2px solid rgba(154,164,204,.25)">' + p + '</p>').join('')}
+        </div>
+        <div style="font-size:.72rem;color:rgba(154,164,204,.4);line-height:1.7;
+             padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.04);
+             margin-bottom:24px;text-align:center">
+          This reflection draws on Internal Family Systems, schema therapy, and vulnerability research.
+          Not a diagnostic tool — a mirror, for those who have been here long enough to look.
+        </div>
+        <div class="ptc-nav" style="justify-content:center">
+          <button class="btn btn-ghost" id="ptcRetakeBtn">Cross Again</button>
+          <button class="btn btn-ghost" id="ptcHubBtn">Return to Realm</button>
+        </div>
+      </div>`;
+    ptcSlideIn(wrap.querySelector('.ptc-result'));
+    try {
+      window.archive?.inc?.('trialsCompleted');
+      window.progression?.increment?.();
+      trackCompletion('pattern-you-carry');
+      // Update the depth gate in case this pushed them past 13
+      if (typeof updatePtcGate === 'function') updatePtcGate();
+    } catch(e) {}
+    document.getElementById('ptcRetakeBtn')?.addEventListener('click', () => {
+      ptcPhase='intro'; ptcChamberIndex=0; ptcSelected=null;
+      ptcScores={protector:0,pleaser:0,achiever:0,witness:0};
+      ptcChambers=ptcSelectChambers(); ptcRenderIntro();
+    });
+    document.getElementById('ptcHubBtn')?.addEventListener('click', () => {
+      if (typeof backToHub==='function') backToHub(()=>{});
+    });
+  }
+
+  // ── ENTRY POINT ─────────────────────────────────────────────────────────
+  function begin() {
+    ptcPhase='intro'; ptcChamberIndex=0; ptcSelected=null;
+    ptcScores={protector:0,pleaser:0,achiever:0,witness:0};
+    ptcChambers=ptcSelectChambers(); ptcRenderIntro();
+  }
+
+  return { begin };
+})();
+
+</script>
 
 <!-- ═══ THE SHAPE OF YOUR DOUBT ═══ -->
 <script>
