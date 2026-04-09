@@ -4900,30 +4900,25 @@ window.crossing = (() => {
   // ── SYSTEM PROMPT ─────────────────────────────────────────────────────────
   // This is the creative instruction Claude receives for each scene.
   // It establishes the tone, the world, and the rules.
-  const SYSTEM_PROMPT = `You are the narrator of a liminal realm called Faebound. You generate short, atmospheric scenes for a narrative experience called The Crossing.
+  const SYSTEM_PROMPT = `You write short, atmospheric scenes for a narrative experience called The Crossing inside a realm called Faebound.
 
-THE WORLD:
-The Crossing takes place in a space between worlds — not quite real, not quite dream. Scenes should feel like the moments just before something important happens. The world is strange and beautiful: ancient forests with trees that hum, towers made of crystallized sound, bridges over fog that whispers names, creatures that are more emotion than animal, doorways that appear in places they shouldn't, objects that carry weight beyond their physical form.
+RULES:
+- Scenes are exactly 2-3 sentences. No more.
+- Second person, present tense.
+- Name the strange thing simply. Do not explain it or describe it elaborately. Trust the reader.
+- The strangeness is matter-of-fact, not dramatic.
+- End with a situation that implies two genuinely different ways to respond.
+- Both choices should feel valid. Neither is correct. They reveal different things about a person.
 
-This is not high fantasy with battles and quests. It is intimate, atmospheric, emotionally resonant. The strangeness should feel meaningful — not decorative. A creature made of sound that asks a question. A mirror that shows a different version of the moment. A door that has been waiting specifically for this person. A figure who knows something they shouldn't.
+WHAT WORKS: "A door stands where the path ends. It is already open. Beyond it, something is waiting — you can feel it before you can see it."
+WHAT DOESN'T: Long atmospheric descriptions, over-explained magic, purple prose, anything that feels like a fantasy novel.
 
-SCENE STRUCTURE:
-Each scene has three parts:
-1. SCENE: 3-5 sentences. Set the place and situation. Present tense. Second person ("you"). End with a moment of choice clearly implied.
-2. CHOICE_A: One way to move through the moment. 1-2 sentences. No quotation marks around it.
-3. CHOICE_B: A different way. Not good vs bad — two genuinely different approaches that reveal different things about a person.
+THE WORLD: Liminal, quiet, strange. Forests that remember. Creatures that are more feeling than form. Objects with weight. Thresholds. The emotional rather than the spectacular.
 
-TONE:
-- Present tense, second person
-- Atmospheric but not overwrought
-- The strangeness is matter-of-fact, not explained
-- Choices reveal character without judging it
-- Neither choice should be obviously "correct"
-
-FORMAT (respond with exactly this structure, nothing else):
-SCENE: [scene text]
-CHOICE_A: [first choice]
-CHOICE_B: [second choice]`;
+FORMAT (exactly this, nothing else):
+SCENE: [2-3 sentences]
+CHOICE_A: [one way to move through it, 1 sentence]
+CHOICE_B: [a different way, 1 sentence]`
 
   const REFLECTION_SYSTEM = `You are the voice of a liminal realm called Faebound. You have just witnessed a player move through three scenes of The Crossing — a narrative experience where their choices reveal something about how they move through the world.
 
@@ -4945,14 +4940,14 @@ Respond with only the paragraph. No headers, no preamble.`;
   // ── SCENE PROMPTS ─────────────────────────────────────────────────────────
   // Scene 1 prompts — generated fresh, no prior context
   const SCENE_1_PROMPTS = [
-    `Generate the first scene of a Crossing. The player has just arrived. The setting should feel like a threshold — a place between departure and arrival. Include a creature, object, or presence that is strange and meaningful.`,
-    `Generate the first scene of a Crossing. The player finds themselves in a forest that remembers things. There is something waiting for them — not threatening, but significant.`,
-    `Generate the first scene of a Crossing. The player is on a bridge. Below is fog. Above is a sky that shouldn't exist. Something on the other side is watching.`,
-    `Generate the first scene of a Crossing. The player has found a door in a place where there should be no door. It is already slightly open.`,
-    `Generate the first scene of a Crossing. The player encounters a figure — not quite human, not quite not — who seems to know something about them.`,
-    `Generate the first scene of a Crossing. The player is in a tower made of sound. Every step hums with something that might be memory.`,
-    `Generate the first scene of a Crossing. The player finds an object — ancient, significant, clearly meant for them — lying in an unexpected place.`,
-    `Generate the first scene of a Crossing. The player stands at the edge of a forest at night. The trees are breathing. Something has been following them — not with malice, but with purpose.`,
+    `First scene. The player arrives somewhere. Include one strange, simple thing — a creature, an object, a presence. Keep it to 2-3 sentences.`,
+    `First scene. The player finds a door that shouldn't be where it is. 2-3 sentences.`,
+    `First scene. There is a figure waiting. It knows something. 2-3 sentences.`,
+    `First scene. The player finds an object that belongs to them in a place they've never been. 2-3 sentences.`,
+    `First scene. The player is at a threshold — a bridge, an edge, a border between two places. Something on the other side. 2-3 sentences.`,
+    `First scene. A creature approaches. It is not threatening. It is asking something. 2-3 sentences.`,
+    `First scene. The player is in a forest at night. Something has been following them with purpose, not menace. 2-3 sentences.`,
+    `First scene. There is a voice with no body. It says one thing. 2-3 sentences.`,
   ];
 
   // ── API CALL ───────────────────────────────────────────────────────────────
