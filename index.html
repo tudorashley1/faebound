@@ -1608,8 +1608,12 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
 
     <!-- Past entries -->
     <div class="arc-entries-section" id="arcEntriesSection">
-      <div class="arc-entries-label">Previous entries</div>
+      <div style="display:flex;gap:0;margin-bottom:14px;border-bottom:1px solid rgba(255,255,255,.06)">
+        <button id="arcTabEntries" style="padding:8px 16px;font-size:.73rem;text-transform:uppercase;letter-spacing:.14em;background:none;border:none;border-bottom:2px solid var(--gold);color:var(--gold);cursor:pointer">Entries</button>
+        <button id="arcTabCrossings" style="padding:8px 16px;font-size:.73rem;text-transform:uppercase;letter-spacing:.14em;background:none;border:none;border-bottom:2px solid transparent;color:rgba(187,168,255,.4);cursor:pointer">Crossings</button>
+      </div>
       <div id="arcEntriesList"></div>
+      <div id="arcCrossingsList" style="display:none"></div>
     </div>
 
     <!-- Disclaimer -->
@@ -5273,6 +5277,32 @@ window.crossing = (() => {
     unnamed:     'Can you describe what it feels like — not what it is, but what it feels like?',
   };
 
+  // ── STATE PERSISTENCE ───────────────────────────────────────────────────
+  function saveCrossingState(r1done) {
+    try {
+      localStorage.setItem('faeboundCrossingState', JSON.stringify({
+        territory: territory, history: history,
+        closingQuestion: closingQuestion, round1Complete: r1done,
+        savedAt: new Date().toISOString(),
+      }));
+    } catch(e) {}
+  }
+  function loadCrossingState() {
+    try { return JSON.parse(localStorage.getItem('faeboundCrossingState') || 'null'); } catch(e) { return null; }
+  }
+  function clearCrossingState() {
+    try { localStorage.removeItem('faeboundCrossingState'); } catch(e) {}
+  }
+  function saveCrossingTranscript(reflText) {
+    try {
+      const arr = JSON.parse(localStorage.getItem('faeboundCrossingTranscripts') || '[]');
+      arr.unshift({ id: Date.now(), date: new Date().toISOString(),
+        territory: territory, history: history.slice(),
+        round2History: (round2History||[]).slice(), reflection: reflText });
+      localStorage.setItem('faeboundCrossingTranscripts', JSON.stringify(arr.slice(0,20)));
+    } catch(e) {}
+  }
+
   // ── API ───────────────────────────────────────────────────────────────
   async function callClaude(messages, system) {
     const response = await fetch('/.netlify/functions/claude', {
@@ -5302,6 +5332,7 @@ window.crossing = (() => {
 
   // ── RENDER TERRITORY SELECTOR ─────────────────────────────────────────
   function renderIntro() {
+    const resumeState = loadCrossingState();
     const lastReflection = (function() {
       try { return localStorage.getItem('faeboundLastCrossingReflection') || ''; } catch(e) { return ''; }
     })();
@@ -5317,6 +5348,7 @@ window.crossing = (() => {
         + '<div style="font-size:.6rem;text-transform:uppercase;letter-spacing:.18em;color:rgba(187,168,255,.35);margin-bottom:6px">Last crossing</div>'
         + '<div style="font-size:.86rem;font-style:italic;color:rgba(187,168,255,.55)">' + lastReflection + '</div></div>' : '')
       + '</div>'
+      + (resumeState && resumeState.round1Complete ? '<div id="crossingResumeCard" style="max-width:520px;margin:0 auto 16px;padding:13px 16px;border-radius:13px;border:1px solid rgba(187,168,255,.22);background:rgba(187,168,255,.07);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap"><div><p style="font-size:.7rem;text-transform:uppercase;letter-spacing:.14em;color:rgba(187,168,255,.45);margin-bottom:3px">Unfinished crossing</p><p style="font-size:.86rem;color:var(--text)">You were carrying <em style="color:var(--accent)">' + resumeState.territory + '</em>. Round 2 is waiting.</p></div><button class="btn btn-sm" id="crossingResumeBtn" style="background:rgba(187,168,255,.14);border-color:rgba(187,168,255,.45);color:var(--accent);white-space:nowrap">Continue →</button></div>' : '')
       + '<p style="font-size:.75rem;text-transform:uppercase;letter-spacing:.2em;color:rgba(187,168,255,.35);text-align:center;margin-bottom:16px">What are you carrying?</p>'
       + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:520px;margin:0 auto 24px" id="territoryGrid"></div>'
       + '<div id="customInput" style="display:none;max-width:520px;margin:0 auto 20px">'
@@ -5351,6 +5383,12 @@ window.crossing = (() => {
       grid.appendChild(btn);
     });
 
+    document.getElementById('crossingResumeBtn')?.addEventListener('click', function() {
+      const rs = loadCrossingState();
+      if (!rs) return;
+      territory = rs.territory; history = rs.history; closingQuestion = rs.closingQuestion;
+      beginRound2();
+    });
     document.getElementById('customBeginBtn')?.addEventListener('click', function() {
       const val = (document.getElementById('customTerritoryText')?.value || '').trim();
       if (val) beginCrossing(val, 'unnamed');
@@ -5360,7 +5398,7 @@ window.crossing = (() => {
   // ── RENDER EXCHANGE ───────────────────────────────────────────────────
   function renderQuestion(question) {
     if (stopped) return;
-
+    clearCrossingState();
     // Progress pips
     const pips = Array.from({length: TOTAL_EXCHANGES}, function(_, i) {
       return '<div class="crossing-pip ' + (i < exchangeCount ? 'done' : i === exchangeCount ? 'active' : '') + '"></div>';
@@ -5454,6 +5492,8 @@ window.crossing = (() => {
   function renderReflection(text) {
     if (stopped) return;
     try { localStorage.setItem('faeboundLastCrossingReflection', text); } catch(e) {}
+    saveCrossingState(true);
+    saveCrossingTranscript(text);
 
     wrap.innerHTML = '<div style="animation:rise .7s ease forwards">'
       + '<div style="font-size:2rem;text-align:center;margin-bottom:18px;animation:breathe 5s ease-in-out infinite;color:var(--accent)">⟡</div>'
@@ -5461,6 +5501,7 @@ window.crossing = (() => {
       + '<div class="crossing-reflection" id="crossingReflText"></div>'
       + '<div style="display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:16px">'
       + '<button class="btn" id="crossingContinueBtn" style="background:rgba(187,168,255,.14);border-color:rgba(187,168,255,.45);color:var(--accent)">Continue the Crossing →</button>'
+      + '<button class="btn btn-ghost btn-sm" id="crossingBringArchiveBtn" style="color:rgba(238,216,122,.7);border-color:rgba(238,216,122,.25)">Bring to Archive →</button>'
       + '<button class="btn btn-ghost" id="crossingAgainBtn">Cross Again</button>'
       + '<button class="btn btn-ghost" id="crossingHubBtn">Return to Realm</button>'
       + '</div>'
@@ -5493,7 +5534,9 @@ window.crossing = (() => {
     } catch(e) {}
 
     document.getElementById('crossingAgainBtn')?.addEventListener('click', function() {
-      territory = ''; history = []; exchangeCount = 0;
+      clearCrossingState();
+      territory = ''; history = []; exchangeCount = 0; round = 1;
+      round2History = []; closingQuestion = '';
       renderIntro();
     });
     document.getElementById('crossingHubBtn')?.addEventListener('click', function() {
@@ -5501,6 +5544,13 @@ window.crossing = (() => {
     });
     document.getElementById('crossingContinueBtn')?.addEventListener('click', function() {
       beginRound2();
+    });
+    document.getElementById('crossingBringArchiveBtn')?.addEventListener('click', function() {
+      stop();
+      const refl = document.getElementById('crossingReflText')?.textContent || '';
+      window.ambient.setIntensity('echo');
+      window.arc?.openWithPrompt('The Crossing reflected: ' + refl);
+      showOnly('archive');
     });
   }
 
@@ -5571,6 +5621,7 @@ window.crossing = (() => {
       + '<div class="crossing-reflection" id="crossingClosingText" style="border-color:rgba(187,168,255,.1);background:rgba(187,168,255,.03)"></div>'
       + '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px">'
       + '<button class="btn" id="crossingAgainFinalBtn" style="background:rgba(187,168,255,.1);border-color:rgba(187,168,255,.35);color:var(--accent)">Cross Again</button>'
+      + '<button class="btn btn-ghost btn-sm" id="crossingBringArchive2Btn" style="color:rgba(238,216,122,.7);border-color:rgba(238,216,122,.25)">Bring to Archive →</button>'
       + '<button class="btn btn-ghost" id="crossingHubFinalBtn">Return to Realm</button>'
       + '</div></div>';
 
@@ -5590,9 +5641,17 @@ window.crossing = (() => {
     }
 
     document.getElementById('crossingAgainFinalBtn')?.addEventListener('click', function() {
+      clearCrossingState();
       territory = ''; history = []; exchangeCount = 0; round = 1;
       round2History = []; closingQuestion = '';
       renderIntro();
+    });
+    document.getElementById('crossingBringArchive2Btn')?.addEventListener('click', function() {
+      stop();
+      const ct = document.getElementById('crossingClosingText')?.textContent || '';
+      window.ambient.setIntensity('echo');
+      window.arc?.openWithPrompt('The Crossing reflected: ' + ct);
+      showOnly('archive');
     });
     document.getElementById('crossingHubFinalBtn')?.addEventListener('click', function() {
       if (typeof backToHub === 'function') backToHub(function(){});
@@ -8685,6 +8744,58 @@ window.tide = (() => {
 
 window.arc = (() => {
 
+  // ── CROSSING TRANSCRIPTS ─────────────────────────────────────────────
+  function loadTranscripts() {
+    try { return JSON.parse(localStorage.getItem('faeboundCrossingTranscripts') || '[]'); } catch(e) { return []; }
+  }
+
+  function renderCrossings() {
+    const list = document.getElementById('arcCrossingsList');
+    if (!list) return;
+    const transcripts = loadTranscripts();
+    if (!transcripts.length) {
+      list.innerHTML = '<div class="arc-empty-state">No Crossings yet.<br>Complete a Crossing to see it recorded here.</div>';
+      return;
+    }
+    list.innerHTML = transcripts.map(function(t) {
+      const d = new Date(t.date).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+      const r1 = (t.history||[]).filter(function(m){return m.role==='user';}).length;
+      const r2 = (t.round2History||[]).filter(function(m){return m.role==='user';}).length;
+      const tot = r1 + r2;
+      return '<div class="arc-crossing-item">'
+        + '<div class="arc-entry-date">' + d + '</div>'
+        + '<div style="font-size:.77rem;color:rgba(187,168,255,.5);margin-bottom:5px;text-transform:capitalize">'
+        + 'Carried: ' + (t.territory||'unnamed') + ' &nbsp;·&nbsp; ' + tot + ' exchange' + (tot!==1?'s':'') + '</div>'
+        + '<div class="arc-entry-preview" style="font-style:italic">' + (t.reflection||'').substring(0,130) + '…</div>'
+        + '<button class="btn btn-ghost btn-sm" style="margin-top:8px;font-size:.72rem" onclick="arcExpandCrossing(' + t.id + ')">Read full transcript</button>'
+        + '</div>';
+    }).join('');
+  }
+
+  window.arcExpandCrossing = function(id) {
+    const t = loadTranscripts().find(function(t){return t.id===id;});
+    const list = document.getElementById('arcCrossingsList');
+    if (!t || !list) return;
+    const d = new Date(t.date).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+    const all = (t.history||[]).concat(t.round2History||[]);
+    let exHtml = '';
+    for (let i=0; i<all.length; i+=2) {
+      const q=all[i], a=all[i+1];
+      if (!q) continue;
+      exHtml += '<div style="margin-bottom:14px">'
+        + '<p style="font-size:.8rem;color:rgba(187,168,255,.55);font-style:italic;margin-bottom:4px">' + (q.content||'') + '</p>'
+        + (a?'<p style="font-size:.88rem;color:var(--text);line-height:1.65;padding-left:12px;border-left:2px solid rgba(187,168,255,.2)">' + (a.content||'').replace(/</g,'&lt;') + '</p>':'')
+        + '</div>';
+    }
+    list.innerHTML = '<button class="btn btn-ghost btn-sm" onclick="arcRenderCrossings()" style="margin-bottom:16px;font-size:.75rem">← Back to Crossings</button>'
+      + '<div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.28);margin-bottom:4px">' + d + ' · ' + (t.territory||'unnamed') + '</div>'
+      + '<div style="margin-bottom:16px">' + exHtml + '</div>'
+      + '<div style="padding:14px;border-radius:12px;border:1px solid rgba(187,168,255,.12);background:rgba(187,168,255,.04);font-style:italic;font-size:.88rem;color:var(--muted);line-height:1.7">'
+      + '<div style="font-size:.64rem;text-transform:uppercase;letter-spacing:.14em;color:rgba(187,168,255,.4);margin-bottom:5px">The Veil reflected</div>'
+      + (t.reflection||'') + '</div>';
+  };
+  window.arcRenderCrossings = function() { renderCrossings(); };
+
   // ── PROMPTS ──────────────────────────────────────────────────────
   // Rotating pool of prompts, calibrated by archetype when available.
   // These are always available even without AI — the prompt generation
@@ -8771,6 +8882,26 @@ window.arc = (() => {
   }
 
   // ── RENDER ENTRIES ────────────────────────────────────────────────
+  function initTabs() {
+    const te = document.getElementById('arcTabEntries');
+    const tc = document.getElementById('arcTabCrossings');
+    const le = document.getElementById('arcEntriesList');
+    const lc = document.getElementById('arcCrossingsList');
+    if (!te || !tc) return;
+    te.addEventListener('click', function() {
+      le.style.display='block'; lc.style.display='none';
+      te.style.borderBottomColor='var(--gold)'; te.style.color='var(--gold)';
+      tc.style.borderBottomColor='transparent'; tc.style.color='rgba(187,168,255,.45)';
+      renderEntries();
+    });
+    tc.addEventListener('click', function() {
+      le.style.display='none'; lc.style.display='block';
+      te.style.borderBottomColor='transparent'; te.style.color='rgba(238,216,122,.4)';
+      tc.style.borderBottomColor='rgba(187,168,255,.6)'; tc.style.color='rgba(187,168,255,.8)';
+      renderCrossings();
+    });
+  }
+
   function renderEntries() {
     const list = document.getElementById('arcEntriesList');
     if (!list) return;
@@ -8914,6 +9045,7 @@ The player's entry follows. Respond as the Archivist.`;
   // ── ENTER THE ARCHIVE ─────────────────────────────────────────────
   function enter() {
     loadEntries();
+    setTimeout(initTabs, 60);
 
     // Reset UI state
     const textarea = document.getElementById('arcTextarea');
@@ -9075,7 +9207,15 @@ The player's entry follows. Respond as the Archivist.`;
     });
   }
 
-  return { enter };
+  return { enter, openWithPrompt: function(prompt) {
+    enter();
+    setTimeout(function() {
+      const promptEl = document.getElementById('arcPromptText');
+      const textarea = document.getElementById('arcTextarea');
+      if (promptEl) promptEl.textContent = prompt;
+      if (textarea) { textarea.placeholder = prompt; textarea.focus(); }
+    }, 150);
+  }};
 })();
 
 </script>
