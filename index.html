@@ -5348,7 +5348,11 @@ window.crossing = (() => {
         + '<div style="font-size:.6rem;text-transform:uppercase;letter-spacing:.18em;color:rgba(187,168,255,.35);margin-bottom:6px">Last crossing</div>'
         + '<div style="font-size:.86rem;font-style:italic;color:rgba(187,168,255,.55)">' + lastReflection + '</div></div>' : '')
       + '</div>'
-      + (resumeState && resumeState.round1Complete ? '<div id="crossingResumeCard" style="max-width:520px;margin:0 auto 16px;padding:13px 16px;border-radius:13px;border:1px solid rgba(187,168,255,.22);background:rgba(187,168,255,.07);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap"><div><p style="font-size:.7rem;text-transform:uppercase;letter-spacing:.14em;color:rgba(187,168,255,.45);margin-bottom:3px">Unfinished crossing</p><p style="font-size:.86rem;color:var(--text)">You were carrying <em style="color:var(--accent)">' + resumeState.territory + '</em>. Round 2 is waiting.</p></div><button class="btn btn-sm" id="crossingResumeBtn" style="background:rgba(187,168,255,.14);border-color:rgba(187,168,255,.45);color:var(--accent);white-space:nowrap">Continue →</button></div>' : '')
+      + (resumeState && resumeState.round1Complete
+        ? '<div id="crossingResumeCard" style="max-width:520px;margin:0 auto 16px;padding:13px 16px;border-radius:13px;border:1px solid rgba(187,168,255,.22);background:rgba(187,168,255,.07);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap"><div><p style="font-size:.7rem;text-transform:uppercase;letter-spacing:.14em;color:rgba(187,168,255,.45);margin-bottom:3px">Unfinished crossing</p><p style="font-size:.86rem;color:var(--text)">You were carrying <em style="color:var(--accent)">' + resumeState.territory + '</em>. Round 2 is waiting.</p></div><button class="btn btn-sm" id="crossingResumeBtn" style="background:rgba(187,168,255,.14);border-color:rgba(187,168,255,.45);color:var(--accent);white-space:nowrap">Continue →</button></div>'
+        : (!resumeState && lastReflection
+          ? '<div style="max-width:520px;margin:0 auto 16px;padding:13px 16px;border-radius:13px;border:1px solid rgba(187,168,255,.18);background:rgba(187,168,255,.05);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap"><div><p style="font-size:.7rem;text-transform:uppercase;letter-spacing:.14em;color:rgba(187,168,255,.4);margin-bottom:3px">Continue last crossing</p><p style="font-size:.84rem;color:var(--muted)">Your last reflection ended with a question. Continue from there.</p></div><button class="btn btn-sm" id="crossingResumeFromReflBtn" style="background:rgba(187,168,255,.1);border-color:rgba(187,168,255,.35);color:var(--accent);white-space:nowrap">Continue →</button></div>'
+          : ''))
       + '<p style="font-size:.75rem;text-transform:uppercase;letter-spacing:.2em;color:rgba(187,168,255,.35);text-align:center;margin-bottom:16px">What are you carrying?</p>'
       + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:520px;margin:0 auto 24px" id="territoryGrid"></div>'
       + '<div id="customInput" style="display:none;max-width:520px;margin:0 auto 20px">'
@@ -5388,6 +5392,9 @@ window.crossing = (() => {
       if (!rs) return;
       territory = rs.territory; history = rs.history; closingQuestion = rs.closingQuestion;
       beginRound2();
+    });
+    document.getElementById('crossingResumeFromReflBtn')?.addEventListener('click', function() {
+      beginRound2FromReflection(lastReflection);
     });
     document.getElementById('customBeginBtn')?.addEventListener('click', function() {
       const val = (document.getElementById('customTerritoryText')?.value || '').trim();
@@ -5827,6 +5834,40 @@ window.crossing = (() => {
       }
     }
   }
+  async function beginRound2FromReflection(reflectionText) {
+    // Called when we have a reflection but no full history (e.g. pre-save crossings)
+    round = 2;
+    round2History = [];
+    territory = territory || 'something unnamed';
+    history = [];
+    // Extract closing question from reflection
+    const sentences = reflectionText.split(/(?<=[.!?])\s+/);
+    const lastQ = sentences.filter(function(s) { return s.trim().endsWith('?'); }).pop();
+    closingQuestion = lastQ || sentences[sentences.length - 1] || reflectionText;
+    generating = true;
+    stopped = false;
+    renderVeil('The Veil reopens...');
+
+    const seedPrompt = 'The player previously completed a round of The Crossing.'
+      + ' The Veil reflected: "' + reflectionText + '"'
+      + ' The player has returned to continue. Begin round two with one opening question'
+      + ' that follows naturally from that reflection and goes deeper.';
+
+    try {
+      const q = await callClaude(
+        [{ role: 'user', content: seedPrompt }],
+        buildRound2System()
+      );
+      generating = false;
+      if (stopped) return;
+      round2History.push({ role: 'assistant', content: q });
+      renderRound2Question(q);
+    } catch(e) {
+      generating = false;
+      if (!stopped) renderError();
+    }
+  }
+
   // ── PUBLIC ────────────────────────────────────────────────────────────
   function enter() {
     stopped = false; generating = false;
