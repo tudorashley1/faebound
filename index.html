@@ -3572,6 +3572,9 @@ window.veilWords = (() => {
     return shuffled.slice(0, 5).map(w => ({
       word: w.word.toUpperCase(),
       resonance: w.resonance,
+      def: w.def || '',
+      sentence: w.sentence || '',
+      etym: w.etym || '',
       tiles: scramble(w.word.toUpperCase().split('')),
     }));
   }
