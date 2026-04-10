@@ -3662,11 +3662,7 @@ window.veilWords = (() => {
           '<div class="vw-answer-placeholder"></div>'
         ).join('')
       + '</div>'
-      + '<div style="display:flex;gap:8px;justify-content:center;margin-top:4px">'
-      + '<button class="btn btn-ghost btn-sm" id="vwClearBtn" style="opacity:.6">Clear</button>'
-      + '<button class="btn btn-ghost btn-sm" id="vwHubBtn3" style="opacity:.4">Return to Realm</button>'
-      + '</div>'
-      + '</div>';
+      + '<div id="vwHintArea" style="margin-top:10px;text-align:center">'      + '<button class="btn btn-ghost btn-sm" id="vwHintBtn"'      + ' style="font-size:.75rem;opacity:.6;border-color:rgba(160,200,255,.25);color:rgba(160,200,255,.7)">'      + 'Reveal hint</button>'      + '<div id="vwHintText" style="display:none;margin-top:8px;padding:10px 14px;'      + 'border-radius:10px;border:1px solid rgba(160,200,255,.12);'      + 'background:rgba(160,200,255,.04);font-size:.84rem;'      + 'color:rgba(160,200,255,.7);font-style:italic;line-height:1.6"></div>'      + '</div>'      + '<div style="display:flex;gap:8px;justify-content:center;margin-top:8px">'      + '<button class="btn btn-ghost btn-sm" id="vwClearBtn" style="opacity:.6">Clear</button>'      + '<button class="btn btn-ghost btn-sm" id="vwHubBtn3" style="opacity:.4">Return to Realm</button>'      + '</div>'      + '</div>';
 
     // Wire tile clicks
     document.querySelectorAll('.vw-tile').forEach(tile => {
