@@ -2874,30 +2874,7 @@ window.resonance = (() => {
       result: '',
     }[phase] || '';
 
-    wrap.innerHTML = '<div style="animation:rise .5s ease forwards;width:100%">'
-      + '<div class="res-eyebrow">Audio Memory Trial</div>'
-      + '<h2 class="res-title" style="margin-bottom:4px">The Resonance</h2>'
-      + '<div class="res-streak-row">'
-      + '<div><strong id="resStreak">' + streak + '</strong>Streak</div>'
-      + '<div><strong id="resBest" style="color:rgba(238,216,122,1)">' + bestStreak + '</strong>Best</div>'
-      + '</div>'
-      + '<p class="res-status' + (phase==='listening'?' listening':'') + '" id="resStatus">' + statusText + '</p>'
-      + (phase !== 'idle' ? '<div class="res-orbs" id="resOrbs" style="'      + (DIFF[difficulty].orbCount === 6        ? 'display:grid;grid-template-columns:repeat(3,82px);gap:14px;justify-content:center'        : 'display:flex;flex-wrap:wrap;gap:16px;justify-content:center')      + '">' + orbsHtml + '</div>' : '<div style="min-height:80px"></div>')
-      + '<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px">'
-      + (phase === 'idle' || phase === 'result'
-        ? '<button class="btn" id="resBeginBtn" style="background:rgba(94,221,168,.12);border-color:rgba(94,221,168,.35);color:rgba(94,221,168,1)">Begin</button>'
-        : '')
-      + (phase === 'listening'
-        ? '<button class="btn btn-ghost btn-sm" id="resReplayBtn" style="opacity:.5">Replay sequence</button>'
-        : '')
-      + '<button class="btn btn-ghost btn-sm" id="resHubBtn">Return to Realm</button>'
-      + '</div>'
-      + '<div class="res-diff-row">'
-      + Object.entries(DIFF).map(([k,v]) =>
-          '<button class="res-diff-btn' + (difficulty===k?' active':'') + '" data-res-diff="' + k + '">' + v.label + '</button>'
-        ).join('')
-      + '</div>'
-      + '</div>';
+        wrap.innerHTML = '<div style="animation:rise .5s ease forwards;width:100%">'      + '<div class="res-eyebrow">Audio Memory Trial</div>'      + '<h2 class="res-title" style="margin-bottom:6px">The Resonance</h2>'      + '<div class="res-streak-row" style="margin-bottom:6px">'      + '<div><strong id="resStreak">' + streak + '</strong>Streak</div>'      + '<div><strong id="resBest" style="color:rgba(238,216,122,1)">' + bestStreak + '</strong>Best</div>'      + '</div>'      + '<p class="res-status' + (phase==='listening'?' listening':'') + '" id="resStatus" style="margin-bottom:18px">' + statusText + '</p>'      + (phase !== 'idle'        ? '<div class="res-orbs" id="resOrbs" style="margin-bottom:28px;'          + (DIFF[difficulty].orbCount === 6            ? 'display:grid;grid-template-columns:repeat(3,88px);gap:18px;justify-content:center'            : 'display:flex;flex-wrap:wrap;gap:18px;justify-content:center')          + '">' + orbsHtml + '</div>'        : '<div style="min-height:60px;margin-bottom:18px"></div>')      + '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:24px">'      + (phase === 'idle' || phase === 'result'        ? '<button class="btn" id="resBeginBtn" style="background:rgba(94,221,168,.12);border-color:rgba(94,221,168,.35);color:rgba(94,221,168,1)">Begin</button>'        : '')      + (phase === 'listening'        ? '<button class="btn btn-ghost btn-sm" id="resReplayBtn" style="opacity:.5">Replay sequence</button>'        : '')      + '<button class="btn btn-ghost btn-sm" id="resHubBtn">Return to Realm</button>'      + '</div>'      + '<div class="res-diff-row">'      + Object.entries(DIFF).map(([k,v]) =>          '<button class="res-diff-btn' + (difficulty===k?' active':'') + '" data-res-diff="' + k + '">' + v.label + '</button>'        ).join('')      + '</div>'      + '</div>';
 
     // Wire orbs
     document.querySelectorAll('.res-orb').forEach(orb => {
@@ -3009,14 +2986,13 @@ window.resonance = (() => {
   function startRound() {
     if (stopped) return;
     buildRound();
+    phase = 'playing';
     render();
     if (window.ambient?.swell) window.ambient.swell(0.003);
-    setTimeout(() => {
-      playSequence(() => {
-        phase = 'listening';
-        render();
-      });
-    }, 400);
+    playSequence(() => {
+      phase = 'listening';
+      render();
+    });
   }
 
   // ── PUBLIC ─────────────────────────────────────────────────────────────────
