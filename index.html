@@ -3696,6 +3696,16 @@ window.veilWords = (() => {
     document.getElementById('vwHubBtn3')?.addEventListener('click', () => {
       if (typeof backToHub === 'function') { stop(); backToHub(()=>{}); }
     });
+
+    // Wire hint button
+    document.getElementById('vwHintBtn')?.addEventListener('click', () => {
+      const hintText = document.getElementById('vwHintText');
+      const hintBtn = document.getElementById('vwHintBtn');
+      if (!hintText || !hintBtn) return;
+      hintText.textContent = current.def || '';
+      hintText.style.display = 'block';
+      hintBtn.style.display = 'none';
+    });
   }
 
   function updateAnswerDisplay() {
