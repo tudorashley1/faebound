@@ -482,6 +482,54 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
 .portal-gated{cursor:default}
 .portal-gated.unlocked{cursor:pointer}
 
+/* ── THE RESONANCE ────────────────────────────────────────────── */
+#resonanceScreen{padding:0;align-items:stretch;position:relative;
+  background:radial-gradient(circle at 50% 35%,rgba(94,221,168,.07),transparent 55%),
+  linear-gradient(180deg,#040e0a,#061210)}
+.res-back{position:fixed;top:14px;right:14px;z-index:40;opacity:.5;transition:opacity .2s}
+.res-back:hover{opacity:1}
+.res-wrap{width:min(560px,100%);margin:0 auto;padding:40px 22px 72px;
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:20px}
+.res-eyebrow{font-size:.62rem;text-transform:uppercase;letter-spacing:.26em;
+  color:rgba(94,221,168,.4);text-align:center}
+.res-title{font-size:1.4rem;font-weight:900;color:rgba(94,221,168,1);text-align:center}
+.res-orbs{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;
+  min-height:100px;align-items:center;padding:10px 0}
+.res-orb{width:72px;height:72px;border-radius:50%;cursor:pointer;
+  border:2px solid rgba(94,221,168,.2);background:rgba(94,221,168,.06);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;font-weight:700;color:rgba(94,221,168,.3);
+  transition:all .15s ease;position:relative;font-family:'Cinzel',serif}
+.res-orb.playing{background:rgba(94,221,168,.35);border-color:rgba(94,221,168,.9);
+  color:rgba(94,221,168,1);box-shadow:0 0 24px rgba(94,221,168,.5);
+  transform:scale(1.12)}
+.res-orb.selected{background:rgba(94,221,168,.2);border-color:rgba(94,221,168,.6);
+  color:rgba(94,221,168,.9);transform:scale(1.06)}
+.res-orb.correct{background:rgba(94,221,168,.3);border-color:rgba(94,221,168,.8);
+  color:rgba(94,221,168,1)}
+.res-orb.wrong{background:rgba(255,85,119,.2);border-color:rgba(255,85,119,.6);
+  color:rgba(255,85,119,.9)}
+.res-orb:hover:not(.playing):not(:disabled){background:rgba(94,221,168,.12);
+  border-color:rgba(94,221,168,.4);color:rgba(94,221,168,.7);transform:scale(1.04)}
+.res-status{font-size:.88rem;color:var(--muted);text-align:center;
+  line-height:1.6;min-height:2.2em;font-style:italic}
+.res-status.listening{color:rgba(94,221,168,.7)}
+.res-status.correct{color:rgba(100,220,160,.8);font-style:normal;font-weight:600}
+.res-status.wrong{color:rgba(255,120,120,.7);font-style:normal}
+.res-streak-row{display:flex;gap:20px;font-size:.75rem;
+  color:rgba(94,221,168,.4);text-align:center;justify-content:center}
+.res-streak-row strong{display:block;font-size:1.1rem;color:rgba(94,221,168,1);font-weight:700}
+.res-diff-row{display:flex;gap:8px;justify-content:center}
+.res-diff-btn{padding:6px 14px;border-radius:999px;font-size:.72rem;
+  text-transform:uppercase;letter-spacing:.14em;cursor:pointer;
+  border:1px solid rgba(94,221,168,.18);background:transparent;
+  color:rgba(94,221,168,.4);transition:all .18s ease}
+.res-diff-btn.active{border-color:rgba(94,221,168,.45);
+  background:rgba(94,221,168,.1);color:rgba(94,221,168,1)}
+.portal-resonance:hover{border-color:rgba(94,221,168,.28);
+  box-shadow:0 22px 52px rgba(0,0,0,.4),0 0 44px rgba(94,221,168,.1)}
+
 /* ── VEIL WORDS ───────────────────────────────────────────────── */
 #veilWordsScreen{padding:0;align-items:stretch;position:relative;
   background:radial-gradient(circle at 50% 30%,rgba(160,200,255,.06),transparent 54%),
@@ -1451,6 +1499,19 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
         <button class="btn btn-sm portal-enter" style="background:rgba(187,168,255,.12);border-color:rgba(187,168,255,.35);color:var(--accent)" data-launch-btn="sigil-trace">Enter the Constellation</button>
       </article>
 
+      <article class="portal portal-resonance" data-launch="the-resonance"
+        style="border-color:rgba(94,221,168,.18)">
+        <div class="portal-glow" style="background:rgba(94,221,168,.7)"></div>
+        <div class="portal-icon" style="color:rgba(94,221,168,1);
+             filter:drop-shadow(0 0 10px rgba(94,221,168,.4))">◎</div>
+        <span class="portal-kicker" style="color:rgba(94,221,168,.55)">Audio Memory Trial</span>
+        <h3 class="portal-name" style="color:rgba(94,221,168,1)">The Resonance</h3>
+        <p class="portal-desc">A sequence of tones sounds in the dark. Listen. Then recreate it — note by note, in the order it was played. The realm speaks in sound; this is how you answer.</p>
+        <button class="btn btn-sm portal-enter"
+          style="background:rgba(94,221,168,.1);border-color:rgba(94,221,168,.3);
+          color:rgba(94,221,168,1)" data-launch-btn="the-resonance">Enter the Resonance</button>
+      </article>
+
       <article class="portal portal-veilwords" data-launch="veil-words"
         style="border-color:rgba(160,200,255,.18)">
         <div class="portal-glow" style="background:rgba(160,200,255,.7)"></div>
@@ -1554,6 +1615,18 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
 </section>
 
 
+
+
+<!-- THE RESONANCE SCREEN -->
+<section class="game-screen-wrap hidden" id="resonanceScreen"
+  style="padding:0;align-items:stretch">
+  <button class="btn btn-ghost btn-sm res-back" id="backFromResonanceBtn">
+    Return to Realm
+  </button>
+  <div class="res-wrap" id="resonanceWrap">
+    <!-- Injected by JS -->
+  </div>
+</section>
 
 
 <!-- VEIL WORDS SCREEN -->
@@ -2175,6 +2248,7 @@ const screens = {
   veilWithin: document.getElementById('veilWithinScreen'),
   threshold: document.getElementById('thresholdScreen'),
   pattern: document.getElementById('patternScreen'),
+  resonance: document.getElementById('resonanceScreen'),
   veilWords: document.getElementById('veilWordsScreen'),
   trials: document.getElementById('trialsScreen'),
   reflections: document.getElementById('reflectionsScreen'),
@@ -2264,6 +2338,11 @@ function launchGame(game){
   audio.ensure(); window.ambient.ensure();
   try{localStorage.setItem('faeboundLastGame',game);}catch(e){}
 
+  if(game==='the-resonance'){
+    window.ambient.setIntensity('echo');
+    window.resonance?.enter();
+    showOnly('resonance');
+  }
   if(game==='veil-words'){
     window.ambient.setIntensity('echo');
     window.veilWords?.enter();
@@ -2366,6 +2445,7 @@ document.getElementById('backFromTrialsBtn')?.addEventListener('click',()=>{ win
 document.getElementById('backFromReflectionsBtn')?.addEventListener('click',()=>{ window.ambient.setIntensity('hub'); showOnly('hub'); });
 document.getElementById('backFromCrossingBtn')?.addEventListener('click',()=>{ window.crossing?.stop(); backToHub(()=>{}); });
 document.getElementById('backFromSoydBtn')?.addEventListener('click',()=>backToHub(()=>{}));
+document.getElementById('backFromResonanceBtn')?.addEventListener('click',()=>{ window.resonance?.stop(); backToHub(()=>{}); });
 document.getElementById('backFromVeilWordsBtn')?.addEventListener('click',()=>{ window.veilWords?.stop(); backToHub(()=>{}); });
 document.getElementById('backFromSigilBtn')?.addEventListener('click',()=>{ window.sigilTrace?.stop(); backToHub(()=>{}); });
 document.getElementById('backFromWyhoBtn')?.addEventListener('click',()=>backToHub(()=>{}));
@@ -2438,7 +2518,7 @@ function updateRecentCrossing(){
   try{
     const last=localStorage.getItem('faeboundLastGame')||'';
     const result=JSON.parse(localStorage.getItem('faeboundLastVeilWithinResult')||'null');
-    const labels={'echo-drift':'Echo Drift','veil-within':'The Veil Within','threshold-between':'The Threshold Between','pattern-you-carry':'The Pattern You Carry','veil-words':'Veil Words','the-crossing':'The Crossing','shape-of-doubt':'The Shape of Your Doubt','sigil-trace':'Sigil Trace','way-you-hold':'The Way You Hold Others','the-tide':'The Tide','archive':'The Archive'};
+    const labels={'echo-drift':'Echo Drift','veil-within':'The Veil Within','threshold-between':'The Threshold Between','pattern-you-carry':'The Pattern You Carry','the-resonance':'The Resonance','veil-words':'Veil Words','the-crossing':'The Crossing','shape-of-doubt':'The Shape of Your Doubt','sigil-trace':'Sigil Trace','way-you-hold':'The Way You Hold Others','the-tide':'The Tide','archive':'The Archive'};
     const glyphs={'echo-drift':'◇','veil-within':'✶','archive':'📖'};
     if(last&&labels[last]){
       let txt=labels[last];
@@ -2665,6 +2745,272 @@ initStars();
 // No court system — realm identity is fixed
 loadSettings();
 updateRecentCrossing();
+</script>
+
+<!-- ═══ THE RESONANCE ═══ -->
+<script>
+
+window.resonance = (() => {
+  const wrap = document.getElementById('resonanceWrap');
+  if (!wrap) return { enter(){}, stop(){} };
+
+  // ── SCALE ─────────────────────────────────────────────────────────────────
+  // D Dorian: root 73.42Hz, steps [0,2,3,5,7,9,10,12,14,15,17,19]
+  // Each orb is assigned a scale degree. Higher orbs = higher pitch.
+  const ROOT = 73.42;
+  const STEPS = [0,2,3,5,7,9,10,12,14,15,17,19];
+
+  function stepToFreq(step) {
+    return ROOT * Math.pow(2, STEPS[step % STEPS.length] / 12)
+           * Math.pow(2, Math.floor(step / STEPS.length));
+  }
+
+  // ── DIFFICULTY ────────────────────────────────────────────────────────────
+  const DIFF = {
+    glimpse: { seqLen:3, orbCount:4, playMs:500, gapMs:180, label:'Glimpse · 3 notes' },
+    trace:   { seqLen:5, orbCount:5, playMs:420, gapMs:150, label:'Trace · 5 notes'   },
+    warden:  { seqLen:7, orbCount:6, playMs:340, gapMs:120, label:'Warden · 7 notes'  },
+  };
+
+  // ── STATE ─────────────────────────────────────────────────────────────────
+  let difficulty = 'glimpse';
+  let sequence = [];       // indices into orbs array
+  let playerSeq = [];      // player's tapped sequence
+  let orbFreqs = [];       // freq for each orb
+  let phase = 'idle';      // idle | playing | listening | result
+  let streak = 0;
+  let bestStreak = 0;
+  let stopped = false;
+  let playTimer = null;
+
+  // ── AUDIO ─────────────────────────────────────────────────────────────────
+  function playOrb(orbIdx, dur) {
+    try {
+      const freq = orbFreqs[orbIdx];
+      audio.tone(freq, dur / 1000, 'sine', .028, freq * 1.002);
+    } catch(e) {}
+  }
+
+  // ── SETUP ─────────────────────────────────────────────────────────────────
+  function buildRound() {
+    const cfg = DIFF[difficulty];
+    // Assign frequencies to orbs evenly across scale
+    orbFreqs = Array.from({length: cfg.orbCount}, (_, i) => {
+      const step = Math.round(i * (STEPS.length - 1) / (cfg.orbCount - 1));
+      return stepToFreq(step);
+    });
+    // Generate sequence
+    sequence = [];
+    for (let i = 0; i < cfg.seqLen; i++) {
+      let next;
+      do { next = Math.floor(Math.random() * cfg.orbCount); }
+      while (sequence.length > 0 && next === sequence[sequence.length - 1]);
+      sequence.push(next);
+    }
+    playerSeq = [];
+  }
+
+  // ── PLAY SEQUENCE ─────────────────────────────────────────────────────────
+  function playSequence(onDone) {
+    const cfg = DIFF[difficulty];
+    phase = 'playing';
+    let i = 0;
+
+    function playNext() {
+      if (stopped) return;
+      if (i >= sequence.length) {
+        setTimeout(() => { if (!stopped) onDone(); }, cfg.gapMs * 2);
+        return;
+      }
+      const orbIdx = sequence[i];
+      // Light up orb
+      const orb = document.querySelector('.res-orb[data-orb="' + orbIdx + '"]');
+      if (orb) {
+        orb.classList.add('playing');
+        setTimeout(() => orb.classList.remove('playing'), cfg.playMs - 40);
+      }
+      playOrb(orbIdx, cfg.playMs);
+      i++;
+      playTimer = setTimeout(playNext, cfg.playMs + cfg.gapMs);
+    }
+    playNext();
+  }
+
+  // ── RENDER ────────────────────────────────────────────────────────────────
+  function render() {
+    if (!wrap || stopped) return;
+    const cfg = DIFF[difficulty];
+
+    const orbsHtml = orbFreqs.map((_, i) => {
+      const note = ['D','E','F','G','A','B','C','D','E','F','G','A'][
+        Math.round(i * (STEPS.length - 1) / Math.max(orbFreqs.length - 1, 1)) % 12
+      ];
+      return '<button class="res-orb" data-orb="' + i + '" '
+        + (phase === 'playing' ? 'disabled' : '')
+        + '>' + note + '</button>';
+    }).join('');
+
+    const statusText = {
+      idle: 'Choose difficulty and press Begin to hear the sequence.',
+      playing: 'Listen carefully...',
+      listening: 'Now recreate the sequence — tap the orbs in order.',
+      result: '',
+    }[phase] || '';
+
+    wrap.innerHTML = '<div style="animation:rise .5s ease forwards;width:100%">'
+      + '<div class="res-eyebrow">Audio Memory Trial</div>'
+      + '<h2 class="res-title" style="margin-bottom:4px">The Resonance</h2>'
+      + '<div class="res-streak-row">'
+      + '<div><strong id="resStreak">' + streak + '</strong>Streak</div>'
+      + '<div><strong id="resBest" style="color:rgba(238,216,122,1)">' + bestStreak + '</strong>Best</div>'
+      + '</div>'
+      + '<p class="res-status' + (phase==='listening'?' listening':'') + '" id="resStatus">' + statusText + '</p>'
+      + '<div class="res-orbs" id="resOrbs">' + orbsHtml + '</div>'
+      + '<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">'
+      + (phase === 'idle' || phase === 'result'
+        ? '<button class="btn" id="resBeginBtn" style="background:rgba(94,221,168,.12);border-color:rgba(94,221,168,.35);color:rgba(94,221,168,1)">Begin</button>'
+        : '')
+      + (phase === 'listening'
+        ? '<button class="btn btn-ghost btn-sm" id="resReplayBtn" style="opacity:.5">Replay sequence</button>'
+        : '')
+      + '<button class="btn btn-ghost btn-sm" id="resHubBtn">Return to Realm</button>'
+      + '</div>'
+      + '<div class="res-diff-row">'
+      + Object.entries(DIFF).map(([k,v]) =>
+          '<button class="res-diff-btn' + (difficulty===k?' active':'') + '" data-res-diff="' + k + '">' + v.label + '</button>'
+        ).join('')
+      + '</div>'
+      + '</div>';
+
+    // Wire orbs
+    document.querySelectorAll('.res-orb').forEach(orb => {
+      orb.addEventListener('click', () => handleOrbTap(parseInt(orb.dataset.orb)));
+    });
+
+    document.getElementById('resBeginBtn')?.addEventListener('click', startRound);
+    document.getElementById('resHubBtn')?.addEventListener('click', () => {
+      if (typeof backToHub === 'function') { stop(); backToHub(()=>{}); }
+    });
+    document.getElementById('resReplayBtn')?.addEventListener('click', () => {
+      if (phase !== 'listening') return;
+      playerSeq = [];
+      phase = 'playing';
+      render();
+      setTimeout(() => playSequence(() => {
+        phase = 'listening';
+        render();
+      }), 300);
+    });
+
+    wrap.querySelectorAll('[data-res-diff]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (phase === 'playing') return;
+        difficulty = btn.dataset.resDiff;
+        phase = 'idle';
+        buildRound();
+        render();
+      });
+    });
+  }
+
+  // ── ORB TAP ────────────────────────────────────────────────────────────────
+  function handleOrbTap(orbIdx) {
+    if (phase !== 'listening' || stopped) return;
+
+    const orb = document.querySelector('.res-orb[data-orb="' + orbIdx + '"]');
+    if (orb) {
+      orb.classList.add('selected');
+      setTimeout(() => orb.classList.remove('selected'), 200);
+    }
+    playOrb(orbIdx, 300);
+    playerSeq.push(orbIdx);
+
+    const pos = playerSeq.length - 1;
+
+    if (playerSeq[pos] !== sequence[pos]) {
+      // Wrong
+      streak = 0;
+      phase = 'result';
+      if (orb) { orb.classList.add('wrong'); setTimeout(() => orb.classList.remove('wrong'), 500); }
+
+      // Flash correct orbs
+      sequence.forEach((idx, i) => {
+        const o = document.querySelector('.res-orb[data-orb="' + idx + '"]');
+        if (o) {
+          setTimeout(() => {
+            o.classList.add('correct');
+            setTimeout(() => o.classList.remove('correct'), 400);
+          }, i * 200);
+        }
+      });
+
+      const statusEl = document.getElementById('resStatus');
+      if (statusEl) {
+        statusEl.className = 'res-status wrong';
+        statusEl.textContent = 'The sequence breaks. The correct pattern is shown.';
+      }
+      try { audio.tone(220, .22, 'sine', .028); } catch(e) {}
+
+      setTimeout(() => { if (!stopped) { phase = 'result'; render(); } }, 1800);
+      return;
+    }
+
+    if (playerSeq.length === sequence.length) {
+      // Correct
+      streak++;
+      if (streak > bestStreak) bestStreak = streak;
+      phase = 'result';
+
+      const statusEl = document.getElementById('resStatus');
+      if (statusEl) {
+        statusEl.className = 'res-status correct';
+        statusEl.textContent = 'The Resonance holds. ' + (streak > 1 ? 'Streak: ' + streak + '.' : '');
+      }
+      try {
+        audio.tone(520, .1, 'sine', .022);
+        setTimeout(() => audio.tone(660, .1, 'sine', .018), 160);
+        setTimeout(() => audio.tone(780, .14, 'sine', .014), 340);
+      } catch(e) {}
+      if (window.ambient?.swell) window.ambient.swell(0.004);
+      if (window.progression?.increment) window.progression.increment();
+      if (window.archive?.inc) window.archive.inc('trialsCompleted');
+      trackCompletion('the-resonance');
+
+      setTimeout(() => { if (!stopped) render(); }, 1600);
+    }
+  }
+
+  // ── START ROUND ────────────────────────────────────────────────────────────
+  function startRound() {
+    if (stopped) return;
+    buildRound();
+    render();
+    if (window.ambient?.swell) window.ambient.swell(0.003);
+    setTimeout(() => {
+      playSequence(() => {
+        phase = 'listening';
+        render();
+      });
+    }, 400);
+  }
+
+  // ── PUBLIC ─────────────────────────────────────────────────────────────────
+  function enter() {
+    stopped = false; streak = 0; bestStreak = 0;
+    difficulty = 'glimpse'; phase = 'idle';
+    sequence = []; playerSeq = []; orbFreqs = [];
+    buildRound();
+    render();
+  }
+
+  function stop() {
+    stopped = true;
+    if (playTimer) { clearTimeout(playTimer); playTimer = null; }
+  }
+
+  return { enter, stop };
+})();
+
 </script>
 
 <!-- ═══ VEIL WORDS ═══ -->
@@ -3807,8 +4153,8 @@ window.veilWords = (() => {
       + '<div style="padding:12px 16px;border-radius:12px;'
       + 'border:1px solid rgba(255,255,255,.05);background:rgba(255,255,255,.02);margin-bottom:18px">'
       + '<p style="font-size:.65rem;text-transform:uppercase;letter-spacing:.16em;'
-      + 'color:rgba(255,255,255,.2);margin-bottom:4px">Origin</p>'
-      + '<p style="font-size:.8rem;color:rgba(255,255,255,.3);line-height:1.6">' + word.etym + '</p>'
+      + 'color:rgba(255,255,255,.58);margin-bottom:4px">Origin</p>'
+      + '<p style="font-size:.8rem;color:rgba(200,215,255,.88);line-height:1.6">' + word.etym + '</p>'
       + '</div>'
 
       // Next button
