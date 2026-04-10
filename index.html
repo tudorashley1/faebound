@@ -2719,14 +2719,13 @@ window.veilWords = (() => {
   // ── WORD GENERATION ────────────────────────────────────────────────────
   const GEN_SYSTEM = [
     'You generate word lists for a game called Veil Words inside a realm called Faebound.',
-    'The realm is liminal, atmospheric, emotionally resonant.',
-    'Words should come from the vocabulary of inner experience, transitions, and human complexity.',
-    'For each word, also provide one short resonance — a single poetic line about what the word means or evokes.',
-    'The resonance is not a dictionary definition. It is more like: "The reaching that does not stop."',
+    'Words come from the vocabulary of inner experience: grief, longing, resilience, threshold, belonging, etc.',
+    'For each word provide one resonance — a single poetic line (not a definition). Example: "The reaching that does not stop."',
     '',
-    'Respond with ONLY a JSON array, no markdown, no backticks, no preamble.',
-    'Format: [{"word":"GRIEF","resonance":"What remains after love has nowhere left to go."},...]',
-    'All words must be uppercase single words, no spaces or hyphens.',
+    'CRITICAL: Respond with ONLY a raw JSON array. No markdown. No backticks. No explanation. No preamble. Nothing before or after the array.',
+    'Start your response with [ and end with ].',
+    'Format exactly: [{"word":"GRIEF","resonance":"What remains after love has nowhere left to go."}]',
+    'Words must be single uppercase words with no spaces or hyphens.',
   ].join('\n');
 
   async function generateWords() {
@@ -2737,6 +2736,8 @@ window.veilWords = (() => {
       + ' Include word and resonance for each.'
       + ' Return only the JSON array.';
     try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 15000);
       const resp = await fetch('/.netlify/functions/claude', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -2745,15 +2746,22 @@ window.veilWords = (() => {
           messages: [{ role: 'user', content: prompt }],
           max_tokens: 400,
         }),
+        signal: controller.signal,
       });
+      clearTimeout(timeout);
       const data = await resp.json();
-      const text = (data.response || '').trim().replace(/```json|```/g, '').trim();
-      const parsed = JSON.parse(text);
-      return parsed.map((item, i) => ({
+      const raw = (data.response || '').trim();
+      // Extract JSON array even if Claude added prose around it
+      const arrayMatch = raw.match(/\[\s*\{[\s\S]*\}\s*\]/);
+      if (!arrayMatch) throw new Error('No JSON array found in response');
+      const parsed = JSON.parse(arrayMatch[0]);
+      const result = parsed.map((item) => ({
         word: (item.word || '').toUpperCase().replace(/[^A-Z]/g, ''),
         resonance: item.resonance || '',
         tiles: scramble((item.word || '').toUpperCase().replace(/[^A-Z]/g, '').split('')),
-      })).filter(w => w.word.length >= cfg.minLen);
+      })).filter(w => w.word.length >= cfg.minLen && w.word.length <= cfg.maxLen + 2);
+      if (result.length < 3) throw new Error('Not enough valid words');
+      return result;
     } catch(e) {
       // Fallback word lists if API fails
       const fallbacks = {
@@ -3054,7 +3062,15 @@ window.veilWords = (() => {
 
     words = await generateWords();
     if (stopped) return;
-    if (!words.length) { renderIdle(); return; }
+    if (!words.length) {
+      // Show a brief error then go to idle
+      wrap.innerHTML = '<div style="text-align:center;padding:40px;animation:rise .4s ease forwards">'
+        + '<p style="color:rgba(255,160,100,.5);font-style:italic;margin-bottom:16px">The Veil could not reach the words. Using the realm vocabulary.</p>'
+        + '<button class="btn btn-ghost btn-sm" id="vwRetryBtn">Try Again</button>'
+        + '</div>';
+      document.getElementById('vwRetryBtn')?.addEventListener('click', startSession);
+      return;
+    }
 
     phase = 'playing';
     renderWord();
