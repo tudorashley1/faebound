@@ -482,6 +482,75 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
 .portal-gated{cursor:default}
 .portal-gated.unlocked{cursor:pointer}
 
+/* ── VEIL WORDS ───────────────────────────────────────────────── */
+#veilWordsScreen{padding:0;align-items:stretch;position:relative;
+  background:radial-gradient(circle at 50% 30%,rgba(160,200,255,.06),transparent 54%),
+  linear-gradient(180deg,#050810,#080c18)}
+.vw-back{position:fixed;top:14px;right:14px;z-index:40;opacity:.5;transition:opacity .2s}
+.vw-back:hover{opacity:1}
+.vw-wrap{width:min(560px,100%);margin:0 auto;padding:40px 22px 72px;
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:20px}
+.vw-eyebrow{font-size:.62rem;text-transform:uppercase;letter-spacing:.26em;
+  color:rgba(160,200,255,.4);text-align:center}
+.vw-title{font-size:1.4rem;font-weight:900;color:rgba(160,200,255,1);text-align:center}
+.vw-progress{display:flex;gap:8px;justify-content:center}
+.vw-pip{width:8px;height:8px;border-radius:50%;
+  background:rgba(160,200,255,.15);border:1px solid rgba(160,200,255,.1);
+  transition:all .3s ease}
+.vw-pip.done{background:rgba(160,200,255,.5);border-color:rgba(160,200,255,.4)}
+.vw-pip.active{background:rgba(160,200,255,.9);
+  box-shadow:0 0 8px rgba(160,200,255,.5);border-color:rgba(160,200,255,.6)}
+.vw-score-row{display:flex;gap:20px;font-size:.75rem;
+  color:rgba(160,200,255,.4);text-align:center}
+.vw-score-row strong{display:block;font-size:1.1rem;color:rgba(160,200,255,1);font-weight:700}
+.vw-tiles{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;
+  min-height:60px;padding:8px 0}
+.vw-tile{width:52px;height:52px;border-radius:12px;
+  font-family:'Cinzel',serif;font-size:1.3rem;font-weight:700;
+  border:1px solid rgba(160,200,255,.25);background:rgba(160,200,255,.08);
+  color:rgba(160,200,255,.9);cursor:pointer;
+  transition:all .15s ease;display:flex;align-items:center;justify-content:center}
+.vw-tile:hover:not(.used){border-color:rgba(160,200,255,.5);
+  background:rgba(160,200,255,.16);transform:translateY(-3px)}
+.vw-tile.used{opacity:.2;cursor:default;transform:none}
+.vw-tile.selected{border-color:rgba(160,200,255,.7);
+  background:rgba(160,200,255,.22);transform:translateY(-3px)}
+.vw-answer{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;
+  min-height:62px;padding:10px 16px;border-radius:16px;
+  border:1px solid rgba(160,200,255,.12);background:rgba(160,200,255,.03);
+  width:100%}
+.vw-answer-tile{width:52px;height:52px;border-radius:12px;
+  font-family:'Cinzel',serif;font-size:1.3rem;font-weight:700;
+  border:1px solid rgba(160,200,255,.3);background:rgba(160,200,255,.1);
+  color:rgba(160,200,255,1);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s ease}
+.vw-answer-tile:hover{border-color:rgba(160,200,255,.5);transform:translateY(-2px)}
+.vw-answer-placeholder{width:52px;height:52px;border-radius:12px;
+  border:1px dashed rgba(160,200,255,.15);
+  background:rgba(160,200,255,.02)}
+.vw-status{font-size:.88rem;color:var(--muted);text-align:center;
+  line-height:1.6;min-height:2.4em;font-style:italic}
+.vw-status.correct{color:rgba(100,220,160,.8);font-style:normal;font-weight:600}
+.vw-status.wrong{color:rgba(255,120,120,.7);font-style:normal}
+.vw-resonance{font-size:.83rem;color:rgba(160,200,255,.55);
+  text-align:center;line-height:1.7;font-style:italic;
+  padding:12px 16px;border-radius:12px;
+  border:1px solid rgba(160,200,255,.1);background:rgba(160,200,255,.03)}
+.vw-diff-row{display:flex;gap:8px;justify-content:center}
+.vw-diff-btn{padding:6px 14px;border-radius:999px;font-size:.72rem;
+  text-transform:uppercase;letter-spacing:.14em;cursor:pointer;
+  border:1px solid rgba(160,200,255,.18);background:transparent;
+  color:rgba(160,200,255,.4);transition:all .18s ease}
+.vw-diff-btn.active{border-color:rgba(160,200,255,.45);
+  background:rgba(160,200,255,.1);color:rgba(160,200,255,1)}
+.vw-loading{text-align:center;padding:40px 0}
+.vw-loading-text{font-size:.85rem;color:rgba(160,200,255,.4);
+  font-style:italic;animation:breathe 3s ease-in-out infinite}
+.portal-veilwords:hover{border-color:rgba(160,200,255,.28);
+  box-shadow:0 22px 52px rgba(0,0,0,.4),0 0 44px rgba(160,200,255,.1)}
+
 /* ── SIGIL TRACE ──────────────────────────────────────────────── */
 #sigilScreen{padding:0;align-items:stretch;position:relative;
   background:linear-gradient(180deg,#04030e,#080616)}
@@ -1396,6 +1465,20 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
         <p class="portal-promise"><strong>What this crossing offers:</strong> sharper sequential memory and comfort with patterns that vanish before you finish seeing them.</p>
         <button class="btn btn-sm portal-enter" style="background:rgba(187,168,255,.12);border-color:rgba(187,168,255,.35);color:var(--accent)" data-launch-btn="sigil-trace">Enter the Constellation</button>
       </article>
+
+      <article class="portal portal-veilwords" data-launch="veil-words"
+        style="border-color:rgba(160,200,255,.18)">
+        <div class="portal-glow" style="background:rgba(160,200,255,.7)"></div>
+        <div class="portal-icon" style="color:rgba(160,200,255,1);
+             filter:drop-shadow(0 0 10px rgba(160,200,255,.4))">⌘</div>
+        <span class="portal-kicker" style="color:rgba(160,200,255,.55)">Word Trial</span>
+        <h3 class="portal-name" style="color:rgba(160,200,255,1)">Veil Words</h3>
+        <p class="portal-desc">Five words from the realm's vocabulary appear scrambled. Tap the letters in order to unscramble each one. Fresh words every session — the Veil generates them.</p>
+        <p class="portal-promise"><strong>What this crossing offers:</strong> pattern recognition, vocabulary depth, and a quiet encounter with the words the realm is made of.</p>
+        <button class="btn btn-sm portal-enter"
+          style="background:rgba(160,200,255,.1);border-color:rgba(160,200,255,.3);
+          color:rgba(160,200,255,1)" data-launch-btn="veil-words">Enter Veil Words</button>
+      </article>
     </div>
   </div>
 </section>
@@ -1488,6 +1571,20 @@ canvas.echo-bg{position:absolute;inset:0;width:100%;height:100%;
 <section class="game-screen-wrap hidden" id="patternScreen" style="padding:0;align-items:stretch">
   <button class="btn btn-ghost btn-sm ptc-back" id="backFromPtcBtn">Return to Realm</button>
   <div class="ptc-wrap" id="ptcWrap">
+    <!-- Injected by JS -->
+  </div>
+</section>
+
+
+
+
+<!-- VEIL WORDS SCREEN -->
+<section class="game-screen-wrap hidden" id="veilWordsScreen"
+  style="padding:0;align-items:stretch">
+  <button class="btn btn-ghost btn-sm vw-back" id="backFromVeilWordsBtn">
+    Return to Realm
+  </button>
+  <div class="vw-wrap" id="veilWordsWrap">
     <!-- Injected by JS -->
   </div>
 </section>
@@ -2100,6 +2197,7 @@ const screens = {
   veilWithin: document.getElementById('veilWithinScreen'),
   threshold: document.getElementById('thresholdScreen'),
   pattern: document.getElementById('patternScreen'),
+  veilWords: document.getElementById('veilWordsScreen'),
   trials: document.getElementById('trialsScreen'),
   reflections: document.getElementById('reflectionsScreen'),
   crossing: document.getElementById('crossingScreen'),
@@ -2188,6 +2286,11 @@ function launchGame(game){
   audio.ensure(); window.ambient.ensure();
   try{localStorage.setItem('faeboundLastGame',game);}catch(e){}
 
+  if(game==='veil-words'){
+    window.ambient.setIntensity('echo');
+    window.veilWords?.enter();
+    showOnly('veilWords');
+  }
   if(game==='echo-drift'){
     window.ambient.setIntensity('echo');
     window.ed?.resetAll();
@@ -2285,6 +2388,7 @@ document.getElementById('backFromTrialsBtn')?.addEventListener('click',()=>{ win
 document.getElementById('backFromReflectionsBtn')?.addEventListener('click',()=>{ window.ambient.setIntensity('hub'); showOnly('hub'); });
 document.getElementById('backFromCrossingBtn')?.addEventListener('click',()=>{ window.crossing?.stop(); backToHub(()=>{}); });
 document.getElementById('backFromSoydBtn')?.addEventListener('click',()=>backToHub(()=>{}));
+document.getElementById('backFromVeilWordsBtn')?.addEventListener('click',()=>{ window.veilWords?.stop(); backToHub(()=>{}); });
 document.getElementById('backFromSigilBtn')?.addEventListener('click',()=>{ window.sigilTrace?.stop(); backToHub(()=>{}); });
 document.getElementById('backFromWyhoBtn')?.addEventListener('click',()=>backToHub(()=>{}));
 document.getElementById('backFromTideBtn')?.addEventListener('click',()=>{ window.tide?.stop(); backToHub(()=>{}); });
@@ -2356,7 +2460,7 @@ function updateRecentCrossing(){
   try{
     const last=localStorage.getItem('faeboundLastGame')||'';
     const result=JSON.parse(localStorage.getItem('faeboundLastVeilWithinResult')||'null');
-    const labels={'echo-drift':'Echo Drift','veil-within':'The Veil Within','threshold-between':'The Threshold Between','pattern-you-carry':'The Pattern You Carry','the-crossing':'The Crossing','shape-of-doubt':'The Shape of Your Doubt','sigil-trace':'Sigil Trace','way-you-hold':'The Way You Hold Others','the-tide':'The Tide','archive':'The Archive'};
+    const labels={'echo-drift':'Echo Drift','veil-within':'The Veil Within','threshold-between':'The Threshold Between','pattern-you-carry':'The Pattern You Carry','veil-words':'Veil Words','the-crossing':'The Crossing','shape-of-doubt':'The Shape of Your Doubt','sigil-trace':'Sigil Trace','way-you-hold':'The Way You Hold Others','the-tide':'The Tide','archive':'The Archive'};
     const glyphs={'echo-drift':'◇','veil-within':'✶','archive':'📖'};
     if(last&&labels[last]){
       let txt=labels[last];
@@ -2583,6 +2687,414 @@ initStars();
 // No court system — realm identity is fixed
 loadSettings();
 updateRecentCrossing();
+</script>
+
+<!-- ═══ VEIL WORDS ═══ -->
+<script>
+
+window.veilWords = (() => {
+  const wrap = document.getElementById('veilWordsWrap');
+  if (!wrap) return { enter(){}, stop(){} };
+
+  // ── STATE ──────────────────────────────────────────────────────────────
+  let difficulty = 'glimpse';
+  let words = [];          // [{word, resonance, tiles}] — generated by Claude
+  let wordIndex = 0;       // current word (0-4)
+  let answer = [];         // [{letter, tileId}] — player's current answer
+  let score = 0;
+  let streak = 0;
+  let bestStreak = 0;
+  let phase = 'idle';      // idle | loading | playing | between | done
+  let stopped = false;
+
+  // ── DIFFICULTY CONFIG ──────────────────────────────────────────────────
+  const DIFF_CONFIG = {
+    glimpse: { count: 5, minLen: 4, maxLen: 6,
+      desc: '4–6 letter words from the realm' },
+    trace:   { count: 5, minLen: 7, maxLen: 9,
+      desc: '7–9 letter words, more complex' },
+    warden:  { count: 5, minLen: 10, maxLen: 14,
+      desc: '10+ letters, deep vocabulary' },
+  };
+
+  // ── HELPERS ────────────────────────────────────────────────────────────
+  function chime(freq, vol) {
+    try { window.audio.tone(freq||440, .12, 'sine', vol||.016, (freq||440)*1.4); } catch(e) {}
+  }
+
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    // Make sure it isn't already solved
+    if (a.join('') === arr.join('')) return shuffle(arr);
+    return a;
+  }
+
+  function scramble(word) {
+    const letters = word.toUpperCase().split('');
+    return shuffle(letters);
+  }
+
+  // ── WORD GENERATION ────────────────────────────────────────────────────
+  const GEN_SYSTEM = [
+    'You generate word lists for a game called Veil Words inside a realm called Faebound.',
+    'The realm is liminal, atmospheric, emotionally resonant.',
+    'Words should come from the vocabulary of inner experience, transitions, and human complexity.',
+    'For each word, also provide one short resonance — a single poetic line about what the word means or evokes.',
+    'The resonance is not a dictionary definition. It is more like: "The reaching that does not stop."',
+    '',
+    'Respond with ONLY a JSON array, no markdown, no backticks, no preamble.',
+    'Format: [{"word":"GRIEF","resonance":"What remains after love has nowhere left to go."},...]',
+    'All words must be uppercase single words, no spaces or hyphens.',
+  ].join('\n');
+
+  async function generateWords() {
+    const cfg = DIFF_CONFIG[difficulty];
+    const prompt = 'Generate exactly 5 words for difficulty: ' + difficulty + '.'
+      + ' Word length: ' + cfg.minLen + ' to ' + cfg.maxLen + ' letters.'
+      + ' All from Faebound emotional/liminal vocabulary.'
+      + ' Include word and resonance for each.'
+      + ' Return only the JSON array.';
+    try {
+      const resp = await fetch('/.netlify/functions/claude', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          system: GEN_SYSTEM,
+          messages: [{ role: 'user', content: prompt }],
+          max_tokens: 400,
+        }),
+      });
+      const data = await resp.json();
+      const text = (data.response || '').trim().replace(/```json|```/g, '').trim();
+      const parsed = JSON.parse(text);
+      return parsed.map((item, i) => ({
+        word: (item.word || '').toUpperCase().replace(/[^A-Z]/g, ''),
+        resonance: item.resonance || '',
+        tiles: scramble((item.word || '').toUpperCase().replace(/[^A-Z]/g, '').split('')),
+      })).filter(w => w.word.length >= cfg.minLen);
+    } catch(e) {
+      // Fallback word lists if API fails
+      const fallbacks = {
+        glimpse: [
+          {word:'GRIEF', resonance:'What remains after love has nowhere left to go.'},
+          {word:'STILL', resonance:'The quiet that holds everything without forcing it.'},
+          {word:'ACHE', resonance:'The body knowing something the mind is not ready to say.'},
+          {word:'HUSH', resonance:'The sound that comes before something important.'},
+          {word:'LIMB', resonance:'Extension. The reaching outward from the self.'},
+        ],
+        trace: [
+          {word:'LONGING', resonance:'The reaching that does not stop when what is reached is found.'},
+          {word:'SHELTER', resonance:'Not absence of storm. Presence of something that holds.'},
+          {word:'FRACTURE', resonance:'The line that lets the light in, if you let it.'},
+          {word:'WAITING', resonance:'Time that has learned to be patient with itself.'},
+          {word:'SILENCE', resonance:'The space where the unsaid things live.'},
+        ],
+        warden: [
+          {word:'RESILIENCE', resonance:'Not the absence of breaking. The returning, after.'},
+          {word:'THRESHOLD', resonance:'The place that is neither here nor there, but both.'},
+          {word:'BELONGING', resonance:'The recognition that a place was waiting for you.'},
+          {word:'COMPASSION', resonance:'Suffering with. Not solving it — entering it.'},
+          {word:'INTEGRATION', resonance:'When the parts that were separate learn to share a body.'},
+        ],
+      };
+      return (fallbacks[difficulty] || fallbacks.glimpse).map(w => ({
+        ...w,
+        word: w.word.toUpperCase(),
+        tiles: scramble(w.word.toUpperCase().split('')),
+      }));
+    }
+  }
+
+  // ── RENDER IDLE ────────────────────────────────────────────────────────
+  function renderIdle() {
+    wrap.innerHTML = '<div style="animation:rise .5s ease forwards;width:100%;text-align:center">'
+      + '<p class="vw-eyebrow">Word Trial</p>'
+      + '<h2 class="vw-title" style="margin-bottom:20px">Veil Words</h2>'
+      + '<div style="max-width:480px;margin:0 auto 22px;padding:16px 18px;border-radius:14px;'
+      + 'border:1px solid rgba(160,200,255,.12);background:rgba(160,200,255,.04)">'
+      + '<p style="font-size:.78rem;text-transform:uppercase;letter-spacing:.14em;'
+      + 'color:rgba(160,200,255,.4);margin-bottom:10px">How it works</p>'
+      + '<p style="font-size:.9rem;color:var(--muted);line-height:1.72;margin-bottom:8px">'
+      + 'Five words from the realm appear scrambled. Tap the letters in the correct order to unscramble each one.'
+      + '</p>'
+      + '<p style="font-size:.82rem;color:rgba(160,200,255,.45);line-height:1.6">'
+      + 'When you get a word right, the Veil offers a quiet note about it.'
+      + '</p>'
+      + '</div>'
+      + '<div class="vw-diff-row" style="margin-bottom:20px">'
+      + ['glimpse','trace','warden'].map(d =>
+          '<button class="vw-diff-btn' + (difficulty===d?' active':'') + '" data-vw-diff="' + d + '">'
+          + (d==='glimpse'?'Glimpse · 4–6 letters':d==='trace'?'Trace · 7–9 letters':'Warden · 10+ letters')
+          + '</button>'
+        ).join('')
+      + '</div>'
+      + '<div class="vw-score-row" style="justify-content:center;margin-bottom:20px">'
+      + '<div><strong>' + streak + '</strong>Streak</div>'
+      + '<div><strong style="color:rgba(238,216,122,1)">' + bestStreak + '</strong>Best</div>'
+      + '</div>'
+      + '<button class="btn" id="vwBeginBtn" style="background:rgba(160,200,255,.12);'
+      + 'border-color:rgba(160,200,255,.35);color:rgba(160,200,255,1);padding:14px 36px">'
+      + 'Begin Session</button>'
+      + '<div style="margin-top:10px">'
+      + '<button class="btn btn-ghost btn-sm" id="vwHubBtn">Return to Realm</button>'
+      + '</div>'
+      + '</div>';
+
+    document.getElementById('vwBeginBtn')?.addEventListener('click', startSession);
+    document.getElementById('vwHubBtn')?.addEventListener('click', () => {
+      if (typeof backToHub === 'function') { stop(); backToHub(()=>{}); }
+    });
+    wrap.querySelectorAll('[data-vw-diff]').forEach(btn => {
+      btn.addEventListener('click', () => { difficulty = btn.dataset.vwDiff; renderIdle(); });
+    });
+  }
+
+  // ── RENDER LOADING ─────────────────────────────────────────────────────
+  function renderLoading() {
+    wrap.innerHTML = '<div class="vw-loading">'
+      + '<div style="font-size:2rem;color:rgba(160,200,255,.3);margin-bottom:18px;'
+      + 'animation:breathe 3s ease-in-out infinite">⌘</div>'
+      + '<p class="vw-loading-text">The Veil is choosing your words…</p>'
+      + '</div>';
+  }
+
+  // ── RENDER WORD ────────────────────────────────────────────────────────
+  function renderWord() {
+    if (stopped) return;
+    const current = words[wordIndex];
+    answer = [];
+
+    const pips = Array.from({length: 5}, (_, i) =>
+      '<div class="vw-pip ' + (i < wordIndex ? 'done' : i === wordIndex ? 'active' : '') + '"></div>'
+    ).join('');
+
+    wrap.innerHTML = '<div style="animation:rise .5s ease forwards;width:100%">'
+      + '<div style="text-align:center;margin-bottom:16px">'
+      + '<p class="vw-eyebrow">Word ' + (wordIndex+1) + ' of 5</p>'
+      + '<div class="vw-progress">' + pips + '</div>'
+      + '</div>'
+      + '<p class="vw-status" id="vwStatus">Tap the letters in the correct order</p>'
+      + '<div class="vw-tiles" id="vwTiles">'
+      + current.tiles.map((letter, i) =>
+          '<button class="vw-tile" data-tile-id="' + i + '" data-letter="' + letter + '">' + letter + '</button>'
+        ).join('')
+      + '</div>'
+      + '<div style="text-align:center;font-size:.72rem;color:rgba(255,255,255,.18);'
+      + 'margin-bottom:8px">' + current.word.length + ' letters</div>'
+      + '<div class="vw-answer" id="vwAnswer">'
+      + Array.from({length: current.word.length}, () =>
+          '<div class="vw-answer-placeholder"></div>'
+        ).join('')
+      + '</div>'
+      + '<div style="display:flex;gap:8px;justify-content:center;margin-top:4px">'
+      + '<button class="btn btn-ghost btn-sm" id="vwClearBtn" style="opacity:.6">Clear</button>'
+      + '<button class="btn btn-ghost btn-sm" id="vwHubBtn3" style="opacity:.4">Return to Realm</button>'
+      + '</div>'
+      + '</div>';
+
+    // Wire tile clicks
+    document.querySelectorAll('.vw-tile').forEach(tile => {
+      tile.addEventListener('click', () => {
+        if (tile.classList.contains('used')) return;
+        const tileId = parseInt(tile.dataset.tileId);
+        const letter = tile.dataset.letter;
+        tile.classList.add('used');
+        answer.push({ letter, tileId });
+        updateAnswerDisplay();
+        if (answer.length === current.word.length) {
+          checkAnswer();
+        } else {
+          chime(380 + answer.length * 30, .014);
+        }
+      });
+    });
+
+    document.getElementById('vwClearBtn')?.addEventListener('click', () => {
+      answer = [];
+      document.querySelectorAll('.vw-tile').forEach(t => t.classList.remove('used'));
+      updateAnswerDisplay();
+      const statusEl = document.getElementById('vwStatus');
+      if (statusEl) { statusEl.textContent = 'Tap the letters in the correct order'; statusEl.className = 'vw-status'; }
+    });
+
+    document.getElementById('vwHubBtn3')?.addEventListener('click', () => {
+      if (typeof backToHub === 'function') { stop(); backToHub(()=>{}); }
+    });
+  }
+
+  function updateAnswerDisplay() {
+    const answerEl = document.getElementById('vwAnswer');
+    if (!answerEl) return;
+    const current = words[wordIndex];
+    answerEl.innerHTML = Array.from({length: current.word.length}, (_, i) => {
+      if (i < answer.length) {
+        return '<button class="vw-answer-tile" data-answer-idx="' + i + '">' + answer[i].letter + '</button>';
+      }
+      return '<div class="vw-answer-placeholder"></div>';
+    }).join('');
+
+    // Wire answer tile clicks (to remove a letter)
+    document.querySelectorAll('.vw-answer-tile').forEach(tile => {
+      tile.addEventListener('click', () => {
+        const idx = parseInt(tile.dataset.answerIdx);
+        const removed = answer.splice(idx, 1)[0];
+        // Un-use the source tile
+        const srcTile = document.querySelector('.vw-tile[data-tile-id="' + removed.tileId + '"]');
+        if (srcTile) srcTile.classList.remove('used');
+        updateAnswerDisplay();
+      });
+    });
+  }
+
+  function checkAnswer() {
+    const current = words[wordIndex];
+    const attempt = answer.map(a => a.letter).join('');
+    const statusEl = document.getElementById('vwStatus');
+
+    if (attempt === current.word) {
+      // Correct
+      score++;
+      if (statusEl) { statusEl.textContent = current.word; statusEl.className = 'vw-status correct'; }
+      chime(520, .024); setTimeout(() => chime(660, .018), 160); setTimeout(() => chime(780, .014), 340);
+      if (window.ambient?.swell) window.ambient.swell(0.003);
+
+      // Show resonance then advance
+      setTimeout(() => {
+        if (stopped) return;
+        // Add resonance below tiles
+        const resonanceEl = document.createElement('div');
+        resonanceEl.className = 'vw-resonance';
+        resonanceEl.textContent = current.resonance;
+        const tilesEl = document.getElementById('vwTiles');
+        if (tilesEl) tilesEl.insertAdjacentElement('afterend', resonanceEl);
+
+        setTimeout(() => {
+          if (stopped) return;
+          wordIndex++;
+          if (wordIndex >= 5) {
+            finishSession();
+          } else {
+            renderWord();
+          }
+        }, 2200);
+      }, 400);
+    } else {
+      // Wrong
+      if (statusEl) { statusEl.textContent = 'Not quite — try again'; statusEl.className = 'vw-status wrong'; }
+      chime(280, .022);
+      // Shake tiles briefly then clear
+      const answerEl = document.getElementById('vwAnswer');
+      if (answerEl) {
+        answerEl.style.borderColor = 'rgba(255,120,120,.3)';
+        setTimeout(() => { if (answerEl) answerEl.style.borderColor = ''; }, 400);
+      }
+      setTimeout(() => {
+        if (stopped) return;
+        answer = [];
+        document.querySelectorAll('.vw-tile').forEach(t => t.classList.remove('used'));
+        updateAnswerDisplay();
+        if (statusEl) { statusEl.textContent = 'Tap the letters in the correct order'; statusEl.className = 'vw-status'; }
+      }, 600);
+    }
+  }
+
+  // ── FINISH SESSION ─────────────────────────────────────────────────────
+  function finishSession() {
+    if (stopped) return;
+    streak++;
+    if (streak > bestStreak) bestStreak = streak;
+
+    const allCorrect = score === 5;
+    chime(440, .02); setTimeout(() => chime(560, .016), 200); setTimeout(() => chime(680, .012), 420);
+
+    wrap.innerHTML = '<div style="animation:rise .6s ease forwards;width:100%;text-align:center">'
+      + '<div style="font-size:2.2rem;margin-bottom:14px;animation:breathe 4s ease-in-out infinite;'
+      + 'color:rgba(160,200,255,.8)">⌘</div>'
+      + '<p class="vw-eyebrow">Session complete</p>'
+      + '<h2 style="font-family:\'Cinzel\',serif;font-size:1.8rem;font-weight:700;'
+      + 'color:rgba(160,200,255,1);margin-bottom:6px">' + score + ' / 5</h2>'
+      + '<p style="font-size:.85rem;color:var(--muted);margin-bottom:20px">'
+      + (allCorrect ? 'All five words unscrambled.' : score + ' of 5 words unscrambled.')
+      + '</p>'
+      + '<div class="vw-score-row" style="margin-bottom:20px">'
+      + '<div><strong>' + streak + '</strong>Streak</div>'
+      + '<div><strong style="color:rgba(238,216,122,1)">' + bestStreak + '</strong>Best</div>'
+      + '</div>'
+      + '<div style="max-width:440px;margin:0 auto 20px;padding:14px;border-radius:12px;'
+      + 'border:1px solid rgba(255,255,255,.05);background:rgba(255,255,255,.02);text-align:left">'
+      + '<p style="font-size:.7rem;text-transform:uppercase;letter-spacing:.13em;'
+      + 'color:rgba(160,200,255,.35);margin-bottom:10px">Words this session</p>'
+      + words.map(w =>
+          '<div style="margin-bottom:8px">'
+          + '<span style="font-family:\'Cinzel\',serif;font-size:.9rem;color:rgba(160,200,255,.8);'
+          + 'letter-spacing:.06em">' + w.word + '</span>'
+          + '<span style="font-size:.78rem;color:rgba(255,255,255,.25);margin-left:8px">·</span>'
+          + '<span style="font-size:.78rem;color:rgba(160,200,255,.4);margin-left:8px;font-style:italic">'
+          + w.resonance + '</span>'
+          + '</div>'
+        ).join('')
+      + '</div>'
+      + '<div style="font-size:.72rem;color:rgba(160,200,255,.28);line-height:1.65;'
+      + 'max-width:420px;margin:0 auto 20px;padding:10px 14px;border-radius:10px;'
+      + 'border:1px solid rgba(255,255,255,.04)">'
+      + 'Words are generated fresh each session by Claude, drawn from the vocabulary of inner experience. '
+      + 'The act of unscrambling emotionally resonant words engages semantic memory differently than neutral ones '
+      + '— a finding from Bower\'s research on emotional associative networks (1981).'
+      + '</div>'
+      + '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">'
+      + '<button class="btn" id="vwPlayAgainBtn" style="background:rgba(160,200,255,.12);'
+      + 'border-color:rgba(160,200,255,.35);color:rgba(160,200,255,1)">Play Again</button>'
+      + '<button class="btn btn-ghost" id="vwDoneHubBtn">Return to Realm</button>'
+      + '</div>'
+      + '</div>';
+
+    document.getElementById('vwPlayAgainBtn')?.addEventListener('click', () => {
+      score = 0; wordIndex = 0; words = []; phase = 'idle';
+      renderIdle();
+    });
+    document.getElementById('vwDoneHubBtn')?.addEventListener('click', () => {
+      if (typeof backToHub === 'function') { stop(); backToHub(()=>{}); }
+    });
+
+    try {
+      window.archive?.inc?.('trialsCompleted');
+      window.progression?.increment?.();
+      trackCompletion('veil-words');
+    } catch(e) {}
+  }
+
+  // ── START SESSION ──────────────────────────────────────────────────────
+  async function startSession() {
+    if (stopped) return;
+    score = 0; wordIndex = 0; words = [];
+    phase = 'loading';
+    renderLoading();
+
+    words = await generateWords();
+    if (stopped) return;
+    if (!words.length) { renderIdle(); return; }
+
+    phase = 'playing';
+    renderWord();
+    chime(440, .016);
+  }
+
+  // ── PUBLIC ─────────────────────────────────────────────────────────────
+  function enter() {
+    stopped = false; phase = 'idle';
+    score = 0; wordIndex = 0; words = []; answer = [];
+    renderIdle();
+  }
+
+  function stop() { stopped = true; }
+
+  return { enter, stop };
+})();
+
 </script>
 
 <!-- ═══ SIGIL TRACE ═══ -->
